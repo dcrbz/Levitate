@@ -1,5 +1,7 @@
 # Levitate 
-<img align="center" src="http://media.ketrwu.de/levitate-header.png" alt="Levitate-Header">
+<p align="center">
+  <img align="center" src="http://media.ketrwu.de/levitate-header.png" alt="Levitate-Header">
+</p>
 
 [![GitHub license](https://img.shields.io/badge/license-GPLv2-blue.svg)](https://raw.githubusercontent.com/KennethWussmann/Levitate/master/LICENSE) [![Build Status](https://travis-ci.org/KennethWussmann/Levitate.svg?branch=master)](https://travis-ci.org/KennethWussmann/Levitate) [![GitHub version](https://badge.fury.io/gh/KennethWussmann%2FLevitate.svg)](https://github.com/KennethWussmann/Levitate/releases/latest) [![PayPal Donate](https://img.shields.io/badge/style-USD%200,99-blue.svg?label=PayPal)](https://www.paypal.me/ketrwu/0,99usd) [![Join Gitter](https://img.shields.io/badge/style-Join%20channel-organge.svg?label=Gitter)](https://gitter.im/KennethWussmann/Levitate)
 Levitate is an awesome and easy to use Command-Library for Bukkit/Spigot-Plugins.<br>
