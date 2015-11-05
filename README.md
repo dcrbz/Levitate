@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="http://media.ketrwu.de/levitate-header.png" alt="Levitate-Header">
+  <img src="http://media.ketrwu.de/levitate-header-3.png" alt="Levitate-Header">
   <br />
   <a href="https://raw.githubusercontent.com/KennethWussmann/Levitate/master/LICENSE"><img src="https://img.shields.io/badge/license-GPLv2-blue.svg" alt="GitHub license"></a>
   <a href="https://travis-ci.org/KennethWussmann/Levitate"><img src="https://travis-ci.org/KennethWussmann/Levitate.svg?branch=master" alt="Build Status"></a>
