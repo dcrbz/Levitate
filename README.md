@@ -9,7 +9,7 @@
 
 <br />
 Levitate is an awesome and easy to use Command-Library for Bukkit/Spigot-Plugins.<br />
-It allows you to register commands with arguments, permissions, TabCompletion and description in seconds. <br />
+It allows you to register commands with arguments, permissions, TabCompletion and description in seconds. 
 There also is no need to register it in the plugin.yml.
 </p>
 
