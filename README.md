@@ -8,8 +8,9 @@
   <a href="https://gitter.im/KennethWussmann/Levitate"><img src="https://img.shields.io/badge/style-Join%20channel-organge.svg?label=Gitter" alt="Join Gitter"></a>
 
 <br />
-Levitate is an awesome and easy to use Command-Library for Bukkit/Spigot-Plugins.<br>
-It allowes you to register commands with arguments, permissions, TabCompletion and description in seconds. There also is no need to register it in the plugin.yml.
+Levitate is an awesome and easy to use Command-Library for Bukkit/Spigot-Plugins.<br />
+It allows you to register commands with arguments, permissions, TabCompletion and description in seconds. <br />
+There also is no need to register it in the plugin.yml.
 </p>
 
 #Example
