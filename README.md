@@ -1,4 +1,4 @@
-# Levitate [![Build Status](https://travis-ci.org/KennethWussmann/Levitate.svg?branch=master)](https://travis-ci.org/KennethWussmann/Levitate)
+# Levitate [![Build Status](https://travis-ci.org/KennethWussmann/Levitate.svg?branch=master)](https://travis-ci.org/KennethWussmann/Levitate) [![Join the chat at https://gitter.im/KennethWussmann/Levitate](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/KennethWussmann/Levitate?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 Levitate is an awesome and easy to use Command-Library for Bukkit/Spigot-Plugins.<br>
 It allowes you to register commands with arguments, permissions, TabCompletion and description in seconds. There also is no need to register it in the plugin.yml.
 
