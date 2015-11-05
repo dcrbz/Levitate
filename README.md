@@ -1,5 +1,6 @@
 <p align="center">
   <img src="http://media.ketrwu.de/levitate-header-2.png" alt="Levitate-Header">
+  <br />
   <a href="https://raw.githubusercontent.com/KennethWussmann/Levitate/master/LICENSE"><img src="https://img.shields.io/badge/license-GPLv2-blue.svg" alt="GitHub license"></a>
   <a href="https://travis-ci.org/KennethWussmann/Levitate"><img src="https://travis-ci.org/KennethWussmann/Levitate.svg?branch=master" alt="Build Status"></a>
   <a href="https://github.com/KennethWussmann/Levitate/releases/latest"><img src="https://badge.fury.io/gh/KennethWussmann%2FLevitate.svg" alt="GitHub version"></a>
