@@ -1,13 +1,10 @@
 <p align="center">
-  <img align="center" src="http://media.ketrwu.de/levitate-header-2.png" alt="Levitate-Header">
-  
-  
-  
-  <a href=""><img align="center" src="" alt=""></a>
-  <a href=""><img align="center" src="" alt=""></a>
-  
-[![GitHub license](https://img.shields.io/badge/license-GPLv2-blue.svg)](https://raw.githubusercontent.com/KennethWussmann/Levitate/master/LICENSE) [![Build Status](https://travis-ci.org/KennethWussmann/Levitate.svg?branch=master)](https://travis-ci.org/KennethWussmann/Levitate) [![GitHub version](https://badge.fury.io/gh/KennethWussmann%2FLevitate.svg)](https://github.com/KennethWussmann/Levitate/releases/latest) [![PayPal Donate](https://img.shields.io/badge/style-USD%200,99-blue.svg?label=PayPal)](https://www.paypal.me/ketrwu/0,99usd) [![Join Gitter](https://img.shields.io/badge/style-Join%20channel-organge.svg?label=Gitter)](https://gitter.im/KennethWussmann/Levitate)
-
+  <img src="http://media.ketrwu.de/levitate-header-2.png" alt="Levitate-Header">
+  <a href="https://raw.githubusercontent.com/KennethWussmann/Levitate/master/LICENSE"><img src="https://img.shields.io/badge/license-GPLv2-blue.svg" alt="GitHub license"></a>
+  <a href="https://travis-ci.org/KennethWussmann/Levitate"><img src="https://travis-ci.org/KennethWussmann/Levitate.svg?branch=master" alt="Build Status"></a>
+  <a href="https://github.com/KennethWussmann/Levitate/releases/latest"><img src="https://badge.fury.io/gh/KennethWussmann%2FLevitate.svg" alt="GitHub version"></a>
+  <a href="https://www.paypal.me/ketrwu/0,99usd"><img src="https://img.shields.io/badge/style-USD%200,99-blue.svg?label=PayPal" alt="PayPal Donate"></a>
+  <a href="https://gitter.im/KennethWussmann/Levitate"><img src="https://img.shields.io/badge/style-Join%20channel-organge.svg?label=Gitter" alt="Join Gitter"></a>
 </p>
 
 Levitate is an awesome and easy to use Command-Library for Bukkit/Spigot-Plugins.<br>
