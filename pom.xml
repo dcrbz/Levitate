@@ -108,7 +108,12 @@
              <additionalparam>-Xdoclint:none</additionalparam>
            </configuration>
          </plugin>
-      </plugins>
+		 <plugin>
+		 	<groupId>org.eluder.coveralls</groupId>
+		 	<artifactId>coveralls-maven-plugin</artifactId>
+		 	<version>4.0.0</version>
+		 </plugin>
+		</plugins>
       <finalName>${project.name}-${project.version}</finalName>
    </build>
 </project>
