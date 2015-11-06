@@ -32,16 +32,16 @@ public void onEnable() {
 ```
 
 #Features
-[*] Checks arguments to be valid
-[*] Checks permission
-[*] Registers command directly to Bukkit/Spigot without plugin.yml
-[*] Supports command aliases
-[*] Bukkit/Spigot-Version independent
-[*] HelpMap with detailed Command-List
-[*] TabComplete
-[*] Undefined amount of arguments
-[*] Extendable
-[] Let me know your ideas :smile:
+[x] Checks arguments to be valid
+[x] Checks permission
+[x] Registers command directly to Bukkit/Spigot without plugin.yml
+[x] Supports command aliases
+[x] Bukkit/Spigot-Version independent
+[x] HelpMap with detailed Command-List
+[x] TabComplete
+[x] Undefined amount of arguments
+[x] Extendable
+[ ] Let me know your ideas :smile:
 
 #Getting started
 Please check [the wiki](https://github.com/KennethWussmann/Levitate/wiki) to get started!
