@@ -32,15 +32,16 @@ public void onEnable() {
 ```
 
 #Features
-* Checks arguments to be valid
-* Checks permission
-* Registers command directly to Bukkit/Spigot without plugin.yml
-* Supports command aliases
-* Bukkit/Spigot-Version independent
-* HelpMap with detailed Command-List
-* TabComplete
-* Undefined amount of arguments
-* Extendable
+[*] Checks arguments to be valid
+[*] Checks permission
+[*] Registers command directly to Bukkit/Spigot without plugin.yml
+[*] Supports command aliases
+[*] Bukkit/Spigot-Version independent
+[*] HelpMap with detailed Command-List
+[*] TabComplete
+[*] Undefined amount of arguments
+[*] Extendable
+[] Let me know your ideas :smile:
 
 #Getting started
 Please check [the wiki](https://github.com/KennethWussmann/Levitate/wiki) to get started!
@@ -54,9 +55,6 @@ You can get the lastest Levitate-Artifact at:
 
 #JavaDoc
 You can find the lastest JavaDocs [here](http://ci.ketrwu.de/job/Levitate-Java-8/javadoc/).
-
-#Planned features
-* Let me know your ideas :smile:
 
 #License
 Levitate is licensed under [GNU General Public License Version 2](https://github.com/KennethWussmann/Levitate/blob/master/LICENSE).
