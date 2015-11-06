@@ -54,8 +54,5 @@ You can get the lastest Levitate-Artifact at:
 * [Jenkins Java-8](http://ci.ketrwu.de/job/Levitate-Java-8/lastSuccessfulBuild/)
 * [Jenkins Java-7](http://ci.ketrwu.de/job/Levitate-Java-7/lastSuccessfulBuild/)
 
-#JavaDoc
-You can find the lastest JavaDocs [here](http://ci.ketrwu.de/job/Levitate-Java-8/javadoc/).
-
 #License
 Levitate is licensed under [GNU General Public License Version 2](https://github.com/KennethWussmann/Levitate/blob/master/LICENSE).
