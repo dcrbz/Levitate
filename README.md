@@ -7,7 +7,7 @@
   <a href="http://ci.ketrwu.de/job/Levitate-Java-8/javadoc/"><img src="https://img.shields.io/badge/style-latest-yellow.svg?label=JavaDoc" alt="JavaDoc"></a>
   <a href="https://github.com/KennethWussmann/Levitate/wiki"><img src="https://img.shields.io/badge/Wiki-Read%20me-358AA6.svg" alt="Wiki"></a>
   <a href="https://www.paypal.me/ketrwu/0.99usd"><img src="https://img.shields.io/badge/style-USD%200.99-blue.svg?label=PayPal" alt="PayPal Donate"></a>
-  <a href="https://gitter.im/KennethWussmann/Levitate"><img src="https://img.shields.io/badge/style-Join%20channel-organge.svg?label=Gitter" alt="Join Gitter"></a>
+  <a href="https://gitter.im/KennethWussmann/Levitate"><img src="https://img.shields.io/badge/style-Join-organge.svg?label=Gitter" alt="Join Gitter"></a>
 
 <br />
 Levitate is an awesome and easy to use Command-Library for Bukkit/Spigot-Plugins.<br />
