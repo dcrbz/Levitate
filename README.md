@@ -20,16 +20,13 @@ This is a simple kill command:
 ```Java
 public void onEnable() {
 	Levitate levitate = new Levitate(this);
-	levitate.register(new CommandInformation("/kill <player[online]>", "kill.player", "Kill a player"), new CommandHandler() {
-				
-		@Override
-		public void execute(CommandSender sender, String command, ParameterSet args) {
-			Player p = args.getPlayer(0);
-			p.setHealth(0);
-			sender.sendMessage("Player " + p.getName() + " has been killed!");
-		}
-				
-	});
+	levitate.registerCommands(this);
+}
+	
+@Command(syntax = "?kill <player[online]>", description = "Kill a player", permission = "player.kill", aliases = {"die"})
+public void killCommand(CommandSender sender, String cmd, ParameterSet args) {
+	args.getPlayer(0).setHealth(0);
+	sender.sendMessage("Player has been killed!");
 }
 ```
 
