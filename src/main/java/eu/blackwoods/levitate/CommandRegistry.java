@@ -1,6 +1,9 @@
 package eu.blackwoods.levitate;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -17,6 +20,7 @@ import org.bukkit.plugin.Plugin;
 
 import eu.blackwoods.levitate.CommandInformation.CommandExecutor;
 import eu.blackwoods.levitate.Message.TextMode;
+import eu.blackwoods.levitate.exception.CommandAnnotationException;
 import eu.blackwoods.levitate.exception.CommandSyntaxException;
 import eu.blackwoods.levitate.exception.ExecutorIncompatibleException;
 import eu.blackwoods.levitate.exception.NoPermissionException;
@@ -30,6 +34,7 @@ public class CommandRegistry {
 	
 	private HashMap<CommandInformation, CommandHandler> commands = new HashMap<CommandInformation, CommandHandler>();
 	private List<String> aliases = new ArrayList<String>();
+	private List<Object> commandClasses = new ArrayList<Object>();
 	private PermissionHandler permissionHandler = null;
 	private HelpMap helpMap = null;
 	private Plugin plugin = null;
@@ -42,6 +47,76 @@ public class CommandRegistry {
 	public CommandRegistry(Plugin plugin) { 
 		if(plugin == null) return;
 		this.plugin = plugin;
+	}
+	
+	/**
+	 * Register all commands with annotations in given class
+	 * @param obj Class with commands
+	 */
+	public void registerCommands(Object obj) {
+		if(commandClasses.contains(obj)) return;
+		commandClasses.add(obj);
+		HashMap<String, String> replaces = new HashMap<String, String>();
+		try {
+			for(Method m : obj.getClass().getDeclaredMethods()) {
+				replaces.put("%method%", obj.getClass().getName() + ": " + m.getName() + "()");
+				CommandInformation cmd = null;
+				String[] aliases = null;
+				if(m.isAnnotationPresent(eu.blackwoods.levitate.Command.class)) {
+					if(m.getParameterCount() != 3) throw new CommandAnnotationException(Message.CR_PARAMETERCOUNT_INVALID.get(TextMode.PLAIN, replaces));
+					if(m.getParameterTypes()[0] != CommandSender.class) {
+						replaces.put("%index%", "0");
+						replaces.put("%class%", "CommandSender");
+						throw new CommandAnnotationException(Message.CR_PARAMETER_INVALID.get(TextMode.PLAIN, replaces));
+					}
+					if(m.getParameterTypes()[1] != String.class) {
+						replaces.put("%index%", "1");
+						replaces.put("%class%", "String");
+						throw new CommandAnnotationException(Message.CR_PARAMETER_INVALID.get(TextMode.PLAIN, replaces));
+					}
+					if(m.getParameterTypes()[2] != ParameterSet.class) {
+						replaces.put("%index%", "2");
+						replaces.put("%class%", "ParameterSet");
+						throw new CommandAnnotationException(Message.CR_PARAMETER_INVALID.get(TextMode.PLAIN, replaces));
+					}
+					
+					eu.blackwoods.levitate.Command commandAnnotation = m.getAnnotation(eu.blackwoods.levitate.Command.class);
+					cmd = new CommandInformation(commandAnnotation.syntax());
+					
+					if(!commandAnnotation.permission().equals("")) cmd.setPermission(commandAnnotation.permission());
+					if(!commandAnnotation.description().equals("")) cmd.setDescription(commandAnnotation.description());
+					if(commandAnnotation.aliases().length > 0) aliases = commandAnnotation.aliases();
+					
+					if(aliases == null) {
+						register(cmd, new CommandHandler() {
+							
+							@Override
+							public void execute(CommandSender sender, String command, ParameterSet args) {
+								try {
+									m.invoke(obj, sender, command, args);
+								} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+									e.printStackTrace();
+								}
+							}
+						});
+					} else {;
+						register(cmd, aliases, new CommandHandler() {
+							
+							@Override
+							public void execute(CommandSender sender, String command, ParameterSet args) {
+								try {
+									m.invoke(obj, sender, command, args);
+								} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+									e.printStackTrace();
+								}
+							}
+						});
+					}
+				}
+			}
+		} catch (CommandAnnotationException e) {
+			e.printStackTrace();
+		}		
 	}
 	
 	/**
@@ -89,6 +164,8 @@ public class CommandRegistry {
 			}
 			if(ns.endsWith(" ")) ns = ns.substring(0, ns.length()-1);
 			CommandInformation cinfo = new CommandInformation(ns, info.getPermission());
+			cinfo.setPermission(info.getPermission());
+			cinfo.setDescription(info.getDescription());
 			registerAlias(alias);
 			commands.put(cinfo, handler);
 		}
@@ -119,7 +196,6 @@ public class CommandRegistry {
 				@Override
 				public boolean execute(CommandSender arg0, String arg1, String[] arg2) {
 					try {
-						
 						return playerPassCommand(arg0, arg1, arg2);
 					} catch (CommandSyntaxException | NoPermissionException | SyntaxResponseException | ExecutorIncompatibleException e) {
 						if(e instanceof NoPermissionException) {

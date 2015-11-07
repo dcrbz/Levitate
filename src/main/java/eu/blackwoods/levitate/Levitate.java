@@ -11,6 +11,7 @@ import org.bukkit.plugin.java.JavaPlugin;
  * Read <a href="https://github.com/KennethWussmann/Levitate/wiki/2.-First-command">this page</a> to create your first Levitate-Command.
  * @author Kenneth Wussmann
  */
+
 public class Levitate {
 	
 	private JavaPlugin plugin;
@@ -78,6 +79,14 @@ public class Levitate {
 	 */
 	public CommandRegistry getCommandRegistry() {
 		return registry;
+	}
+	
+	/**
+	 * Register all commands with annotations in given class
+	 * @param obj Class with commands
+	 */
+	public void registerCommands(Object obj) {
+		getCommandRegistry().registerCommands(obj);
 	}
 
 	/**
