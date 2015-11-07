@@ -63,7 +63,7 @@ public class CommandRegistry {
 				CommandInformation cmd = null;
 				String[] aliases = null;
 				if(m.isAnnotationPresent(eu.blackwoods.levitate.Command.class)) {
-					if(m.getParameterCount() != 3) throw new CommandAnnotationException(Message.CR_PARAMETERCOUNT_INVALID.get(TextMode.PLAIN, replaces));
+					if(m.getParameterTypes().length != 3) throw new CommandAnnotationException(Message.CR_PARAMETERCOUNT_INVALID.get(TextMode.PLAIN, replaces));
 					if(m.getParameterTypes()[0] != CommandSender.class) {
 						replaces.put("%index%", "0");
 						replaces.put("%class%", "CommandSender");
