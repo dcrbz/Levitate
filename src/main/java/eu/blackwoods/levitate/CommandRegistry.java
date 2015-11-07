@@ -53,12 +53,12 @@ public class CommandRegistry {
 	 * Register all commands with annotations in given class
 	 * @param obj Class with commands
 	 */
-	public void registerCommands(Object obj) {
+	public void registerCommands(final Object obj) {
 		if(commandClasses.contains(obj)) return;
 		commandClasses.add(obj);
 		HashMap<String, String> replaces = new HashMap<String, String>();
 		try {
-			for(Method m : obj.getClass().getDeclaredMethods()) {
+			for(final Method m : obj.getClass().getDeclaredMethods()) {
 				replaces.put("%method%", obj.getClass().getName() + ": " + m.getName() + "()");
 				CommandInformation cmd = null;
 				String[] aliases = null;
