@@ -40,7 +40,7 @@ public void killCommand(CommandSender sender, String cmd, ParameterSet args) {
 - [x] TabComplete
 - [x] Undefined amount of arguments
 - [x] Extendable
-- [ ] Let me know your ideas :smile:
+- [ ] [Let me know your ideas](https://github.com/KennethWussmann/Levitate/issues/new?labels=Feature-Request&body=Please describe your feature in detail. May use examples to explain your feature.) :smile:
 
 #Getting started
 Please check [the wiki](https://github.com/KennethWussmann/Levitate/wiki) to get started!
