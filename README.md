@@ -43,7 +43,8 @@ public void killCommand(CommandSender sender, String cmd, ParameterSet args) {
 - [ ] [Let me know your ideas](https://github.com/KennethWussmann/Levitate/issues/new?labels=Feature-Request&body=Please describe your feature in detail. May use examples to explain your feature.) :smile:
 
 #Getting started
-Please check [the wiki](https://github.com/KennethWussmann/Levitate/wiki) to get started!
+Please check [the wiki](https://github.com/KennethWussmann/Levitate/wiki) to get started!<br>
+If you need any help or you have questions, feel free to [contact me](https://github.com/KennethWussmann/Levitate/issues/new?labels=Help&body=Please describe your problem in detail. May use examples to explain your problem.).
 
 #Download
 You can get the lastest Levitate-Artifact at:
