@@ -15,6 +15,10 @@ It allows you to register commands with arguments, permissions, TabCompletion an
 There also is no need to register it in the plugin.yml.
 </p>
 
+#Important
+In the next version (1.5.1 not released yet), Levitate will change it's package from `eu.blackwoods` to `de.ketrwu`.<br>
+Notice to change your imports at this version. 
+
 #Example
 This is a simple kill command:
 ```Java
