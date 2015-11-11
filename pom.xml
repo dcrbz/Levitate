@@ -4,7 +4,7 @@
    <groupId>de.ketrwu</groupId>
    <artifactId>levitate</artifactId>
    <packaging>jar</packaging>
-   <version>1.5.0-SNAPSHOT</version>
+   <version>1.5.1-SNAPSHOT</version>
    <name>Levitate</name>
    <description>Easy to use command registry and handler for Bukkit and Spigot.</description>
    <licenses>
