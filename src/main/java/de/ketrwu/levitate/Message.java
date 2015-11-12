@@ -30,7 +30,7 @@ public enum Message {
 	CI_ERROR_AT_CHAR("Error at character \"%char%\"!"),
 	CI_CMD_CANNOT_START_WITH("Command cannot start with \"<\"!"),
 	CR_PARAMETERCOUNT_INVALID("ParameterCount of \"%method%\" has to be three!"),
-	CR_PARAMETER_INVALID("Parameter %index% of \"%method%\" has to be %class%!"),
+	CR_PARAMETER_INVALID("Parameter %index% of \"%method%\" has to be \"%class%\"!"),
 	BOOLEANSYNTAX_HAS_TO_BE_BOOLEAN("Argument \"%arg%\" has to be a boolean!"),
 	CHOICESYNTAX_NOT_LIST("Parameter \"%arg%\" has to be a list of choices!"),
 	CHOICESYNTAX_NOT_COMMA_SEPARATED("Parameter \"%arg%\" has to be a comma-separated list!"),
