@@ -8,6 +8,7 @@
   <a href="https://github.com/KennethWussmann/Levitate/wiki"><img src="https://img.shields.io/badge/Wiki-Read%20me-358AA6.svg" alt="Wiki"></a>
   <a href="https://www.paypal.me/ketrwu/0.99usd"><img src="https://img.shields.io/badge/style-USD%200.99-blue.svg?label=PayPal" alt="PayPal Donate"></a>
   <a href="https://gitter.im/KennethWussmann/Levitate"><img src="https://img.shields.io/badge/style-Join-organge.svg?label=Gitter" alt="Join Gitter"></a>
+  <img src="https://d2weczhvl823v0.cloudfront.net/KennethWussmann/levitate/trend.png" alt="Bitdeli" />
 
 <br />
 Levitate is an awesome and easy to use Command-Library for Bukkit/Spigot-Plugins.<br />
