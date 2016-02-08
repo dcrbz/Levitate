@@ -56,3 +56,7 @@ You can get the lastest Levitate-Artifact at:
 
 #License
 Levitate is licensed under [GNU General Public License Version 2](https://github.com/KennethWussmann/Levitate/blob/master/LICENSE).
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/KennethWussmann/levitate/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
