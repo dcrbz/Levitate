@@ -231,8 +231,6 @@ public class CommandRegistry {
 		List<String> complete = new ArrayList<String>();
 		int lastArg = args.length-1;
 		String arg = args[lastArg];
-		CommandExecutor ce = CommandExecutor.PLAYER;
-		if(!(sender instanceof Player)) ce = CommandExecutor.CONSOLE;
 		
 		for(CommandInformation info : commands.keySet()) {
 			if(!info.getCommand().equalsIgnoreCase(command)) continue;
@@ -260,8 +258,7 @@ public class CommandRegistry {
 			try {
 				exArg = info.getArgs().get(lastArg);
 			} catch (IndexOutOfBoundsException e) {
-				exArg = info.getArgs().get(info.getArgs().size()-1);
-				if(!exArg.isUnlimited()) e.printStackTrace();
+				
 			}
 			if(exArg == null) continue;
 			List<String> l = exArg.getHandler().getTabComplete(exArg.getParameter(), arg);
