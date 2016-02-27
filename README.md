@@ -24,7 +24,7 @@ public void onEnable() {
 	levitate.registerCommands(this);
 }
 	
-@Command(syntax = "?kill <player[online]>", description = "Kill a player", permission = "player.kill", aliases = {"die"})
+@Command(syntax = "?kill <player[online]>", readable = "/kill <Player>", description = "Kill a player", permission = "player.kill", aliases = {"die"})
 public void killCommand(CommandSender sender, String cmd, ParameterSet args) {
 	args.getPlayer(0).setHealth(0);
 	sender.sendMessage("Player has been killed!");
