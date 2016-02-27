@@ -31,8 +31,11 @@ public class DefaultHelpMap implements HelpMap {
 				if(!registry.getPermissionHandler().hasPermission(sender, info.getPermission())) 
 					continue;
 			if(info.getCommand().equalsIgnoreCase(getCommandBase(command))) {
-				String syntax = info.getSyntax();
-				if(syntax.startsWith("?") || syntax.startsWith("$")) syntax = "/" + syntax.substring(1);
+				String syntax = info.getReadable();
+				if(!info.hasReadableSyntax()) {
+					syntax = info.getSyntax();
+					if(syntax.startsWith("?") || syntax.startsWith("$")) syntax = "/" + syntax.substring(1);
+				}
 				replaces.put("%syntax%", syntax);
 				String desc = info.getDescription();
 				if(desc == null || desc.equals("")) desc = Message.DEFAULTHELPMAP_NO_DESCRIPTION.get(TextMode.COLOR);

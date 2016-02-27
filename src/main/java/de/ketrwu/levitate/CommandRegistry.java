@@ -9,7 +9,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandMap;
@@ -82,6 +84,7 @@ public class CommandRegistry {
 					de.ketrwu.levitate.Command commandAnnotation = m.getAnnotation(de.ketrwu.levitate.Command.class);
 					cmd = new CommandInformation(commandAnnotation.syntax());
 					
+					if(!commandAnnotation.readable().equals("")) cmd.setReadable(commandAnnotation.readable());
 					if(!commandAnnotation.permission().equals("")) cmd.setPermission(commandAnnotation.permission());
 					if(!commandAnnotation.description().equals("")) cmd.setDescription(commandAnnotation.description());
 					if(commandAnnotation.aliases().length > 0) aliases = commandAnnotation.aliases();
@@ -98,7 +101,7 @@ public class CommandRegistry {
 								}
 							}
 						});
-					} else {;
+					} else {
 						register(cmd, aliases, new CommandHandler() {
 							
 							@Override
@@ -117,7 +120,7 @@ public class CommandRegistry {
 			e.printStackTrace();
 		}		
 	}
-	
+
 	/**
 	 * Register new command
 	 * @param info CommandInformation with syntax, permission etc
@@ -127,12 +130,12 @@ public class CommandRegistry {
 		registerBukkitCommand(info, null);
 		commands.put(info, handler);
 	}
-	
+		
 	/**
 	 * Register alias, only used internal
 	 * @param alias Alias as string
 	 */
-	public void registerAlias(String alias) {
+	private void registerAlias(String alias) {
 		if(aliases.contains(alias.toLowerCase())) return;
 		aliases.add(alias.toLowerCase());
 	}
@@ -188,6 +191,9 @@ public class CommandRegistry {
             	@Override
             	public List<String> tabComplete(CommandSender sender, String alias, String[] args) throws IllegalArgumentException {
             		List<String> complete = handleTabComplete(sender, alias, args);
+            		Set<String> setItems = new LinkedHashSet<String>(complete);
+            		complete.clear();
+            		complete.addAll(setItems);
             		if(complete == null) return super.tabComplete(sender, alias, args);
             		return complete;
             	}
@@ -231,8 +237,6 @@ public class CommandRegistry {
 		List<String> complete = new ArrayList<String>();
 		int lastArg = args.length-1;
 		String arg = args[lastArg];
-		CommandExecutor ce = CommandExecutor.PLAYER;
-		if(!(sender instanceof Player)) ce = CommandExecutor.CONSOLE;
 		
 		for(CommandInformation info : commands.keySet()) {
 			if(!info.getCommand().equalsIgnoreCase(command)) continue;
@@ -260,8 +264,7 @@ public class CommandRegistry {
 			try {
 				exArg = info.getArgs().get(lastArg);
 			} catch (IndexOutOfBoundsException e) {
-				exArg = info.getArgs().get(info.getArgs().size()-1);
-				if(!exArg.isUnlimited()) e.printStackTrace();
+				
 			}
 			if(exArg == null) continue;
 			List<String> l = exArg.getHandler().getTabComplete(exArg.getParameter(), arg);

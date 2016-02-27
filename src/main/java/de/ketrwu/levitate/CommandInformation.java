@@ -22,6 +22,7 @@ public class CommandInformation {
 	private String command;
 	private String permission;
 	private String description = "";
+	private String readable;
 	private CommandExecutor commandExecutor;
 	private List<Argument> args = new ArrayList<Argument>();
 	
@@ -52,7 +53,7 @@ public class CommandInformation {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * Create a CommandInformation with permission and description for a new command
 	 * @param syntax Your syntax
@@ -69,7 +70,7 @@ public class CommandInformation {
 			e.printStackTrace();
 		}
 	}
-	
+
 	private void processSyntax() throws CommandSyntaxException {
 		
 		if(!syntax.contains(" ")) {
@@ -224,6 +225,10 @@ public class CommandInformation {
 		return false;
 	}
 	
+	public boolean hasReadableSyntax() {
+		return getReadable() != null;
+	}
+	
 	enum CommandExecutor {
 		CONSOLE(),
 		PLAYER(),
@@ -277,6 +282,15 @@ public class CommandInformation {
 	public void setArgs(List<Argument> args) {
 		this.args = args;
 	}
+
+	public String getReadable() {
+		return readable;
+	}
+
+	public void setReadable(String readable) {
+		this.readable = readable;
+	}
+	
 	
 	
 }
