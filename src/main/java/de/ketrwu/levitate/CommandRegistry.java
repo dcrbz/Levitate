@@ -84,6 +84,7 @@ public class CommandRegistry {
 					de.ketrwu.levitate.Command commandAnnotation = m.getAnnotation(de.ketrwu.levitate.Command.class);
 					cmd = new CommandInformation(commandAnnotation.syntax());
 					
+					if(!commandAnnotation.readable().equals("")) cmd.setReadable(commandAnnotation.readable());
 					if(!commandAnnotation.permission().equals("")) cmd.setPermission(commandAnnotation.permission());
 					if(!commandAnnotation.description().equals("")) cmd.setDescription(commandAnnotation.description());
 					if(commandAnnotation.aliases().length > 0) aliases = commandAnnotation.aliases();
@@ -100,7 +101,7 @@ public class CommandRegistry {
 								}
 							}
 						});
-					} else {;
+					} else {
 						register(cmd, aliases, new CommandHandler() {
 							
 							@Override
@@ -119,7 +120,7 @@ public class CommandRegistry {
 			e.printStackTrace();
 		}		
 	}
-	
+
 	/**
 	 * Register new command
 	 * @param info CommandInformation with syntax, permission etc
@@ -129,12 +130,12 @@ public class CommandRegistry {
 		registerBukkitCommand(info, null);
 		commands.put(info, handler);
 	}
-	
+		
 	/**
 	 * Register alias, only used internal
 	 * @param alias Alias as string
 	 */
-	public void registerAlias(String alias) {
+	private void registerAlias(String alias) {
 		if(aliases.contains(alias.toLowerCase())) return;
 		aliases.add(alias.toLowerCase());
 	}
@@ -190,7 +191,7 @@ public class CommandRegistry {
             	@Override
             	public List<String> tabComplete(CommandSender sender, String alias, String[] args) throws IllegalArgumentException {
             		List<String> complete = handleTabComplete(sender, alias, args);
-            		Set setItems = new LinkedHashSet(complete);
+            		Set<String> setItems = new LinkedHashSet<String>(complete);
             		complete.clear();
             		complete.addAll(setItems);
             		if(complete == null) return super.tabComplete(sender, alias, args);
