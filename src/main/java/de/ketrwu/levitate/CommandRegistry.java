@@ -9,7 +9,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandMap;
@@ -188,6 +190,9 @@ public class CommandRegistry {
             	@Override
             	public List<String> tabComplete(CommandSender sender, String alias, String[] args) throws IllegalArgumentException {
             		List<String> complete = handleTabComplete(sender, alias, args);
+            		Set setItems = new LinkedHashSet(complete);
+            		complete.clear();
+            		complete.addAll(setItems);
             		if(complete == null) return super.tabComplete(sender, alias, args);
             		return complete;
             	}
