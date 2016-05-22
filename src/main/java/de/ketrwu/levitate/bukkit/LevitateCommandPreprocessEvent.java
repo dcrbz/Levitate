@@ -8,6 +8,11 @@ import org.bukkit.event.HandlerList;
 import de.ketrwu.levitate.CommandInformation;
 import de.ketrwu.levitate.ParameterSet;
 
+/**
+ * Gets called when a user tries to execute a Levitate-Command.<br />
+ * When cancelled, Levitate wont execute the command.
+ * @author Kenneth Wussmann
+ */
 public class LevitateCommandPreprocessEvent extends Event implements Cancellable {
 
     private static final HandlerList handlers = new HandlerList();
@@ -15,7 +20,11 @@ public class LevitateCommandPreprocessEvent extends Event implements Cancellable
 	private CommandInformation commandInformation; 
 	private ParameterSet parameterSet;
     private boolean cancelled;
- 
+
+	/**
+	 * Gets called when a user tries to execute a Levitate-Command.<br />
+	 * When cancelled, Levitate wont execute the command.
+	 */
     public LevitateCommandPreprocessEvent(CommandSender sender, CommandInformation commandInformation, ParameterSet parameterSet) {
     	this.sender = sender;
     	this.commandInformation = commandInformation;

@@ -23,6 +23,7 @@ import org.bukkit.plugin.Plugin;
 import de.ketrwu.levitate.CommandInformation.CommandExecutor;
 import de.ketrwu.levitate.Message.TextMode;
 import de.ketrwu.levitate.bukkit.LevitateCommandPreprocessEvent;
+import de.ketrwu.levitate.bukkit.LevitateMessagePreprocessEvent;
 import de.ketrwu.levitate.exception.CommandAnnotationException;
 import de.ketrwu.levitate.exception.CommandSyntaxException;
 import de.ketrwu.levitate.exception.ExecutorIncompatibleException;
@@ -206,11 +207,16 @@ public class CommandRegistry {
 						return playerPassCommand(arg0, arg1, arg2);
 					} catch (CommandSyntaxException | NoPermissionException | SyntaxResponseException | ExecutorIncompatibleException e) {
 						if(e instanceof NoPermissionException) {
-							arg0.sendMessage(Message.NO_PERMISSION.get(TextMode.COLOR));
+							LevitateMessagePreprocessEvent preprocessEvent = new LevitateMessagePreprocessEvent(arg0, Message.NO_PERMISSION, TextMode.COLOR, Message.NO_PERMISSION.get(TextMode.COLOR));
+							Bukkit.getPluginManager().callEvent(preprocessEvent);
+							if(!preprocessEvent.isCancelled()) arg0.sendMessage(preprocessEvent.getMessage());
 							return true;
 						}
 						if(e instanceof SyntaxResponseException || e instanceof ExecutorIncompatibleException) {
-							arg0.sendMessage(e.getMessage());
+
+							LevitateMessagePreprocessEvent preprocessEvent = new LevitateMessagePreprocessEvent(arg0, null, null, e.getMessage());
+							Bukkit.getPluginManager().callEvent(preprocessEvent);
+							if(!preprocessEvent.isCancelled()) arg0.sendMessage(preprocessEvent.getMessage());
 							return true;
 						}
 						e.printStackTrace();
