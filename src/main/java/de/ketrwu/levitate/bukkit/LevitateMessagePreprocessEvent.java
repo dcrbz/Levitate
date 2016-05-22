@@ -12,12 +12,13 @@ import de.ketrwu.levitate.Message.TextMode;
  * Gets called before Levitate sends a message to the user. <br />
  * When cancelled, Levitate wont send a message to the user.<br />
  * Levitate will send the message from getMessage() to the user.
+ * 
  * @author Kenneth Wussmann
  */
 public class LevitateMessagePreprocessEvent extends Event implements Cancellable {
 
-    private static final HandlerList handlers = new HandlerList();
-    private CommandSender receiver;
+	private static final HandlerList handlers = new HandlerList();
+	private CommandSender receiver;
 	private Message messageType;
 	private TextMode textMode;
 	private String message;
@@ -28,21 +29,22 @@ public class LevitateMessagePreprocessEvent extends Event implements Cancellable
 	 * When cancelled, Levitate wont send a message to the user.<br />
 	 * Levitate will send the message from getMessage() to the user.
 	 */
-    public LevitateMessagePreprocessEvent(CommandSender receiver, Message messageType, TextMode textMode, String message) {
-    	this.receiver = receiver;
-    	this.messageType = messageType;
-    	this.textMode = textMode;
-    	this.message = message;
-    }
-  
-	@Override
-    public HandlerList getHandlers() {
-        return handlers;
-    }
+	public LevitateMessagePreprocessEvent(CommandSender receiver, Message messageType, TextMode textMode,
+			String message) {
+		this.receiver = receiver;
+		this.messageType = messageType;
+		this.textMode = textMode;
+		this.message = message;
+	}
 
-    public static HandlerList getHandlerList() {
-        return handlers;
-    }
+	@Override
+	public HandlerList getHandlers() {
+		return handlers;
+	}
+
+	public static HandlerList getHandlerList() {
+		return handlers;
+	}
 
 	public Message getMessageType() {
 		return messageType;
@@ -73,5 +75,5 @@ public class LevitateMessagePreprocessEvent extends Event implements Cancellable
 	public void setCancelled(boolean cancelled) {
 		this.cancelled = cancelled;
 	}
-	    
+
 }
