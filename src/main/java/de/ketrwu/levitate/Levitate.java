@@ -63,6 +63,7 @@ public class Levitate {
 			}
 			Message.loadConfig(config);
 		}
+		
 	}
 
 	/**

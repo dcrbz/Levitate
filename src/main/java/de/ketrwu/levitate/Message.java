@@ -115,6 +115,7 @@ public enum Message {
 	 * @param file Path to .yml file
 	 */
 	public static void loadConfig(File file) {
+		if(config != null) return; 
 		config = new YamlConfiguration();
 		try {
 			config.load(file);
@@ -123,6 +124,19 @@ public enum Message {
 			}
 			config.options().copyDefaults(true);
 			config.save(file);
+		} catch (IOException | InvalidConfigurationException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * Reload the messages-config
+	 * @param file The messages.yml file
+	 */
+	public static void reloadConfig(File file) {
+		if(config == null) return;
+		try {
+			config.load(file);
 		} catch (IOException | InvalidConfigurationException e) {
 			e.printStackTrace();
 		}

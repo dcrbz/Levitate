@@ -70,6 +70,25 @@ public class CommandInformation {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * Create a CommandInformation with permission and description for a new command
+	 * @param syntax Your syntax
+	 * @param permission Your new permission
+	 * @param description Your description of your command
+	 * @param readable Your syntax for humans readable
+	 */
+	public CommandInformation(String syntax, String permission, String description, String readable) {
+		this.permission = permission;
+		this.syntax = syntax;
+		this.description = description;
+		this.readable = readable;
+		try {
+			processSyntax();
+		} catch (CommandSyntaxException e) {
+			e.printStackTrace();
+		}
+	}
 
 	private void processSyntax() throws CommandSyntaxException {
 		
