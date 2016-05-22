@@ -41,6 +41,4 @@ public class LevitatePlugin extends JavaPlugin {
 		});
 	}
 	
-	
-	
 }

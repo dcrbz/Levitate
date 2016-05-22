@@ -209,14 +209,18 @@ public class CommandRegistry {
 						if(e instanceof NoPermissionException) {
 							LevitateMessagePreprocessEvent preprocessEvent = new LevitateMessagePreprocessEvent(arg0, Message.NO_PERMISSION, TextMode.COLOR, Message.NO_PERMISSION.get(TextMode.COLOR));
 							Bukkit.getPluginManager().callEvent(preprocessEvent);
-							if(!preprocessEvent.isCancelled()) arg0.sendMessage(preprocessEvent.getMessage());
+							if(!preprocessEvent.isCancelled()) {
+								if(preprocessEvent.getMessage() != null) arg0.sendMessage(preprocessEvent.getMessage());
+							}
 							return true;
 						}
 						if(e instanceof SyntaxResponseException || e instanceof ExecutorIncompatibleException) {
 
 							LevitateMessagePreprocessEvent preprocessEvent = new LevitateMessagePreprocessEvent(arg0, null, null, e.getMessage());
 							Bukkit.getPluginManager().callEvent(preprocessEvent);
-							if(!preprocessEvent.isCancelled()) arg0.sendMessage(preprocessEvent.getMessage());
+							if(!preprocessEvent.isCancelled()) {
+								if(preprocessEvent.getMessage() != null) arg0.sendMessage(preprocessEvent.getMessage());
+							}
 							return true;
 						}
 						e.printStackTrace();
