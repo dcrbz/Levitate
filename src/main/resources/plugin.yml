@@ -1,0 +1,6 @@
+name: Levitate
+version: 1.5.3
+main: de.ketrwu.levitate.bukkit.LevitatePlugin
+author: Kenneth Wußmann
+website: https://github.com/KennethWussmann/Levitate
+load: STARTUP

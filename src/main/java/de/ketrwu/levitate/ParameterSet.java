@@ -189,15 +189,6 @@ public class ParameterSet {
 	}
 	
 	/**
-	 * Get argument as Object
-	 * @param i The index in your command, starts at 0
-	 * @return
-	 */
-	public Object get(int i) {
-		return (Object) parameter.get(i);
-	}
-	
-	/**
 	 * Checks if string is an integer
 	 * @param val 
 	 * @return

@@ -13,6 +13,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandMap;
 import org.bukkit.command.CommandSender;
@@ -21,6 +22,8 @@ import org.bukkit.plugin.Plugin;
 
 import de.ketrwu.levitate.CommandInformation.CommandExecutor;
 import de.ketrwu.levitate.Message.TextMode;
+import de.ketrwu.levitate.bukkit.LevitateCommandPreprocessEvent;
+import de.ketrwu.levitate.bukkit.LevitateMessagePreprocessEvent;
 import de.ketrwu.levitate.exception.CommandAnnotationException;
 import de.ketrwu.levitate.exception.CommandSyntaxException;
 import de.ketrwu.levitate.exception.ExecutorIncompatibleException;
@@ -204,11 +207,20 @@ public class CommandRegistry {
 						return playerPassCommand(arg0, arg1, arg2);
 					} catch (CommandSyntaxException | NoPermissionException | SyntaxResponseException | ExecutorIncompatibleException e) {
 						if(e instanceof NoPermissionException) {
-							arg0.sendMessage(Message.NO_PERMISSION.get(TextMode.COLOR));
+							LevitateMessagePreprocessEvent preprocessEvent = new LevitateMessagePreprocessEvent(arg0, Message.NO_PERMISSION, TextMode.COLOR, Message.NO_PERMISSION.get(TextMode.COLOR));
+							Bukkit.getPluginManager().callEvent(preprocessEvent);
+							if(!preprocessEvent.isCancelled()) {
+								if(preprocessEvent.getMessage() != null) arg0.sendMessage(preprocessEvent.getMessage());
+							}
 							return true;
 						}
 						if(e instanceof SyntaxResponseException || e instanceof ExecutorIncompatibleException) {
-							arg0.sendMessage(e.getMessage());
+
+							LevitateMessagePreprocessEvent preprocessEvent = new LevitateMessagePreprocessEvent(arg0, null, null, e.getMessage());
+							Bukkit.getPluginManager().callEvent(preprocessEvent);
+							if(!preprocessEvent.isCancelled()) {
+								if(preprocessEvent.getMessage() != null) arg0.sendMessage(preprocessEvent.getMessage());
+							}
 							return true;
 						}
 						e.printStackTrace();
@@ -352,7 +364,10 @@ public class CommandRegistry {
 							throw new NoPermissionException(Message.NO_PERMISSION.get(TextMode.COLOR));
 						}
 					}
-					commands.get(i).execute(sender, command, new ParameterSet(args));
+					ParameterSet ps = new ParameterSet(args);
+					LevitateCommandPreprocessEvent preprocessEvent = new LevitateCommandPreprocessEvent(sender, i, ps);
+					Bukkit.getPluginManager().callEvent(preprocessEvent);
+					if(!preprocessEvent.isCancelled()) commands.get(i).execute(sender, command, new ParameterSet(args));
 					found = true;
 				}
 			} catch (ExecutorIncompatibleException | SyntaxResponseException e) {
