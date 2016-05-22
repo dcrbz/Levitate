@@ -3,7 +3,7 @@
   <br />
   <a href="https://raw.githubusercontent.com/KennethWussmann/Levitate/master/LICENSE"><img src="https://img.shields.io/badge/license-GPLv2-blue.svg" alt="GitHub license"></a>
   <a href='http://ci.ketrwu.de/job/Levitate-Java-8/'><img src='http://ci.ketrwu.de/buildStatus/icon?job=Levitate-Java-8'></a>
-  <a href="https://github.com/KennethWussmann/Levitate/releases/latest"><img src="https://img.shields.io/badge/style-1.5.2-A68FA1.svg?label=version" alt="GitHub version"></a>
+  <a href="https://github.com/KennethWussmann/Levitate/releases/latest"><img src="https://img.shields.io/badge/style-1.5.3-A68FA1.svg?label=version" alt="GitHub version"></a>
   <a href="http://ci.ketrwu.de/job/Levitate-Java-8/javadoc/"><img src="https://img.shields.io/badge/style-latest-yellow.svg?label=JavaDoc" alt="JavaDoc"></a>
   <a href="https://github.com/KennethWussmann/Levitate/wiki"><img src="https://img.shields.io/badge/Wiki-Read%20me-358AA6.svg" alt="Wiki"></a>
   <a href="https://www.paypal.me/ketrwu/0.99usd"><img src="https://img.shields.io/badge/style-USD%200.99-blue.svg?label=PayPal" alt="PayPal Donate"></a>
