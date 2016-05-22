@@ -1,0 +1,4 @@
+name: Levitate
+version: 1.5.3
+main: de.ketrwu.levitate.LevitatePlugin
+author: Kenneth

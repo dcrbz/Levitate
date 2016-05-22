@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="http://media.ketrwu.de/levitate-header-3.png" alt="Levitate-Header">
+  <img src="https://i.imgur.com/Ln11ksG.png" alt="Levitate-Header">
   <br />
   <a href="https://raw.githubusercontent.com/KennethWussmann/Levitate/master/LICENSE"><img src="https://img.shields.io/badge/license-GPLv2-blue.svg" alt="GitHub license"></a>
   <a href='http://ci.ketrwu.de/job/Levitate-Java-8/'><img src='http://ci.ketrwu.de/buildStatus/icon?job=Levitate-Java-8'></a>
