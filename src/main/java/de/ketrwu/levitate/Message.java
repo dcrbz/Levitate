@@ -67,6 +67,7 @@ public enum Message {
 	URLSYNTAX_DOES_NOT_START_WITH("The url \"%arg%\" has to start with \"%parameter%\"!");
 	
 	private static YamlConfiguration config;
+	private static HashMap<Message, String> overrides = new HashMap<Message, String>();
 	private String message;
 	
 	/**
@@ -87,6 +88,9 @@ public enum Message {
 		String raw = message;
 		if(config != null) {
 			if(config.getString("levitate." + values()[ordinal()].toString()) != null) raw = config.getString("levitate." + values()[ordinal()].toString());
+		}
+		if(overrides.containsKey(values()[ordinal()])) {
+			raw = overrides.get(values()[ordinal()]);
 		}
 		switch(mode) {
 		case COLOR:
@@ -140,6 +144,15 @@ public enum Message {
 		} catch (IOException | InvalidConfigurationException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	/**
+	 * Override a message globally
+	 * @param message The message you want to override
+	 * @param raw The raw String to override the default message
+	 */
+	public static void overrideMessage(Message message, String raw) {
+		overrides.put(message, raw);
 	}
 
 	/**

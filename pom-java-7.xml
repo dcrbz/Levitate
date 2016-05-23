@@ -4,7 +4,7 @@
    <groupId>de.ketrwu</groupId>
    <artifactId>levitate</artifactId>
    <packaging>jar</packaging>
-   <version>1.5.3-SNAPSHOT</version>
+   <version>1.5.4-SNAPSHOT</version>
    <name>Levitate</name>
    <description>Easy to use command registry and handler for Bukkit and Spigot.</description>
    <licenses>
@@ -18,19 +18,19 @@
          <name>Kenneth Wussmann</name>
          <email>contact@ketrwu.de</email>
          <organization>Kenneth Wussmann</organization>
-         <organizationUrl>http://ketrwu.de/</organizationUrl>
+         <organizationUrl>https://ketrwu.de/</organizationUrl>
       </developer>
    </developers>
    <distributionManagement>
       <repository>
          <id>deployment</id>
          <name>Internal Releases</name>
-         <url>http://repo.ketrwu.de/content/repositories/snapshots/</url>
+         <url>http://repo.ketrwu.de/repository/maven-snapshots/</url>
       </repository>
       <snapshotRepository>
          <id>deployment</id>
          <name>Internal Releases</name>
-         <url>http://repo.ketrwu.de/content/repositories/snapshots/</url>
+         <url>http://repo.ketrwu.de/repository/maven-snapshots/</url>
       </snapshotRepository>
    </distributionManagement>
    <dependencies>
