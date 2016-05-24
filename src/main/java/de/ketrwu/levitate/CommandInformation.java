@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.regex.MatchResult;
 import java.util.regex.Pattern;
 
+import org.bukkit.command.CommandSender;
+
 import de.ketrwu.levitate.Message.TextMode;
 import de.ketrwu.levitate.exception.CommandSyntaxException;
 import de.ketrwu.levitate.exception.ExecutorIncompatibleException;
@@ -125,11 +127,11 @@ public class CommandInformation {
 		}
 	}
 	
-	public boolean matchArgument(String input, String syntaxArg) throws CommandSyntaxException {
+	public boolean matchArgument(CommandSender sender, String input, String syntaxArg) throws CommandSyntaxException {
 		List<String> i = parseArgument(syntaxArg);
 		for(SyntaxHandler h : SyntaxValidations.getSyntaxes().values()) {
 			try {
-				h.check(i.get(1), input);
+				h.check(sender, i.get(1), input);
 				return true;
 			} catch (Exception e) { }
 		}
@@ -200,7 +202,7 @@ public class CommandInformation {
 	}
 	
 	
-	public boolean matches(CommandExecutor sender, String command, String[] args) throws CommandSyntaxException, SyntaxResponseException, ExecutorIncompatibleException {
+	public boolean matches(CommandSender cmdSender, CommandExecutor sender, String command, String[] args) throws CommandSyntaxException, SyntaxResponseException, ExecutorIncompatibleException {
 		if(!this.command.equalsIgnoreCase(command)) return false;
 		
 		switch(commandExecutor) {
@@ -233,7 +235,7 @@ public class CommandInformation {
 			}
 			String arg = args[i];
 			try {
-				exArg.getHandler().check(exArg.getParameter(), arg);
+				exArg.getHandler().check(cmdSender, exArg.getParameter(), arg);
 			} catch (SyntaxResponseException e) {
 				throw e;
 			}

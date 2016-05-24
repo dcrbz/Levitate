@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.bukkit.command.CommandSender;
+
 import de.ketrwu.levitate.Message;
 import de.ketrwu.levitate.Message.TextMode;
 import de.ketrwu.levitate.SyntaxHandler;
@@ -39,7 +41,7 @@ public class BooleanSyntax implements SyntaxHandler {
 	}
 	
 	@Override
-	public void check(String parameter, final String passed) throws SyntaxResponseException {
+	public void check(CommandSender sender, String parameter, final String passed) throws SyntaxResponseException {
 		if(values.contains(passed.toLowerCase())) return;
 		throw new SyntaxResponseException(Message.BOOLEANSYNTAX_HAS_TO_BE_BOOLEAN.get(TextMode.COLOR, new HashMap<String, String>(){{put("%arg%", passed);}}));
 	}

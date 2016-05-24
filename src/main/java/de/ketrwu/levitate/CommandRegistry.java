@@ -281,7 +281,7 @@ public class CommandRegistry {
 				
 			}
 			if(exArg == null) continue;
-			List<String> l = exArg.getHandler().getTabComplete(exArg.getParameter(), arg);
+			List<String> l = exArg.getHandler().getTabComplete(sender, exArg.getParameter(), arg);
 			if(l != null && l.size() > 0) complete.addAll(l);
 		}
 		Iterator<String> iComplete = complete.iterator();
@@ -360,7 +360,7 @@ public class CommandRegistry {
 		for(CommandInformation i : commands.keySet()) {
 			if(found == true) continue;
 			try {
-				if(i.matches(ce, command, args)) {
+				if(i.matches(sender, ce, command, args)) {
 					if(permissionHandler != null && i.getPermission() != null) {
 						if(!permissionHandler.hasPermission(sender, i.getPermission())) {
 							throw new NoPermissionException(Message.NO_PERMISSION.get(TextMode.COLOR));

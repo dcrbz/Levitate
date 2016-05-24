@@ -65,7 +65,12 @@ public enum Message {
 	ITEMSTACKSYNTAX_ITEM_NOT_FOUND("Item \"%arg%\" doesn't exist!"),
 	WORLDSYNTAX_WORLD_DOES_NOT_EXIST("The world \"%world%\" doesn't exist!"),
 	URLSYNTAX_URL_MALFORMED("The argument \"%arg%\" has to be an URL!"),
-	URLSYNTAX_DOES_NOT_START_WITH("The url \"%arg%\" has to start with \"%parameter%\"!");
+	URLSYNTAX_DOES_NOT_START_WITH("The url \"%arg%\" has to start with \"%parameter%\"!"),
+	COORDSYNTAX_PARAMETER_MALFORMED("Parameter \"%parameter%\" of syntax \"coord\" is malformed!"),
+	COORDSYNTAX_CONSOLE_COMMAND("The syntax \"coord\" cannot be used in a console command!"),
+	COORDSYNTAX_HAS_TO_BE_WORLD("Argument \"%arg%\" has to be a worldname!"),
+	COORDSYNTAX_HAS_TO_BE_INTEGER("Argument \"%arg%\" has to be an integer!");
+	
 	
 	private static YamlConfiguration config;
 	private static HashMap<Message, String> overrides = new HashMap<Message, String>();

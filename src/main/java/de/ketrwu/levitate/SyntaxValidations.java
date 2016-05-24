@@ -12,6 +12,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import de.ketrwu.levitate.syntax.BooleanSyntax;
 import de.ketrwu.levitate.syntax.ChoiceIgnoreCaseSyntax;
 import de.ketrwu.levitate.syntax.ChoiceSyntax;
+import de.ketrwu.levitate.syntax.CoordinateSyntax;
 import de.ketrwu.levitate.syntax.DoubleSyntax;
 import de.ketrwu.levitate.syntax.EnumSyntax;
 import de.ketrwu.levitate.syntax.EqualsIgnoreCaseSyntax;
@@ -55,6 +56,7 @@ public class SyntaxValidations {
 		registerSyntax("*", new WildcardSyntax());
 		registerSyntax("world", new WorldSyntax());
 		registerSyntax("url", new URLSyntax());
+		registerSyntax("coord", new CoordinateSyntax());
 	}
 	
 	/**

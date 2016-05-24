@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.bukkit.Material;
+import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -33,7 +34,7 @@ public class ItemStackSyntax implements SyntaxHandler {
 	}
 
 	@Override
-	public void check(String parameter, String passed) throws SyntaxResponseException {
+	public void check(CommandSender sender, String parameter, String passed) throws SyntaxResponseException {
 		HashMap<String, String> replaces = new HashMap<String, String>();
 		replaces.put("%arg%", passed);
 		ItemStack is = null;
@@ -117,7 +118,7 @@ public class ItemStackSyntax implements SyntaxHandler {
 	}
 
 	@Override
-	public List<String> getTabComplete(String parameter, String passed) {
+	public List<String> getTabComplete(CommandSender sender, String parameter, String passed) {
 		return new ArrayList<String>(){{addAll(items.keySet());}};
 	}
 	

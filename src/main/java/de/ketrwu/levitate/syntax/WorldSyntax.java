@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.World;
+import org.bukkit.command.CommandSender;
 
 import de.ketrwu.levitate.Message;
 import de.ketrwu.levitate.Message.TextMode;
@@ -19,7 +20,7 @@ import de.ketrwu.levitate.exception.SyntaxResponseException;
 public class WorldSyntax implements SyntaxHandler {
 
 	@Override
-	public void check(String parameter, String passed) throws SyntaxResponseException {
+	public void check(CommandSender sender, String parameter, String passed) throws SyntaxResponseException {
 		World w = Bukkit.getWorld(passed);
 		if(w == null) {
 			HashMap<String, String> replaces = new HashMap<String, String>();
@@ -29,7 +30,7 @@ public class WorldSyntax implements SyntaxHandler {
 	}
 
 	@Override
-	public List<String> getTabComplete(String parameter, String passed) {
+	public List<String> getTabComplete(CommandSender sender, String parameter, String passed) {
 		List<String> complete = new ArrayList<String>();
 		for(World w : Bukkit.getWorlds())
 			complete.add(w.getName());

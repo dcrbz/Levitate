@@ -7,6 +7,7 @@ import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import de.ketrwu.levitate.Message;
@@ -22,7 +23,7 @@ import de.ketrwu.levitate.exception.SyntaxResponseException;
 public class PlayerSyntax implements SyntaxHandler {
 
 	@Override
-	public void check(String parameter, String passed) throws SyntaxResponseException, CommandSyntaxException {
+	public void check(CommandSender sender, String parameter, String passed) throws SyntaxResponseException, CommandSyntaxException {
 		if(parameter.equalsIgnoreCase("online") == false && parameter.equalsIgnoreCase("offline") == false && parameter.equals("") == false) throw new CommandSyntaxException("Method 'player' doesn't supports parameter '"+parameter+"'!");
 		OfflinePlayer p = Bukkit.getOfflinePlayer(passed);
 		HashMap<String, String> replaces = new HashMap<String, String>();
@@ -37,7 +38,7 @@ public class PlayerSyntax implements SyntaxHandler {
 	}
 	
 	@Override
-	public List<String> getTabComplete(String parameter, String passed) {
+	public List<String> getTabComplete(CommandSender sender, String parameter, String passed) {
 		List<String> playerList = new ArrayList<String>();
 		for(Player p : Bukkit.getOnlinePlayers()) {
 			playerList.add(p.getName());
