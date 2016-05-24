@@ -27,9 +27,10 @@ public class PlayerSyntax implements SyntaxHandler {
 		if(parameter.equalsIgnoreCase("online") == false && parameter.equalsIgnoreCase("offline") == false && parameter.equals("") == false) throw new CommandSyntaxException("Method 'player' doesn't supports parameter '"+parameter+"'!");
 		OfflinePlayer p = Bukkit.getOfflinePlayer(passed);
 		HashMap<String, String> replaces = new HashMap<String, String>();
-		replaces.put("%player%", p.getName());
+		replaces.put("%player%", passed);
 		if(p == null) p = Bukkit.getOfflinePlayer(UUID.fromString(passed));
-		if(p == null) throw new SyntaxResponseException(Message.PLAYERSYNTAX_PLAYER_NOT_FOUND.get(TextMode.COLOR, replaces));
+		if(p == null) throw new SyntaxResponseException(Message.PLAYERSYNTAX_PLAYER_NOT_FOUND.get(TextMode.COLOR));
+		replaces.put("%player%", p.getName());
 		if(parameter.equalsIgnoreCase("online")) {
 			if(!p.isOnline()) throw new SyntaxResponseException(Message.PLAYERSYNTAX_PLAYER_OFFLINE.get(TextMode.COLOR, replaces));
 		} else if(parameter.equalsIgnoreCase("offline")) {
