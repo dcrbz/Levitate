@@ -66,15 +66,15 @@ public class CoordinateSyntax implements SyntaxHandler {
 			break;
 		case "x":
 			if(b == null) break;
-			complete.add(String.valueOf(b.getLocation().getX()));
+			complete.add(String.valueOf((int) b.getLocation().getX()));
 			break;
 		case "y":
 			if(b == null) break;
-			complete.add(String.valueOf(b.getLocation().getY()));
+			complete.add(String.valueOf((int) b.getLocation().getY()));
 			break;
 		case "z":
 			if(b == null) break;
-			complete.add(String.valueOf(b.getLocation().getZ()));
+			complete.add(String.valueOf((int) b.getLocation().getZ()));
 			break;
 		}
 		return complete;
