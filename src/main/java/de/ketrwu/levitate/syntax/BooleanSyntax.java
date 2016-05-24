@@ -47,7 +47,7 @@ public class BooleanSyntax implements SyntaxHandler {
 	}
 
 	@Override
-	public List<String> getTabComplete(String parameter, String passed) {
+	public List<String> getTabComplete(CommandSender sender, String parameter, String passed) {
 		return new ArrayList<String>(values);
 	}
 
