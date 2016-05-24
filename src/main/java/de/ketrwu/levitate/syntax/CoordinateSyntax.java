@@ -35,11 +35,13 @@ public class CoordinateSyntax implements SyntaxHandler {
 			for(World w : Bukkit.getWorlds()) {
 				if(w.getName().equalsIgnoreCase(passed)) return;
 			}
-			throw new CommandSyntaxException(Message.COORDSYNTAX_HAS_TO_BE_WORLD.get(TextMode.COLOR, replaces));
+			throw new SyntaxResponseException(Message.COORDSYNTAX_HAS_TO_BE_WORLD.get(TextMode.COLOR, replaces));
 		case "x":
 		case "y":
 		case "z":
-			if(!isInt(passed)) throw new CommandSyntaxException(Message.COORDSYNTAX_HAS_TO_BE_INTEGER.get(TextMode.COLOR, replaces));
+		case "yaw":
+		case "pitch":
+			if(!isInt(passed) && !isDouble(passed) && !isFloat(passed)) throw new SyntaxResponseException(Message.COORDSYNTAX_HAS_TO_BE_NUMBER.get(TextMode.COLOR, replaces));
 			break;
 		default:
 			throw new CommandSyntaxException(Message.COORDSYNTAX_PARAMETER_MALFORMED.get(TextMode.COLOR, replaces)); 
@@ -49,6 +51,22 @@ public class CoordinateSyntax implements SyntaxHandler {
 	public boolean isInt(String val) {
 		try {
 			Integer.parseInt(val);
+			return true;
+		} catch (Exception e) { }
+		return false;
+	}
+	
+	public boolean isDouble(String val) {
+		try {
+			Double.parseDouble(val);
+			return true;
+		} catch (Exception e) { }
+		return false;
+	}
+	
+	public boolean isFloat(String val) {
+		try {
+			Float.parseFloat(val);
 			return true;
 		} catch (Exception e) { }
 		return false;
@@ -66,15 +84,21 @@ public class CoordinateSyntax implements SyntaxHandler {
 			break;
 		case "x":
 			if(b == null) break;
-			complete.add(String.valueOf((int) b.getLocation().getX()));
+			complete.add(String.valueOf(b.getLocation().getX()));
 			break;
 		case "y":
 			if(b == null) break;
-			complete.add(String.valueOf((int) b.getLocation().getY()));
+			complete.add(String.valueOf(b.getLocation().getY()));
 			break;
 		case "z":
 			if(b == null) break;
-			complete.add(String.valueOf((int) b.getLocation().getZ()));
+			complete.add(String.valueOf(b.getLocation().getZ()));
+		case "yaw":
+			if(b == null) break;
+			complete.add(String.valueOf(p.getLocation().getYaw()));
+		case "pitch":
+			if(b == null) break;
+			complete.add(String.valueOf(p.getLocation().getPitch()));
 			break;
 		}
 		return complete;
