@@ -28,7 +28,7 @@ public class PlayerSyntax implements SyntaxHandler {
 		HashMap<String, String> replaces = new HashMap<String, String>();
 		replaces.put("%player%", p.getName());
 		if(p == null) p = Bukkit.getOfflinePlayer(UUID.fromString(passed));
-		if(p == null) throw new Synt
+		if(p == null) throw new SyntaxResponseException(Message.PLAYERSYNTAX_PLAYER_NOT_FOUND.get(TextMode.COLOR, replaces));
 		if(parameter.equalsIgnoreCase("online")) {
 			if(!p.isOnline()) throw new SyntaxResponseException(Message.PLAYERSYNTAX_PLAYER_OFFLINE.get(TextMode.COLOR, replaces));
 		} else if(parameter.equalsIgnoreCase("offline")) {
