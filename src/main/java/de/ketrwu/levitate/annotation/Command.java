@@ -1,4 +1,4 @@
-package de.ketrwu.levitate;
+package de.ketrwu.levitate.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

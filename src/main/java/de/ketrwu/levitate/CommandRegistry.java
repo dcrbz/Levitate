@@ -66,7 +66,7 @@ public class CommandRegistry {
 				replaces.put("%method%", obj.getClass().getName() + ": " + m.getName() + "()");
 				CommandInformation cmd = null;
 				String[] aliases = null;
-				if(m.isAnnotationPresent(de.ketrwu.levitate.Command.class)) {
+				if(m.isAnnotationPresent(de.ketrwu.levitate.annotation.Command.class)) {
 					if(m.getParameterTypes().length != 3) throw new CommandAnnotationException(Message.CR_PARAMETERCOUNT_INVALID.get(TextMode.PLAIN, replaces));
 					if(m.getParameterTypes()[0] != CommandSender.class) {
 						replaces.put("%index%", "0");
@@ -84,7 +84,7 @@ public class CommandRegistry {
 						throw new CommandAnnotationException(Message.CR_PARAMETER_INVALID.get(TextMode.PLAIN, replaces));
 					}
 					
-					de.ketrwu.levitate.Command commandAnnotation = m.getAnnotation(de.ketrwu.levitate.Command.class);
+					de.ketrwu.levitate.annotation.Command commandAnnotation = m.getAnnotation(de.ketrwu.levitate.annotation.Command.class);
 					cmd = new CommandInformation(commandAnnotation.syntax());
 					
 					if(!commandAnnotation.readable().equals("")) cmd.setReadable(commandAnnotation.readable());
