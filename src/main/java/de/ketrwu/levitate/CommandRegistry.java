@@ -103,6 +103,7 @@ public class CommandRegistry {
 									e.printStackTrace();
 								}
 							}
+							
 						});
 					} else {
 						register(cmd, aliases, new CommandHandler() {
@@ -115,6 +116,7 @@ public class CommandRegistry {
 									e.printStackTrace();
 								}
 							}
+							
 						});
 					}
 				}
@@ -207,7 +209,7 @@ public class CommandRegistry {
 						return playerPassCommand(arg0, arg1, arg2);
 					} catch (CommandSyntaxException | NoPermissionException | SyntaxResponseException | ExecutorIncompatibleException e) {
 						if(e instanceof NoPermissionException) {
-							LevitateMessagePreprocessEvent preprocessEvent = new LevitateMessagePreprocessEvent(arg0, Message.NO_PERMISSION, TextMode.COLOR, Message.NO_PERMISSION.get(TextMode.COLOR));
+							LevitateMessagePreprocessEvent preprocessEvent = new LevitateMessagePreprocessEvent(getPlugin(), arg0, Message.NO_PERMISSION, TextMode.COLOR, Message.NO_PERMISSION.get(TextMode.COLOR));
 							Bukkit.getPluginManager().callEvent(preprocessEvent);
 							if(!preprocessEvent.isCancelled()) {
 								if(preprocessEvent.getMessage() != null) arg0.sendMessage(preprocessEvent.getMessage());
@@ -216,7 +218,7 @@ public class CommandRegistry {
 						}
 						if(e instanceof SyntaxResponseException || e instanceof ExecutorIncompatibleException) {
 
-							LevitateMessagePreprocessEvent preprocessEvent = new LevitateMessagePreprocessEvent(arg0, null, null, e.getMessage());
+							LevitateMessagePreprocessEvent preprocessEvent = new LevitateMessagePreprocessEvent(getPlugin(), arg0, null, null, e.getMessage());
 							Bukkit.getPluginManager().callEvent(preprocessEvent);
 							if(!preprocessEvent.isCancelled()) {
 								if(preprocessEvent.getMessage() != null) arg0.sendMessage(preprocessEvent.getMessage());
@@ -365,7 +367,7 @@ public class CommandRegistry {
 						}
 					}
 					ParameterSet ps = new ParameterSet(args);
-					LevitateCommandPreprocessEvent preprocessEvent = new LevitateCommandPreprocessEvent(sender, i, ps);
+					LevitateCommandPreprocessEvent preprocessEvent = new LevitateCommandPreprocessEvent(getPlugin(), sender, i, ps);
 					Bukkit.getPluginManager().callEvent(preprocessEvent);
 					if(!preprocessEvent.isCancelled()) commands.get(i).execute(sender, command, new ParameterSet(args));
 					found = true;
