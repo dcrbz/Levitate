@@ -36,9 +36,12 @@ public class CoordinateSyntax implements SyntaxHandler {
 				if(w.getName().equalsIgnoreCase(passed)) return;
 			}
 			throw new SyntaxResponseException(Message.COORDSYNTAX_HAS_TO_BE_WORLD.get(TextMode.COLOR, replaces));
-		case "x":
-		case "y":
-		case "z":
+		case "blockx":
+		case "blocky":
+		case "blockz":
+		case "playerx":
+		case "playery":
+		case "playerz":
 		case "yaw":
 		case "pitch":
 			if(!isInt(passed) && !isDouble(passed) && !isFloat(passed)) throw new SyntaxResponseException(Message.COORDSYNTAX_HAS_TO_BE_NUMBER.get(TextMode.COLOR, replaces));
@@ -82,17 +85,28 @@ public class CoordinateSyntax implements SyntaxHandler {
 		case "world":
 			complete.add(p.getWorld().getName());
 			break;
-		case "x":
+		case "blockx":
 			if(b == null) break;
 			complete.add(String.valueOf(b.getLocation().getX()));
 			break;
-		case "y":
+		case "blocky":
 			if(b == null) break;
 			complete.add(String.valueOf(b.getLocation().getY()));
 			break;
-		case "z":
+		case "blockz":
 			if(b == null) break;
 			complete.add(String.valueOf(b.getLocation().getZ()));
+		case "playerx":
+			if(b == null) break;
+			complete.add(String.valueOf(p.getLocation().getX()));
+			break;
+		case "playery":
+			if(b == null) break;
+			complete.add(String.valueOf(p.getLocation().getY()));
+			break;
+		case "playerz":
+			if(b == null) break;
+			complete.add(String.valueOf(p.getLocation().getZ()));
 		case "yaw":
 			if(b == null) break;
 			complete.add(String.valueOf(p.getLocation().getYaw()));
