@@ -56,6 +56,7 @@ public enum Message {
 	NOTEQUALSSYNTAX_CANNOT_EQUAL("Argument \"%arg%\" cannot equal \"%value%\"!"),
 	PLAYERSYNTAX_PLAYER_OFFLINE("The player \"%player%\" has to be online!"),
 	PLAYERSYNTAX_PLAYER_ONLINE("The player \"%player%\" has to be offline!"),
+	PLAYERSYNTAX_PLAYER_NOT_FOUND("The player \"%player%\" doesn't exist!"),
 	STRINGSYNTAX_CANNOT_BE_INT("Argmuent \"%arg%\" cannot be a number!"),
 	STRINGSYNTAX_ONLY_LOWERCASE("Argument \"%arg%\" has to contain only lower-case letters!"),
 	STRINGSYNTAX_ONLY_UPPERCASE("Argument \"%arg%\" has to contain only upper-case letters!"),

@@ -3,6 +3,7 @@ package de.ketrwu.levitate.syntax;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -26,6 +27,8 @@ public class PlayerSyntax implements SyntaxHandler {
 		OfflinePlayer p = Bukkit.getOfflinePlayer(passed);
 		HashMap<String, String> replaces = new HashMap<String, String>();
 		replaces.put("%player%", p.getName());
+		if(p == null) p = Bukkit.getOfflinePlayer(UUID.fromString(passed));
+		if(p == null) throw new Synt
 		if(parameter.equalsIgnoreCase("online")) {
 			if(!p.isOnline()) throw new SyntaxResponseException(Message.PLAYERSYNTAX_PLAYER_OFFLINE.get(TextMode.COLOR, replaces));
 		} else if(parameter.equalsIgnoreCase("offline")) {
@@ -36,8 +39,9 @@ public class PlayerSyntax implements SyntaxHandler {
 	@Override
 	public List<String> getTabComplete(String parameter, String passed) {
 		List<String> playerList = new ArrayList<String>();
-		for(Player p : Bukkit.getOnlinePlayers())
+		for(Player p : Bukkit.getOnlinePlayers()) {
 			playerList.add(p.getName());
+		}
 		return playerList;
 	}
 
