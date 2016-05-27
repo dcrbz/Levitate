@@ -6,11 +6,11 @@ import java.io.IOException;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import de.ketrwu.levitate.CommandHandler;
 import de.ketrwu.levitate.CommandInformation;
 import de.ketrwu.levitate.Levitate;
 import de.ketrwu.levitate.Message;
 import de.ketrwu.levitate.ParameterSet;
+import de.ketrwu.levitate.handler.CommandHandler;
 
 public class LevitatePlugin extends JavaPlugin {
 	

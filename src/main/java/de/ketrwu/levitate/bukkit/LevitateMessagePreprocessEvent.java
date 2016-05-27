@@ -6,7 +6,6 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.Plugin;
 
-import de.ketrwu.levitate.Levitate;
 import de.ketrwu.levitate.Message;
 import de.ketrwu.levitate.Message.TextMode;
 

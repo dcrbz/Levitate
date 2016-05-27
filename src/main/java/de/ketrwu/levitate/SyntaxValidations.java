@@ -9,6 +9,7 @@ import java.util.regex.Pattern;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
+import de.ketrwu.levitate.handler.SyntaxHandler;
 import de.ketrwu.levitate.syntax.BooleanSyntax;
 import de.ketrwu.levitate.syntax.ChoiceIgnoreCaseSyntax;
 import de.ketrwu.levitate.syntax.ChoiceSyntax;

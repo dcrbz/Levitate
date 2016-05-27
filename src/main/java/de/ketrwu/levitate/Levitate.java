@@ -6,6 +6,10 @@ import java.io.InputStream;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
+import de.ketrwu.levitate.handler.CommandHandler;
+import de.ketrwu.levitate.handler.PermissionHandler;
+import de.ketrwu.levitate.handler.SyntaxHandler;
+
 /**
  * Bundles everything you need to use Levitate.
  * Read <a href="https://github.com/KennethWussmann/Levitate/wiki/2.-First-command">this page</a> to create your first Levitate-Command.

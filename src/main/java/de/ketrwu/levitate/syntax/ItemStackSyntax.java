@@ -16,8 +16,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import de.ketrwu.levitate.Message;
 import de.ketrwu.levitate.Message.TextMode;
-import de.ketrwu.levitate.SyntaxHandler;
 import de.ketrwu.levitate.exception.SyntaxResponseException;
+import de.ketrwu.levitate.handler.SyntaxHandler;
 
 /**
  * Checks if user-input is an itemname or id

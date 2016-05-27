@@ -12,9 +12,9 @@ import org.bukkit.entity.Player;
 
 import de.ketrwu.levitate.Message;
 import de.ketrwu.levitate.Message.TextMode;
-import de.ketrwu.levitate.SyntaxHandler;
 import de.ketrwu.levitate.exception.CommandSyntaxException;
 import de.ketrwu.levitate.exception.SyntaxResponseException;
+import de.ketrwu.levitate.handler.SyntaxHandler;
 
 /**
  * Checks if user-input is a playername
@@ -25,10 +25,15 @@ public class PlayerSyntax implements SyntaxHandler {
 	@Override
 	public void check(CommandSender sender, String parameter, String passed) throws SyntaxResponseException, CommandSyntaxException {
 		if(parameter.equalsIgnoreCase("online") == false && parameter.equalsIgnoreCase("offline") == false && parameter.equals("") == false) throw new CommandSyntaxException("Method 'player' doesn't supports parameter '"+parameter+"'!");
-		OfflinePlayer p = Bukkit.getOfflinePlayer(passed);
+		OfflinePlayer p = null;
 		HashMap<String, String> replaces = new HashMap<String, String>();
-		replaces.put("%player%", passed);
-		if(p == null) p = Bukkit.getOfflinePlayer(UUID.fromString(passed));
+		
+		if(passed.length() > 16 && passed.contains("-")) {
+			p = Bukkit.getOfflinePlayer(UUID.fromString(passed));
+		} else {
+			p = Bukkit.getOfflinePlayer(passed);
+		}
+		
 		if(p == null) throw new SyntaxResponseException(Message.PLAYERSYNTAX_PLAYER_NOT_FOUND.get(TextMode.COLOR));
 		replaces.put("%player%", p.getName());
 		if(parameter.equalsIgnoreCase("online")) {

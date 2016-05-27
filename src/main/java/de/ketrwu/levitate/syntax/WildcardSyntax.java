@@ -4,8 +4,8 @@ import java.util.List;
 
 import org.bukkit.command.CommandSender;
 
-import de.ketrwu.levitate.SyntaxHandler;
 import de.ketrwu.levitate.exception.SyntaxResponseException;
+import de.ketrwu.levitate.handler.SyntaxHandler;
 
 /**
  * Checks if user-input is anything

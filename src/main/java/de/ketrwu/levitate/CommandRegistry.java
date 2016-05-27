@@ -29,6 +29,8 @@ import de.ketrwu.levitate.exception.CommandSyntaxException;
 import de.ketrwu.levitate.exception.ExecutorIncompatibleException;
 import de.ketrwu.levitate.exception.NoPermissionException;
 import de.ketrwu.levitate.exception.SyntaxResponseException;
+import de.ketrwu.levitate.handler.CommandHandler;
+import de.ketrwu.levitate.handler.PermissionHandler;
 
 /**
  * Handles Levitate-Commands
@@ -190,7 +192,7 @@ public class CommandRegistry {
 		try {
 			final Field f = getPlugin().getServer().getClass().getDeclaredField("commandMap");
 			f.setAccessible(true);
-            CommandMap cmap = (CommandMap)f.get(getPlugin().getServer());
+            CommandMap cmap = (CommandMap) f.get(getPlugin().getServer());
             cmap.register(info.getCommand(), new Command(info.getCommand(), info.getDescription(), info.getSyntax(), new ArrayList<String>(Arrays.asList(aliases))) {
 				
             	@Override

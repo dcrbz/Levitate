@@ -13,9 +13,9 @@ import org.bukkit.entity.Player;
 
 import de.ketrwu.levitate.Message;
 import de.ketrwu.levitate.Message.TextMode;
-import de.ketrwu.levitate.SyntaxHandler;
 import de.ketrwu.levitate.exception.CommandSyntaxException;
 import de.ketrwu.levitate.exception.SyntaxResponseException;
+import de.ketrwu.levitate.handler.SyntaxHandler;
 
 /**
  * Used for Tab-Complete coordinates of the block a player is looking at

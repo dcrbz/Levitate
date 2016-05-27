@@ -9,8 +9,8 @@ import org.bukkit.command.CommandSender;
 
 import de.ketrwu.levitate.Message;
 import de.ketrwu.levitate.Message.TextMode;
-import de.ketrwu.levitate.SyntaxHandler;
 import de.ketrwu.levitate.exception.SyntaxResponseException;
+import de.ketrwu.levitate.handler.SyntaxHandler;
 
 /**
  * Checks if user-input is string. Case-sensitive

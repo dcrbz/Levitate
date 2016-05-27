@@ -7,7 +7,6 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.Plugin;
 
 import de.ketrwu.levitate.CommandInformation;
-import de.ketrwu.levitate.Levitate;
 import de.ketrwu.levitate.ParameterSet;
 
 /**

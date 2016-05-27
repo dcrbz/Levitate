@@ -1,4 +1,4 @@
-package de.ketrwu.levitate;
+package de.ketrwu.levitate.handler;
 
 import java.util.List;
 

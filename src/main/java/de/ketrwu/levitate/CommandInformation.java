@@ -13,6 +13,7 @@ import de.ketrwu.levitate.Message.TextMode;
 import de.ketrwu.levitate.exception.CommandSyntaxException;
 import de.ketrwu.levitate.exception.ExecutorIncompatibleException;
 import de.ketrwu.levitate.exception.SyntaxResponseException;
+import de.ketrwu.levitate.handler.SyntaxHandler;
 
 /**
  * Holds syntax of Levitate-Command
