@@ -142,9 +142,11 @@ public class SyntaxValidations {
 						public List<String> getTabComplete(CommandSender sender, String parameter, String passed) {
 							if(m.getReturnType() == null) return null;
 							try {
-								if(annotation.parameter() && annotation.parameterOptional() == false) {
+								if(annotation.parameter()) {
 									return (List<String>) m.invoke(obj, sender, passed, parameter);
-								} 
+								} else {
+									return (List<String>) m.invoke(obj, sender, passed);
+								}
 							} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 								e.printStackTrace();
 							}
