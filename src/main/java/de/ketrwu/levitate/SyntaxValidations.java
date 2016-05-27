@@ -147,8 +147,10 @@ public class SyntaxValidations {
 								} else {
 									return (List<String>) m.invoke(obj, sender, passed);
 								}
-							} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+							} catch (IllegalAccessException | IllegalArgumentException e) {
 								e.printStackTrace();
+							} catch (InvocationTargetException e) {
+								
 							}
 							return null;
 						}
@@ -183,8 +185,16 @@ public class SyntaxValidations {
 									} else {
 										try {
 											m.invoke(obj, sender, passed, parameter);
-										} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+										} catch (IllegalAccessException | IllegalArgumentException e) {
 											e.printStackTrace();
+										} catch (InvocationTargetException e) {
+											if(e.getCause() != null) {
+												if(e.getCause() instanceof SyntaxResponseException) {
+													throw new SyntaxResponseException(e.getCause().getMessage());
+												} else if(e.getCause() instanceof CommandSyntaxException) {
+													throw new CommandSyntaxException(e.getCause().getMessage());
+												}
+											}
 										}
 									}
 								}
