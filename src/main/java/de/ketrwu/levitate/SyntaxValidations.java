@@ -93,6 +93,7 @@ public class SyntaxValidations {
 		HashMap<String, String> replaces = new HashMap<String, String>();
 		try {
 			for(final Method m : obj.getClass().getDeclaredMethods()) {
+				m.setAccessible(true);
 				replaces.put("%method%", obj.getClass().getName() + ": " + m.getName() + "()");
 				if(m.isAnnotationPresent(Syntax.class)) {
 					Syntax annotation = m.getAnnotation(Syntax.class);
@@ -142,7 +143,7 @@ public class SyntaxValidations {
 							if(m.getReturnType() == null) return null;
 							try {
 								if(annotation.parameter() && annotation.parameterOptional() == false) {
-									return (List<String>) m.invoke(sender, passed, parameter);
+									return (List<String>) m.invoke(obj, sender, passed, parameter);
 								} 
 							} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 								e.printStackTrace();
@@ -170,7 +171,7 @@ public class SyntaxValidations {
 							if(annotation.parameter()) {
 								if(annotation.parameterOptional()) {
 									try {
-										m.invoke(sender, passed, parameter);
+										m.invoke(obj, sender, passed, parameter);
 									} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 										e.printStackTrace();
 									}
@@ -179,11 +180,17 @@ public class SyntaxValidations {
 										throw new CommandSyntaxException(Message.SV_PARAMETER_NEEDED.get(TextMode.COLOR, replaces));
 									} else {
 										try {
-											m.invoke(sender, passed);
+											m.invoke(obj, sender, passed, parameter);
 										} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 											e.printStackTrace();
 										}
 									}
+								}
+							} else {
+								try {
+									m.invoke(obj, sender, passed);
+								} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+									e.printStackTrace();
 								}
 							}
 						}
