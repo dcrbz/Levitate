@@ -251,12 +251,6 @@ public class CommandInformation {
 		return getReadable() != null;
 	}
 	
-	enum CommandExecutor {
-		CONSOLE(),
-		PLAYER(),
-		ALL();
-	}
-
 	public String getSyntax() {
 		return syntax;
 	}

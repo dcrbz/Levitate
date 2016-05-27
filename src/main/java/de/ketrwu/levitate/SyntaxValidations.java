@@ -1,14 +1,27 @@
 package de.ketrwu.levitate;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.regex.MatchResult;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import de.ketrwu.levitate.Message.TextMode;
+import de.ketrwu.levitate.annotation.Syntax;
+import de.ketrwu.levitate.exception.CommandSyntaxException;
+import de.ketrwu.levitate.exception.SyntaxAnnotationException;
+import de.ketrwu.levitate.exception.SyntaxResponseException;
 import de.ketrwu.levitate.handler.SyntaxHandler;
 import de.ketrwu.levitate.syntax.BooleanSyntax;
 import de.ketrwu.levitate.syntax.ChoiceIgnoreCaseSyntax;
@@ -33,8 +46,9 @@ import de.ketrwu.levitate.syntax.WorldSyntax;
  * @author Kenneth Wussmann
  */
 public class SyntaxValidations {
-	
+
 	private static HashMap<String, SyntaxHandler> syntaxes = new HashMap<String, SyntaxHandler>();
+	private static List<Object> syntaxClasses = new ArrayList<Object>();
 	
 	/**
 	 * Register default syntaxes to create your command
@@ -67,6 +81,120 @@ public class SyntaxValidations {
 	 */
 	public static void registerSyntax(String method, SyntaxHandler handler) {
 		syntaxes.put(method, handler);
+	}
+	
+	/**
+	 * Register all syntaxes in this class based on the @Syntax annotation.
+	 * @param obj Class mit syntaxes
+	 */
+	public static void registerSyntaxes(final Object obj) {
+		if(syntaxClasses.contains(obj)) return;
+		syntaxClasses.add(obj);
+		HashMap<String, String> replaces = new HashMap<String, String>();
+		try {
+			for(final Method m : obj.getClass().getDeclaredMethods()) {
+				replaces.put("%method%", obj.getClass().getName() + ": " + m.getName() + "()");
+				if(m.isAnnotationPresent(Syntax.class)) {
+					Syntax annotation = m.getAnnotation(Syntax.class);
+					if(annotation.parameter()) {
+						if(annotation.parameterOptional()) {
+							if(m.getParameterTypes().length > 3 || m.getParameterTypes().length < 2) {
+								replaces.put("%amount%", "2 - 3");
+								throw new SyntaxAnnotationException(Message.SV_PARAMETERCOUNT_INVALID.get(TextMode.PLAIN, replaces));
+							}
+						} else {
+							if(m.getParameterTypes().length != 3) {
+								replaces.put("%amount%", "3");
+								throw new SyntaxAnnotationException(Message.SV_PARAMETERCOUNT_INVALID.get(TextMode.PLAIN, replaces));
+							}
+						}
+					} else {
+						if(m.getParameterTypes().length != 2) {
+							replaces.put("%amount%", "2");
+							throw new SyntaxAnnotationException(Message.SV_PARAMETERCOUNT_INVALID.get(TextMode.PLAIN, replaces));
+						}
+					}
+					if(m.getParameterTypes()[0] != CommandSender.class) {
+						replaces.put("%index%", "0");
+						replaces.put("%class%", "CommandSender");
+						throw new SyntaxAnnotationException(Message.SV_PARAMETER_INVALID.get(TextMode.PLAIN, replaces));
+					}
+					if(m.getParameterTypes()[1] != String.class) {
+						replaces.put("%index%", "1");
+						replaces.put("%class%", "String");
+						throw new SyntaxAnnotationException(Message.SV_PARAMETER_INVALID.get(TextMode.PLAIN, replaces));
+					}
+					if(m.getParameterTypes().length == 3) {
+						if(m.getParameterTypes()[2] != String.class) {
+							replaces.put("%index%", "2");
+							replaces.put("%class%", "String");
+							throw new SyntaxAnnotationException(Message.SV_PARAMETER_INVALID.get(TextMode.PLAIN, replaces));
+						}
+					}
+
+
+					replaces.put("%syntax%", annotation.syntax());
+					
+					registerSyntax(annotation.syntax(), new SyntaxHandler() {
+						
+						@Override
+						public List<String> getTabComplete(CommandSender sender, String parameter, String passed) {
+							if(m.getReturnType() == null) return null;
+							try {
+								if(annotation.parameter() && annotation.parameterOptional() == false) {
+									return (List<String>) m.invoke(sender, passed, parameter);
+								} 
+							} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+								e.printStackTrace();
+							}
+							return null;
+						}
+						
+						@Override
+						public void check(CommandSender sender, String parameter, String passed) throws CommandSyntaxException, SyntaxResponseException {
+							if(annotation.parameter() == false && parameter != null) throw new CommandSyntaxException(Message.SV_PARAMETER_DISALLOWED.get(TextMode.COLOR, replaces));
+							switch(annotation.commandType()) {
+							case CONSOLE:
+								if(sender instanceof Player) {
+									replaces.put("%syntax%", annotation.commandType().toString());
+									throw new CommandSyntaxException(Message.SV_DISALLOWED_FOR_EXECUTOR.get(TextMode.COLOR, replaces));
+								}
+								break;
+							case PLAYER:
+								if(!(sender instanceof Player)) {
+									replaces.put("%syntax%", annotation.commandType().toString());
+									throw new CommandSyntaxException(Message.SV_DISALLOWED_FOR_EXECUTOR.get(TextMode.COLOR, replaces));
+								}
+								break;
+							}
+							if(annotation.parameter()) {
+								if(annotation.parameterOptional()) {
+									try {
+										m.invoke(sender, passed, parameter);
+									} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+										e.printStackTrace();
+									}
+								} else {
+									if(parameter == null) {
+										throw new CommandSyntaxException(Message.SV_PARAMETER_NEEDED.get(TextMode.COLOR, replaces));
+									} else {
+										try {
+											m.invoke(sender, passed);
+										} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+											e.printStackTrace();
+										}
+									}
+								}
+							}
+						}
+						
+					});
+					
+				}
+			}
+		} catch (SyntaxAnnotationException e) {
+			e.printStackTrace();
+		}		
 	}
 	
 	/**
@@ -131,5 +259,34 @@ public class SyntaxValidations {
 	public static void clearSyntaxes() {
 		syntaxes.clear();
 	}
+	
+	public static boolean isStringList(Class clazz) {
+		Type type = clazz.getGenericSuperclass();
+	    if (type instanceof ParameterizedType) {
+	        ParameterizedType pType = (ParameterizedType)type;
+	        try {
+				Class c = Class.forName(pType.getActualTypeArguments()[0].getTypeName());
+				for (int i = 0; i < 5; i++) {
+					if(c.isInstance(new ArrayList<String>())) return true;
+					c = c.getSuperclass();
+				}
+				
+			} catch (ClassNotFoundException e) {
+			}
+	    }
+	    return false;
+	}
+	
+//	public static Class getGeneric(Field f) {
+//		Type type = f.getGenericType();
+//	    if (type instanceof ParameterizedType) {
+//	        ParameterizedType pType = (ParameterizedType)type;
+//	        try {
+//				return Class.forName(pType.getActualTypeArguments()[0].getTypeName());
+//			} catch (ClassNotFoundException e) {
+//			}
+//	    }
+//	    return null;
+//	}
 	
 }
