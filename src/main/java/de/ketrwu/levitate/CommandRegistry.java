@@ -20,7 +20,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
-import de.ketrwu.levitate.CommandInformation.CommandExecutor;
 import de.ketrwu.levitate.Message.TextMode;
 import de.ketrwu.levitate.bukkit.LevitateCommandPreprocessEvent;
 import de.ketrwu.levitate.bukkit.LevitateMessagePreprocessEvent;
