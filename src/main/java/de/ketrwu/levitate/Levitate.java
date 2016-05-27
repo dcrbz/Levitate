@@ -93,6 +93,15 @@ public class Levitate {
 	public void registerCommands(Object obj) {
 		getCommandRegistry().registerCommands(obj);
 	}
+	
+	/**
+	 * Register all annotation-based syntaxes in given class. <br />
+	 * Be sure to register the syntaxes before using them in a command.
+	 * @param obj
+	 */
+	public void registerSyntaxes(Object obj) {
+		SyntaxValidations.registerSyntaxes(obj);
+	}
 
 	/**
 	 * Register new command with aliases
