@@ -62,6 +62,9 @@ Please check [the wiki](https://github.com/KennethWussmann/Levitate/wiki) for fu
 - [x] Extendable
 - [ ] [Let me know your ideas](https://github.com/KennethWussmann/Levitate/issues/new?labels=Feature-Request&body=Please describe your feature in detail. May use examples to explain your feature.) :smile:
 
+#Documentation
+All important features are documented in [the wiki](https://github.com/KennethWussmann/Levitate/wiki). 
+
 #License
 Levitate is licensed under [GNU General Public License Version 2](https://github.com/KennethWussmann/Levitate/blob/master/LICENSE).
 
