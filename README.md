@@ -23,7 +23,7 @@ Add the dependency to your project using maven:
     <dependency>
       <groupId>de.ketrwu</groupId>
       <artifactId>levitate</artifactId>
-      <version>1.5.3-SNAPSHOT</version>
+      <version>1.5.4-SNAPSHOT</version>
     </dependency>
 </dependencies>
 
