@@ -16,8 +16,26 @@ It allows you to register commands with arguments, permissions, TabCompletion an
 There also is no need to register it in the plugin.yml.
 </p>
 
-#Example
-This is a simple kill command:
+#Getting started 
+Add the dependency to your project using maven:
+```XML
+<dependencies>
+    <dependency>
+      <groupId>de.ketrwu</groupId>
+      <artifactId>levitate</artifactId>
+      <version>1.5.3-SNAPSHOT</version>
+    </dependency>
+</dependencies>
+
+<repositories>
+    <repository>
+      <id>ketrwu-repo</id>
+      <url>http://repo.ketrwu.de/repository/maven-snapshots</url>
+    </repository>
+</repositories>
+```
+
+Write your first command in seconds: 
 ```Java
 public void onEnable() {
 	Levitate levitate = new Levitate(this);
@@ -30,6 +48,7 @@ public void killCommand(CommandSender sender, String cmd, ParameterSet args) {
 	sender.sendMessage("Player has been killed!");
 }
 ```
+Please check [the wiki](https://github.com/KennethWussmann/Levitate/wiki) for further reading. You can download Levitate [here](https://github.com/KennethWussmann/Levitate/wiki/1.-Getting-started#download-levitate) if you don't want to use Maven.
 
 #Features
 - [x] Checks arguments to be valid
@@ -43,20 +62,6 @@ public void killCommand(CommandSender sender, String cmd, ParameterSet args) {
 - [x] Extendable
 - [ ] [Let me know your ideas](https://github.com/KennethWussmann/Levitate/issues/new?labels=Feature-Request&body=Please describe your feature in detail. May use examples to explain your feature.) :smile:
 
-#Getting started
-Please check [the wiki](https://github.com/KennethWussmann/Levitate/wiki) to get started!<br>
-If you need any help or you have questions, feel free to [contact me](https://github.com/KennethWussmann/Levitate/issues/new?labels=Help&body=Please describe your problem in detail. May use examples to explain your problem.).
-
-#Download
-You can get the lastest Levitate-Artifact at:
-* [GitHub Releases](https://github.com/KennethWussmann/Levitate/releases/latest) (Only Java-8)
-* [Maven](https://github.com/KennethWussmann/Levitate/wiki/1.-Getting-started#maven) (Only Java-8)
-* [Jenkins Java-8](http://ci.ketrwu.de/job/Levitate-Java-8/lastSuccessfulBuild/)
-* [Jenkins Java-7](http://ci.ketrwu.de/job/Levitate-Java-7/lastSuccessfulBuild/)
-
 #License
 Levitate is licensed under [GNU General Public License Version 2](https://github.com/KennethWussmann/Levitate/blob/master/LICENSE).
-
-
-[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/KennethWussmann/levitate/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
 
