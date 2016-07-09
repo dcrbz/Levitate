@@ -176,6 +176,7 @@ public class CommandRegistry {
 			CommandInformation cinfo = new CommandInformation(ns, info.getPermission());
 			cinfo.setPermission(info.getPermission());
 			cinfo.setDescription(info.getDescription());
+			if(info.getReadable() != null) cinfo.setReadable(info.getReadable());
 			registerAlias(alias);
 			commands.put(cinfo, handler);
 		}
