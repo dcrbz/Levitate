@@ -12,13 +12,5 @@ public interface MessageHandler {
 	 * @param message
 	 */
 	public void sendMessage(CommandSender sender, String message);
-
-	/**
-	 * Send a message to player / console to process the LevitateMessagePreprocessEvent
-	 * @param event The preprocessed event
-	 */
-	public void sendMessage(LevitateMessagePreprocessEvent event);
-	
-	
 			
 }
