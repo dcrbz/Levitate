@@ -31,9 +31,6 @@ public class Levitate {
 		this.plugin = plugin;
 		SyntaxValidations.registerDefaultSyntax(plugin);
 		registry = new CommandRegistry(plugin);
-		registry.registerDefaultMessageHandler();
-		registry.registerBukkitPermissionHandler();
-		registry.registerDefaultHelpMap();
 	}
 
 	/**

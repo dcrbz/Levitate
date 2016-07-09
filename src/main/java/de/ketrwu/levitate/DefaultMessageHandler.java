@@ -8,6 +8,7 @@ public class DefaultMessageHandler implements MessageHandler {
 
 	@Override
 	public void sendMessage(CommandSender sender, String message) {
+		if(sender == null) return;
 		sender.sendMessage(message);
 	}
 	

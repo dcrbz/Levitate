@@ -54,6 +54,9 @@ public class CommandRegistry {
 	public CommandRegistry(Plugin plugin) { 
 		if(plugin == null) return;
 		this.plugin = plugin;
+		registerDefaultMessageHandler();
+		registerBukkitPermissionHandler();
+		registerDefaultHelpMap();
 	}
 	
 	/**
