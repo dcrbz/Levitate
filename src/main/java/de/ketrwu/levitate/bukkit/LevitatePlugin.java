@@ -35,7 +35,7 @@ public class LevitatePlugin extends JavaPlugin {
 			@Override
 			public void execute(CommandSender sender, String command, ParameterSet args) {
 				Message.reloadConfig(new File("plugins/Levitate/messages.yml"));
-				sender.sendMessage("ยง2The messages has been reloaded!");
+				sender.sendMessage("ง2The messages have been reloaded!");
 			}
 			
 		});

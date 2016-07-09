@@ -29,6 +29,7 @@ import de.ketrwu.levitate.exception.ExecutorIncompatibleException;
 import de.ketrwu.levitate.exception.NoPermissionException;
 import de.ketrwu.levitate.exception.SyntaxResponseException;
 import de.ketrwu.levitate.handler.CommandHandler;
+import de.ketrwu.levitate.handler.MessageHandler;
 import de.ketrwu.levitate.handler.PermissionHandler;
 
 /**
@@ -42,6 +43,7 @@ public class CommandRegistry {
 	private List<Object> commandClasses = new ArrayList<Object>();
 	private PermissionHandler permissionHandler = null;
 	private HelpMap helpMap = null;
+	private MessageHandler messageHandler = null;
 	private Plugin plugin = null;
 	
 	/**
@@ -213,7 +215,7 @@ public class CommandRegistry {
 							LevitateMessagePreprocessEvent preprocessEvent = new LevitateMessagePreprocessEvent(getPlugin(), arg0, Message.NO_PERMISSION, TextMode.COLOR, Message.NO_PERMISSION.get(TextMode.COLOR));
 							Bukkit.getPluginManager().callEvent(preprocessEvent);
 							if(!preprocessEvent.isCancelled()) {
-								if(preprocessEvent.getMessage() != null) arg0.sendMessage(preprocessEvent.getMessage());
+								if(preprocessEvent.getMessage() != null) getMessageHandler().sendMessage(arg0, preprocessEvent.getMessage());
 							}
 							return true;
 						}
@@ -222,7 +224,7 @@ public class CommandRegistry {
 							LevitateMessagePreprocessEvent preprocessEvent = new LevitateMessagePreprocessEvent(getPlugin(), arg0, null, null, e.getMessage());
 							Bukkit.getPluginManager().callEvent(preprocessEvent);
 							if(!preprocessEvent.isCancelled()) {
-								if(preprocessEvent.getMessage() != null) arg0.sendMessage(preprocessEvent.getMessage());
+								if(preprocessEvent.getMessage() != null) getMessageHandler().sendMessage(arg0, preprocessEvent.getMessage());
 							}
 							return true;
 						}
@@ -332,13 +334,28 @@ public class CommandRegistry {
 	}
 	
 	/**
-	 * Register own HelpMaoo
+	 * Register default MessageHandler
+	 */
+	public void registerDefaultMessageHandler() {
+		this.messageHandler = new DefaultMessageHandler();
+	}
+	
+	/**
+	 * Register own HelpMap
 	 * @param helpMap Handles the help-message
 	 */
 	public void registerHelpMap(HelpMap helpMap) {
 		this.helpMap = helpMap;
 	}
 		
+	/**
+	 * Register own MessageHandler
+	 * @param messageHandler
+	 */
+	public void registerMessageHandler(MessageHandler messageHandler) {
+		this.messageHandler = messageHandler;
+	}
+	
 	/**
 	 * Executes a command as a Bukkit/Spigot player or console.
 	 * You don't need to call it.
@@ -403,33 +420,22 @@ public class CommandRegistry {
 		return commands;
 	}
 
-	public void setCommands(HashMap<CommandInformation, CommandHandler> commands) {
-		this.commands = commands;
-	}
-
 	public PermissionHandler getPermissionHandler() {
 		return permissionHandler;
 	}
-
-	public void setPermissionHandler(PermissionHandler permissionHandler) {
-		this.permissionHandler = permissionHandler;
-	}
-
+	
 	public Plugin getPlugin() {
 		return plugin;
-	}
-
-	public void setPlugin(Plugin plugin) {
-		this.plugin = plugin;
 	}
 
 	public HelpMap getHelpMap() {
 		return helpMap;
 	}
 
-	public void setHelpMap(HelpMap helpMap) {
-		this.helpMap = helpMap;
+	public MessageHandler getMessageHandler() {
+		return messageHandler;
 	}
+	
 	
 	
 	

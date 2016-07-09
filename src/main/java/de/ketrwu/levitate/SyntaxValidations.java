@@ -96,7 +96,7 @@ public class SyntaxValidations {
 				m.setAccessible(true);
 				replaces.put("%method%", obj.getClass().getName() + ": " + m.getName() + "()");
 				if(m.isAnnotationPresent(Syntax.class)) {
-					Syntax annotation = m.getAnnotation(Syntax.class);
+					final Syntax annotation = m.getAnnotation(Syntax.class);
 					if(annotation.parameter()) {
 						if(annotation.parameterOptional()) {
 							if(m.getParameterTypes().length > 3 || m.getParameterTypes().length < 2) {
