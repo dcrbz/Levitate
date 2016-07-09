@@ -3,6 +3,7 @@ package de.ketrwu.levitate.bukkit;
 import java.io.File;
 import java.io.IOException;
 
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -35,7 +36,7 @@ public class LevitatePlugin extends JavaPlugin {
 			@Override
 			public void execute(CommandSender sender, String command, ParameterSet args) {
 				Message.reloadConfig(new File("plugins/Levitate/messages.yml"));
-				sender.sendMessage("§2The messages have been reloaded!");
+				sender.sendMessage(ChatColor.GREEN + "The messages have been reloaded!");
 			}
 			
 		});
