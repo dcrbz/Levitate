@@ -2,8 +2,6 @@ package de.ketrwu.levitate.handler;
 
 import org.bukkit.command.CommandSender;
 
-import de.ketrwu.levitate.bukkit.LevitateMessagePreprocessEvent;
-
 public interface MessageHandler {
 	
 	/**
