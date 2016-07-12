@@ -281,20 +281,21 @@ public class SyntaxValidations {
 		syntaxes.clear();
 	}
 	
-	public static boolean isStringList(Class<?> clazz) {
+	public static boolean isStringList(Class clazz) {
 		final Type type = clazz.getGenericSuperclass();
-	    if (type instanceof ParameterizedType) {
-	        ParameterizedType pType = (ParameterizedType)type;
-	        try {
-				Class<?> c = Class.forName(pType.getActualTypeArguments()[0].getTypeName());
+		if (type instanceof ParameterizedType) {
+			final ParameterizedType pType = (ParameterizedType) type;
+			try {
+				Class c = Class.forName(pType.getActualTypeArguments()[0].getTypeName());
 				for (int i = 0; i < 5; i++) {
-					if(c.isInstance(new ArrayList<String>())) return true;
+					if (c.isInstance(new ArrayList<String>()))
+						return true;
 					c = c.getSuperclass();
 				}
 			} catch (ClassNotFoundException e) {
 			}
-	    }
-	    return false;
+		}
+		return false;
 	}
 	
 //	public static Class getGeneric(Field f) {
