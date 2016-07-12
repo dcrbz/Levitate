@@ -10,6 +10,7 @@ import org.bukkit.command.CommandSender;
 
 import de.ketrwu.levitate.Message;
 import de.ketrwu.levitate.Message.TextMode;
+import de.ketrwu.levitate.MessageBuilder;
 import de.ketrwu.levitate.exception.SyntaxResponseException;
 import de.ketrwu.levitate.handler.SyntaxHandler;
 
@@ -29,11 +30,11 @@ public class URLSyntax implements SyntaxHandler {
 			if(parameter != null && !parameter.equals("")) {
 				if(!passed.toLowerCase().startsWith(parameter.toLowerCase())) {
 					replaces.put("%parameter%", parameter);
-					throw new SyntaxResponseException(Message.URLSYNTAX_DOES_NOT_START_WITH.get(TextMode.COLOR, replaces));
+					throw new SyntaxResponseException(new MessageBuilder(Message.URLSYNTAX_DOES_NOT_START_WITH, TextMode.COLOR, replaces));
 				}
 			}
 		} catch (MalformedURLException e) {
-			throw new SyntaxResponseException(Message.URLSYNTAX_URL_MALFORMED.get(TextMode.COLOR, replaces));
+			throw new SyntaxResponseException(new MessageBuilder(Message.URLSYNTAX_URL_MALFORMED, TextMode.COLOR, replaces));
 		}
 	}
 

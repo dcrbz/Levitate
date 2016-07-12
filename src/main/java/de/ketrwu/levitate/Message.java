@@ -59,6 +59,7 @@ public enum Message {
 	DOUBLESYNTAX_HAS_TO_BE_INBETWEEN("Argument \"%arg%\" has to be inbetween \"%min%\" and \"%max%\"!"),
 	NOTEQUALSIGNORECASESYNTAX_CANNOT_EQUAL("Argument \"%arg%\" cannot equal \"%value%\"!"),
 	NOTEQUALSSYNTAX_CANNOT_EQUAL("Argument \"%arg%\" cannot equal \"%value%\"!"),
+	PLAYERSYNTAX_PARAMETER_MALFORMED("The parameter \"%parameter%\" is malformed!"),
 	PLAYERSYNTAX_PLAYER_OFFLINE("The player \"%player%\" has to be online!"),
 	PLAYERSYNTAX_PLAYER_ONLINE("The player \"%player%\" has to be offline!"),
 	PLAYERSYNTAX_PLAYER_NOT_FOUND("The player \"%player%\" doesn't exist!"),

@@ -10,6 +10,7 @@ import org.bukkit.command.CommandSender;
 
 import de.ketrwu.levitate.Message;
 import de.ketrwu.levitate.Message.TextMode;
+import de.ketrwu.levitate.MessageBuilder;
 import de.ketrwu.levitate.exception.SyntaxResponseException;
 import de.ketrwu.levitate.handler.SyntaxHandler;
 
@@ -25,7 +26,7 @@ public class WorldSyntax implements SyntaxHandler {
 		if(w == null) {
 			HashMap<String, String> replaces = new HashMap<String, String>();
 			replaces.put("%world%", passed);
-			throw new SyntaxResponseException(Message.WORLDSYNTAX_WORLD_DOES_NOT_EXIST.get(TextMode.COLOR, replaces));
+			throw new SyntaxResponseException(new MessageBuilder(Message.WORLDSYNTAX_WORLD_DOES_NOT_EXIST, TextMode.COLOR, replaces));
 		}
 	}
 

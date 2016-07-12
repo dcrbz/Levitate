@@ -9,6 +9,7 @@ import org.bukkit.command.CommandSender;
 
 import de.ketrwu.levitate.Message;
 import de.ketrwu.levitate.Message.TextMode;
+import de.ketrwu.levitate.MessageBuilder;
 import de.ketrwu.levitate.exception.SyntaxResponseException;
 import de.ketrwu.levitate.handler.SyntaxHandler;
 
@@ -23,7 +24,7 @@ public class EqualsIgnoreCaseSyntax implements SyntaxHandler {
 		HashMap<String, String> replaces = new HashMap<String, String>();
 		replaces.put("%arg%", passed);
 		replaces.put("%value%", parameter);
-		if(!parameter.equalsIgnoreCase(passed)) throw new SyntaxResponseException(Message.EQUALSIGNORECASESYNTAX_DOESNT_EQUAL.get(TextMode.COLOR, replaces));
+		if(!parameter.equalsIgnoreCase(passed)) throw new SyntaxResponseException(new MessageBuilder(Message.EQUALSIGNORECASESYNTAX_DOESNT_EQUAL, TextMode.COLOR, replaces));
 	}
 
 	@Override

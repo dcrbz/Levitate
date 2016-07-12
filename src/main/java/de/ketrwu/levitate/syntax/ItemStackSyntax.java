@@ -16,6 +16,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import de.ketrwu.levitate.Message;
 import de.ketrwu.levitate.Message.TextMode;
+import de.ketrwu.levitate.MessageBuilder;
 import de.ketrwu.levitate.exception.SyntaxResponseException;
 import de.ketrwu.levitate.handler.SyntaxHandler;
 
@@ -44,11 +45,11 @@ public class ItemStackSyntax implements SyntaxHandler {
 			String a = passed.split(":")[0];
 			String b = passed.split(":")[1];
 			
-			if(!isInt(b)) throw new SyntaxResponseException(Message.ITEMSTACKSYNTAX_NO_INTEGER.get(TextMode.COLOR, replaces));
+			if(!isInt(b)) throw new SyntaxResponseException(new MessageBuilder(Message.ITEMSTACKSYNTAX_NO_INTEGER, TextMode.COLOR, replaces));
 			
 			int meta = Integer.parseInt(b);
 			replaces.put("%int%", b);
-			if(meta < 0)  throw new SyntaxResponseException(Message.ITEMSTACKSYNTAX_POSITIVE_INTEGER.get(TextMode.COLOR, replaces));
+			if(meta < 0)  throw new SyntaxResponseException(new MessageBuilder(Message.ITEMSTACKSYNTAX_POSITIVE_INTEGER, TextMode.COLOR, replaces));
 			
 			if(!isInt(a)) {
 				is = items.get(a);
@@ -58,15 +59,15 @@ public class ItemStackSyntax implements SyntaxHandler {
 			
 			int id = Integer.parseInt(a);
 			replaces.put("%int%", a);
-			if(id < 0)  throw new SyntaxResponseException(Message.ITEMSTACKSYNTAX_POSITIVE_INTEGER.get(TextMode.COLOR, replaces));
+			if(id < 0)  throw new SyntaxResponseException(new MessageBuilder(Message.ITEMSTACKSYNTAX_POSITIVE_INTEGER, TextMode.COLOR, replaces));
 			
 			is = new ItemStack(Material.getMaterial(id), 1, (short) meta);
 		} else if(isInt(passed)) {
 			int i = Integer.parseInt(passed);
-			if(i < 0)  throw new SyntaxResponseException(Message.ITEMSTACKSYNTAX_POSITIVE_INTEGER.get(TextMode.COLOR, replaces));
+			if(i < 0)  throw new SyntaxResponseException(new MessageBuilder(Message.ITEMSTACKSYNTAX_POSITIVE_INTEGER, TextMode.COLOR, replaces));
 			is = new ItemStack(i);
 		}
-		if(is == null) throw new SyntaxResponseException(Message.ITEMSTACKSYNTAX_ITEM_NOT_FOUND.get(TextMode.COLOR, replaces));
+		if(is == null) throw new SyntaxResponseException(new MessageBuilder(Message.ITEMSTACKSYNTAX_ITEM_NOT_FOUND, TextMode.COLOR, replaces));
 	}
 	
 	public static void loadCSV() {

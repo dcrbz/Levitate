@@ -7,6 +7,7 @@ import org.bukkit.command.CommandSender;
 
 import de.ketrwu.levitate.Message;
 import de.ketrwu.levitate.Message.TextMode;
+import de.ketrwu.levitate.MessageBuilder;
 import de.ketrwu.levitate.exception.SyntaxResponseException;
 import de.ketrwu.levitate.handler.SyntaxHandler;
 
@@ -21,14 +22,14 @@ public class StringSyntax implements SyntaxHandler {
 		HashMap<String, String> replaces = new HashMap<String, String>();
 		replaces.put("%arg%", passed);
 		if(parameter.equals("") || parameter.equals("aA")) {
-			if(isInt(passed)) throw new SyntaxResponseException(Message.STRINGSYNTAX_CANNOT_BE_INT.get(TextMode.COLOR, replaces));
+			if(isInt(passed)) throw new SyntaxResponseException(new MessageBuilder(Message.STRINGSYNTAX_CANNOT_BE_INT, TextMode.COLOR, replaces));
 			return;
 		}
 		if(parameter.equals("a")) {
-			if(!isLowerCase(passed)) throw new SyntaxResponseException(Message.STRINGSYNTAX_ONLY_LOWERCASE.get(TextMode.COLOR, replaces));
+			if(!isLowerCase(passed)) throw new SyntaxResponseException(new MessageBuilder(Message.STRINGSYNTAX_ONLY_LOWERCASE, TextMode.COLOR, replaces));
 		}
 		if(parameter.equals("A")) {
-			if(!isUpperCase(passed)) throw new SyntaxResponseException(Message.STRINGSYNTAX_ONLY_UPPERCASE.get(TextMode.COLOR, replaces));
+			if(!isUpperCase(passed)) throw new SyntaxResponseException(new MessageBuilder(Message.STRINGSYNTAX_ONLY_UPPERCASE, TextMode.COLOR, replaces));
 		}
 		return;
 	}

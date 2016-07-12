@@ -10,6 +10,7 @@ import org.bukkit.command.CommandSender;
 import de.ketrwu.levitate.CommandRegistry;
 import de.ketrwu.levitate.Message;
 import de.ketrwu.levitate.Message.TextMode;
+import de.ketrwu.levitate.MessageBuilder;
 import de.ketrwu.levitate.exception.CommandSyntaxException;
 import de.ketrwu.levitate.exception.SyntaxResponseException;
 import de.ketrwu.levitate.handler.SyntaxHandler;
@@ -22,10 +23,10 @@ public class EnumSyntax implements SyntaxHandler {
 
 	@Override
 	public void check(CommandSender sender, String parameter, String passed) throws SyntaxResponseException, CommandSyntaxException {
-		if(parameter.equals("")) throw new CommandSyntaxException(Message.ENUMSYNTAX_NEEDS_CLASSPATH.get(TextMode.COLOR));
+		if(parameter.equals("")) throw new CommandSyntaxException(new MessageBuilder(Message.ENUMSYNTAX_NEEDS_CLASSPATH, TextMode.COLOR));
 		HashMap<String, String> replaces = new HashMap<String, String>();
 		replaces.put("%class%", parameter);
-		if(!CommandRegistry.existClass(parameter)) throw new CommandSyntaxException(Message.ENUMSYNTAX_CLASS_DOESNT_EXIST.get(TextMode.COLOR, replaces));
+		if(!CommandRegistry.existClass(parameter)) throw new CommandSyntaxException(new MessageBuilder(Message.ENUMSYNTAX_CLASS_DOESNT_EXIST, TextMode.COLOR, replaces));
 		try {
 			Class<?> cls = Class.forName(parameter);
 			cls.getDeclaredField(passed.toUpperCase());
@@ -41,7 +42,7 @@ public class EnumSyntax implements SyntaxHandler {
 					replaces.clear();
 					replaces.put("%arg%", correctCase(passed));
 					replaces.put("%list%", fields);
-					throw new SyntaxResponseException(Message.ENUMSYNTAX_ARG_NOT_IN_ENUM.get(TextMode.COLOR, replaces));
+					throw new SyntaxResponseException(new MessageBuilder(Message.ENUMSYNTAX_ARG_NOT_IN_ENUM, TextMode.COLOR, replaces));
 				} catch (ClassNotFoundException e2) { }
 			}
 			e.printStackTrace();

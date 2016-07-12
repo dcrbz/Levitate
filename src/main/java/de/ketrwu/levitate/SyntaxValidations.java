@@ -90,7 +90,7 @@ public class SyntaxValidations {
 	public static void registerSyntaxes(final Object obj) {
 		if(syntaxClasses.contains(obj)) return;
 		syntaxClasses.add(obj);
-		HashMap<String, String> replaces = new HashMap<String, String>();
+		final HashMap<String, String> replaces = new HashMap<String, String>();
 		try {
 			for(final Method m : obj.getClass().getDeclaredMethods()) {
 				m.setAccessible(true);
@@ -101,35 +101,35 @@ public class SyntaxValidations {
 						if(annotation.parameterOptional()) {
 							if(m.getParameterTypes().length > 3 || m.getParameterTypes().length < 2) {
 								replaces.put("%amount%", "2 - 3");
-								throw new SyntaxAnnotationException(Message.SV_PARAMETERCOUNT_INVALID.get(TextMode.PLAIN, replaces));
+								throw new SyntaxAnnotationException(new MessageBuilder(Message.SV_PARAMETERCOUNT_INVALID, TextMode.PLAIN, replaces));
 							}
 						} else {
 							if(m.getParameterTypes().length != 3) {
 								replaces.put("%amount%", "3");
-								throw new SyntaxAnnotationException(Message.SV_PARAMETERCOUNT_INVALID.get(TextMode.PLAIN, replaces));
+								throw new SyntaxAnnotationException(new MessageBuilder(Message.SV_PARAMETERCOUNT_INVALID, TextMode.PLAIN, replaces));
 							}
 						}
 					} else {
 						if(m.getParameterTypes().length != 2) {
 							replaces.put("%amount%", "2");
-							throw new SyntaxAnnotationException(Message.SV_PARAMETERCOUNT_INVALID.get(TextMode.PLAIN, replaces));
+							throw new SyntaxAnnotationException(new MessageBuilder(Message.SV_PARAMETERCOUNT_INVALID, TextMode.PLAIN, replaces));
 						}
 					}
 					if(m.getParameterTypes()[0] != CommandSender.class) {
 						replaces.put("%index%", "0");
 						replaces.put("%class%", "CommandSender");
-						throw new SyntaxAnnotationException(Message.SV_PARAMETER_INVALID.get(TextMode.PLAIN, replaces));
+						throw new SyntaxAnnotationException(new MessageBuilder(Message.SV_PARAMETER_INVALID, TextMode.PLAIN, replaces));
 					}
 					if(m.getParameterTypes()[1] != String.class) {
 						replaces.put("%index%", "1");
 						replaces.put("%class%", "String");
-						throw new SyntaxAnnotationException(Message.SV_PARAMETER_INVALID.get(TextMode.PLAIN, replaces));
+						throw new SyntaxAnnotationException(new MessageBuilder(Message.SV_PARAMETER_INVALID, TextMode.PLAIN, replaces));
 					}
 					if(m.getParameterTypes().length == 3) {
 						if(m.getParameterTypes()[2] != String.class) {
 							replaces.put("%index%", "2");
 							replaces.put("%class%", "String");
-							throw new SyntaxAnnotationException(Message.SV_PARAMETER_INVALID.get(TextMode.PLAIN, replaces));
+							throw new SyntaxAnnotationException(new MessageBuilder(Message.SV_PARAMETER_INVALID, TextMode.PLAIN, replaces));
 						}
 					}
 
@@ -157,18 +157,18 @@ public class SyntaxValidations {
 						
 						@Override
 						public void check(CommandSender sender, String parameter, String passed) throws CommandSyntaxException, SyntaxResponseException {
-							if(annotation.parameter() == false && parameter != null) throw new CommandSyntaxException(Message.SV_PARAMETER_DISALLOWED.get(TextMode.COLOR, replaces));
+							if(annotation.parameter() == false && parameter != null) throw new CommandSyntaxException(new MessageBuilder(Message.SV_PARAMETER_DISALLOWED, TextMode.COLOR, replaces));
 							switch(annotation.commandType()) {
 							case CONSOLE:
 								if(sender instanceof Player) {
 									replaces.put("%syntax%", annotation.commandType().toString());
-									throw new CommandSyntaxException(Message.SV_DISALLOWED_FOR_EXECUTOR.get(TextMode.COLOR, replaces));
+									throw new CommandSyntaxException(new MessageBuilder(Message.SV_DISALLOWED_FOR_EXECUTOR, TextMode.COLOR, replaces));
 								}
 								break;
 							case PLAYER:
 								if(!(sender instanceof Player)) {
 									replaces.put("%syntax%", annotation.commandType().toString());
-									throw new CommandSyntaxException(Message.SV_DISALLOWED_FOR_EXECUTOR.get(TextMode.COLOR, replaces));
+									throw new CommandSyntaxException(new MessageBuilder(Message.SV_DISALLOWED_FOR_EXECUTOR, TextMode.COLOR, replaces));
 								}
 								break;
 							}
@@ -181,7 +181,7 @@ public class SyntaxValidations {
 									}
 								} else {
 									if(parameter == null) {
-										throw new CommandSyntaxException(Message.SV_PARAMETER_NEEDED.get(TextMode.COLOR, replaces));
+										throw new CommandSyntaxException(new MessageBuilder(Message.SV_PARAMETER_NEEDED, TextMode.COLOR, replaces));
 									} else {
 										try {
 											m.invoke(obj, sender, passed, parameter);
@@ -190,9 +190,11 @@ public class SyntaxValidations {
 										} catch (InvocationTargetException e) {
 											if(e.getCause() != null) {
 												if(e.getCause() instanceof SyntaxResponseException) {
-													throw new SyntaxResponseException(e.getCause().getMessage());
+													SyntaxResponseException ex = (SyntaxResponseException) e.getCause();
+													throw new SyntaxResponseException(ex.getMessageBuilder());
 												} else if(e.getCause() instanceof CommandSyntaxException) {
-													throw new CommandSyntaxException(e.getCause().getMessage());
+													CommandSyntaxException ex = (CommandSyntaxException) e.getCause();
+													throw new CommandSyntaxException(ex.getMessageBuilder());
 												}
 											}
 										}
@@ -280,7 +282,7 @@ public class SyntaxValidations {
 	}
 	
 	public static boolean isStringList(Class clazz) {
-		Type type = clazz.getGenericSuperclass();
+		final Type type = clazz.getGenericSuperclass();
 	    if (type instanceof ParameterizedType) {
 	        ParameterizedType pType = (ParameterizedType)type;
 	        try {

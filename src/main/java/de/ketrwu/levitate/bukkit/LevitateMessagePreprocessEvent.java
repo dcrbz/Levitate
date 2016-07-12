@@ -8,6 +8,7 @@ import org.bukkit.plugin.Plugin;
 
 import de.ketrwu.levitate.Message;
 import de.ketrwu.levitate.Message.TextMode;
+import de.ketrwu.levitate.MessageBuilder;
 
 /**
  * Gets called before Levitate sends a message to the user. <br />
@@ -19,25 +20,20 @@ import de.ketrwu.levitate.Message.TextMode;
 public class LevitateMessagePreprocessEvent extends Event implements Cancellable {
 
 	private static final HandlerList handlers = new HandlerList();
+	private boolean cancelled;
 	private Plugin plugin;
 	private CommandSender receiver;
-	private Message messageType;
-	private TextMode textMode;
-	private String message;
-	private boolean cancelled;
+	private MessageBuilder messageBuilder;
 
 	/**
 	 * Gets called before Levitate sends a message to the user. <br />
 	 * When cancelled, Levitate wont send a message to the user.<br />
 	 * Levitate will send the message from getMessage() to the user.
 	 */
-	public LevitateMessagePreprocessEvent(Plugin plugin, CommandSender receiver, Message messageType, TextMode textMode,
-			String message) {
+	public LevitateMessagePreprocessEvent(Plugin plugin, CommandSender receiver, MessageBuilder messageBuilder) {
 		this.plugin = plugin;
 		this.receiver = receiver;
-		this.messageType = messageType;
-		this.textMode = textMode;
-		this.message = message;
+		this.messageBuilder = messageBuilder;
 	}
 
 	@Override
@@ -50,35 +46,20 @@ public class LevitateMessagePreprocessEvent extends Event implements Cancellable
 	}
 
 	/**
-	 * Get the MessageType of the message
-	 * @return Entry in Message-Enum
+	 * Get the MessageBuilder for this message
+	 * @return
 	 */
-	public Message getMessageType() {
-		return messageType;
+	public MessageBuilder getMessageBuilder() {
+		return messageBuilder;
 	}
 	
 	/**
-	 * Get the final message with replaced values
-	 * @return Final message
-	 */
-	public String getMessage() {
-		return message;
-	}
-
-	/**
-	 * Set the message to send
+	 * Only used until the old messages using strings will be removed completly!
+	 * @deprecated Don't use it! Just change the settings in the existing MessageBuilder!
 	 * @param message
 	 */
-	public void setMessage(String message) {
-		this.message = message;
-	}
-	
-	/**
-	 * Get the styling mode of the message
-	 * @return Styling mode
-	 */
-	public TextMode getTextMode() {
-		return textMode;
+	public MessageBuilder setMessageBuilder(MessageBuilder messageBuilder) {
+		return messageBuilder;
 	}
 	
 	/**
@@ -110,5 +91,39 @@ public class LevitateMessagePreprocessEvent extends Event implements Cancellable
 	public Plugin getPlugin() {
 		return plugin;
 	}	
+	
+	/**
+	 * Build a message with the MessageBuilder
+	 * @return Formatted and replaced message for the user
+	 */
+	public String getMessage() {
+		return getMessageBuilder().build();
+	}
+	
+	/**
+	 * @deprecated Build your message with the MessageBuilder!
+	 * @param message
+	 */
+	@Deprecated
+	public void setMessage(String message) {
+		setMessageBuilder(new MessageBuilder(message));
+	}
+
+	/**
+	 * @deprecated Please use the MessageBuilder!
+	 */
+	@Deprecated
+	public TextMode getTextMode() {
+		return getMessageBuilder().getTextMode();
+	}
+	
+	/**
+	 * @deprecated Please use the MessageBuilder!
+	 */
+	@Deprecated
+	public Message getMessageType() {
+		return getMessageBuilder().getMessage();
+	}
+
 
 }

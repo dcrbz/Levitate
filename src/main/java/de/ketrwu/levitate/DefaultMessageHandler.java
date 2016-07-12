@@ -7,9 +7,9 @@ import de.ketrwu.levitate.handler.MessageHandler;
 public class DefaultMessageHandler implements MessageHandler {
 
 	@Override
-	public void sendMessage(CommandSender sender, String message) {
+	public void sendMessage(CommandSender sender, MessageBuilder messageBuilder) {
 		if(sender == null) return;
-		sender.sendMessage(message);
+		sender.sendMessage(messageBuilder.build());
 	}
 	
 }

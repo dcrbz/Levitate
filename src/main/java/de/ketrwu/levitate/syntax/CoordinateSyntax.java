@@ -13,6 +13,7 @@ import org.bukkit.entity.Player;
 
 import de.ketrwu.levitate.Message;
 import de.ketrwu.levitate.Message.TextMode;
+import de.ketrwu.levitate.MessageBuilder;
 import de.ketrwu.levitate.exception.CommandSyntaxException;
 import de.ketrwu.levitate.exception.SyntaxResponseException;
 import de.ketrwu.levitate.handler.SyntaxHandler;
@@ -28,14 +29,14 @@ public class CoordinateSyntax implements SyntaxHandler {
 		HashMap<String, String> replaces = new HashMap<String, String>();
 		replaces.put("%parameter%", passed);
 		replaces.put("%arg%", passed);
-		if(!(sender instanceof Player)) throw new CommandSyntaxException(Message.COORDSYNTAX_CONSOLE_COMMAND.get(TextMode.COLOR, replaces));
-		if(parameter.trim().equals("")) throw new CommandSyntaxException(Message.COORDSYNTAX_PARAMETER_MALFORMED.get(TextMode.COLOR, replaces));
+		if(!(sender instanceof Player)) throw new CommandSyntaxException(new MessageBuilder(Message.COORDSYNTAX_CONSOLE_COMMAND, TextMode.COLOR, replaces));
+		if(parameter.trim().equals("")) throw new CommandSyntaxException(new MessageBuilder(Message.COORDSYNTAX_PARAMETER_MALFORMED, TextMode.COLOR, replaces));
 		switch(parameter.trim().toLowerCase()) {
 		case "world":
 			for(World w : Bukkit.getWorlds()) {
 				if(w.getName().equalsIgnoreCase(passed)) return;
 			}
-			throw new SyntaxResponseException(Message.COORDSYNTAX_HAS_TO_BE_WORLD.get(TextMode.COLOR, replaces));
+			throw new SyntaxResponseException(new MessageBuilder(Message.COORDSYNTAX_HAS_TO_BE_WORLD, TextMode.COLOR, replaces));
 		case "blockx":
 		case "blocky":
 		case "blockz":
@@ -44,10 +45,10 @@ public class CoordinateSyntax implements SyntaxHandler {
 		case "playerz":
 		case "yaw":
 		case "pitch":
-			if(!isInt(passed) && !isDouble(passed) && !isFloat(passed)) throw new SyntaxResponseException(Message.COORDSYNTAX_HAS_TO_BE_NUMBER.get(TextMode.COLOR, replaces));
+			if(!isInt(passed) && !isDouble(passed) && !isFloat(passed)) throw new SyntaxResponseException(new MessageBuilder(Message.COORDSYNTAX_HAS_TO_BE_NUMBER, TextMode.COLOR, replaces));
 			break;
 		default:
-			throw new CommandSyntaxException(Message.COORDSYNTAX_PARAMETER_MALFORMED.get(TextMode.COLOR, replaces)); 
+			throw new CommandSyntaxException(new MessageBuilder(Message.COORDSYNTAX_PARAMETER_MALFORMED, TextMode.COLOR, replaces)); 
 		}
 	}
 

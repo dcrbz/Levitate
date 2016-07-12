@@ -8,6 +8,7 @@ import org.bukkit.command.CommandSender;
 
 import de.ketrwu.levitate.Message;
 import de.ketrwu.levitate.Message.TextMode;
+import de.ketrwu.levitate.MessageBuilder;
 import de.ketrwu.levitate.exception.SyntaxResponseException;
 import de.ketrwu.levitate.handler.SyntaxHandler;
 
@@ -43,7 +44,7 @@ public class BooleanSyntax implements SyntaxHandler {
 	@Override
 	public void check(CommandSender sender, String parameter, final String passed) throws SyntaxResponseException {
 		if(values.contains(passed.toLowerCase())) return;
-		throw new SyntaxResponseException(Message.BOOLEANSYNTAX_HAS_TO_BE_BOOLEAN.get(TextMode.COLOR, new HashMap<String, String>(){{put("%arg%", passed);}}));
+		throw new SyntaxResponseException(new MessageBuilder(Message.BOOLEANSYNTAX_HAS_TO_BE_BOOLEAN, TextMode.COLOR, new HashMap<String, String>(){{put("%arg%", passed);}}));
 	}
 
 	@Override

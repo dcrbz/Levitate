@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 
 import de.ketrwu.levitate.Message;
 import de.ketrwu.levitate.Message.TextMode;
+import de.ketrwu.levitate.MessageBuilder;
 import de.ketrwu.levitate.exception.CommandSyntaxException;
 import de.ketrwu.levitate.exception.SyntaxResponseException;
 import de.ketrwu.levitate.handler.SyntaxHandler;
@@ -24,7 +25,7 @@ public class PlayerSyntax implements SyntaxHandler {
 
 	@Override
 	public void check(CommandSender sender, String parameter, String passed) throws SyntaxResponseException, CommandSyntaxException {
-		if(parameter.equalsIgnoreCase("online") == false && parameter.equalsIgnoreCase("offline") == false && parameter.equals("") == false) throw new CommandSyntaxException("Method 'player' doesn't supports parameter '"+parameter+"'!");
+		if(parameter.equalsIgnoreCase("online") == false && parameter.equalsIgnoreCase("offline") == false && parameter.equals("") == false) throw new CommandSyntaxException(new MessageBuilder(Message.PLAYERSYNTAX_PARAMETER_MALFORMED, TextMode.COLOR, new HashMap<String, String>(){{put("%parameter%", parameter);}}));
 		OfflinePlayer p = null;
 		HashMap<String, String> replaces = new HashMap<String, String>();
 		
@@ -34,12 +35,12 @@ public class PlayerSyntax implements SyntaxHandler {
 			p = Bukkit.getOfflinePlayer(passed);
 		}
 		
-		if(p == null) throw new SyntaxResponseException(Message.PLAYERSYNTAX_PLAYER_NOT_FOUND.get(TextMode.COLOR));
+		if(p == null) throw new SyntaxResponseException(new MessageBuilder(Message.PLAYERSYNTAX_PLAYER_NOT_FOUND, TextMode.COLOR, replaces));
 		replaces.put("%player%", p.getName());
 		if(parameter.equalsIgnoreCase("online")) {
-			if(!p.isOnline()) throw new SyntaxResponseException(Message.PLAYERSYNTAX_PLAYER_OFFLINE.get(TextMode.COLOR, replaces));
+			if(!p.isOnline()) throw new SyntaxResponseException(new MessageBuilder(Message.PLAYERSYNTAX_PLAYER_OFFLINE, TextMode.COLOR, replaces));
 		} else if(parameter.equalsIgnoreCase("offline")) {
-			if(p.isOnline()) throw new SyntaxResponseException(Message.PLAYERSYNTAX_PLAYER_ONLINE.get(TextMode.COLOR, replaces));
+			if(p.isOnline()) throw new SyntaxResponseException(new MessageBuilder(Message.PLAYERSYNTAX_PLAYER_ONLINE, TextMode.COLOR, replaces));
 		}
 	}
 	

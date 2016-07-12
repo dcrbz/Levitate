@@ -73,21 +73,21 @@ public class CommandRegistry {
 				CommandInformation cmd = null;
 				String[] aliases = null;
 				if(m.isAnnotationPresent(de.ketrwu.levitate.annotation.Command.class)) {
-					if(m.getParameterTypes().length != 3) throw new CommandAnnotationException(Message.CR_PARAMETERCOUNT_INVALID.get(TextMode.PLAIN, replaces));
+					if(m.getParameterTypes().length != 3) throw new CommandAnnotationException(new MessageBuilder(Message.CR_PARAMETERCOUNT_INVALID, TextMode.PLAIN, replaces));
 					if(m.getParameterTypes()[0] != CommandSender.class) {
 						replaces.put("%index%", "0");
 						replaces.put("%class%", "CommandSender");
-						throw new CommandAnnotationException(Message.CR_PARAMETER_INVALID.get(TextMode.PLAIN, replaces));
+						throw new CommandAnnotationException(new MessageBuilder(Message.CR_PARAMETER_INVALID, TextMode.PLAIN, replaces));
 					}
 					if(m.getParameterTypes()[1] != String.class) {
 						replaces.put("%index%", "1");
 						replaces.put("%class%", "String");
-						throw new CommandAnnotationException(Message.CR_PARAMETER_INVALID.get(TextMode.PLAIN, replaces));
+						throw new CommandAnnotationException(new MessageBuilder(Message.CR_PARAMETER_INVALID, TextMode.PLAIN, replaces));
 					}
 					if(m.getParameterTypes()[2] != ParameterSet.class) {
 						replaces.put("%index%", "2");
 						replaces.put("%class%", "ParameterSet");
-						throw new CommandAnnotationException(Message.CR_PARAMETER_INVALID.get(TextMode.PLAIN, replaces));
+						throw new CommandAnnotationException(new MessageBuilder(Message.CR_PARAMETER_INVALID, TextMode.PLAIN, replaces));
 					}
 					
 					de.ketrwu.levitate.annotation.Command commandAnnotation = m.getAnnotation(de.ketrwu.levitate.annotation.Command.class);
@@ -211,27 +211,39 @@ public class CommandRegistry {
             	}
             	
 				@Override
-				public boolean execute(CommandSender arg0, String arg1, String[] arg2) {
+				public boolean execute(CommandSender sender, String arg1, String[] arg2) {
 					try {
-						return playerPassCommand(arg0, arg1, arg2);
+						return playerPassCommand(sender, arg1, arg2);
 					} catch (CommandSyntaxException | NoPermissionException | SyntaxResponseException | ExecutorIncompatibleException e) {
 						if(e instanceof NoPermissionException) {
-							LevitateMessagePreprocessEvent preprocessEvent = new LevitateMessagePreprocessEvent(getPlugin(), arg0, Message.NO_PERMISSION, TextMode.COLOR, Message.NO_PERMISSION.get(TextMode.COLOR));
+							LevitateMessagePreprocessEvent preprocessEvent = new LevitateMessagePreprocessEvent(getPlugin(), sender, new MessageBuilder(Message.NO_PERMISSION, TextMode.COLOR));
 							Bukkit.getPluginManager().callEvent(preprocessEvent);
 							if(!preprocessEvent.isCancelled()) {
-								if(preprocessEvent.getMessage() != null) getMessageHandler().sendMessage(arg0, preprocessEvent.getMessage());
+								if(preprocessEvent.getMessage() != null) getMessageHandler().sendMessage(sender, preprocessEvent.getMessageBuilder());
 							}
 							return true;
 						}
-						if(e instanceof SyntaxResponseException || e instanceof ExecutorIncompatibleException) {
-
-							LevitateMessagePreprocessEvent preprocessEvent = new LevitateMessagePreprocessEvent(getPlugin(), arg0, null, null, e.getMessage());
+						if(e instanceof SyntaxResponseException) {
+							SyntaxResponseException ex = (SyntaxResponseException) e;
+							LevitateMessagePreprocessEvent preprocessEvent = new LevitateMessagePreprocessEvent(getPlugin(), sender, ex.getMessageBuilder());
 							Bukkit.getPluginManager().callEvent(preprocessEvent);
 							if(!preprocessEvent.isCancelled()) {
-								if(preprocessEvent.getMessage() != null) getMessageHandler().sendMessage(arg0, preprocessEvent.getMessage());
+								if(preprocessEvent.getMessage() != null) getMessageHandler().sendMessage(sender, preprocessEvent.getMessageBuilder());
 							}
 							return true;
 						}
+						
+						if(e instanceof ExecutorIncompatibleException) {
+							ExecutorIncompatibleException ex = (ExecutorIncompatibleException) e;
+							LevitateMessagePreprocessEvent preprocessEvent = new LevitateMessagePreprocessEvent(getPlugin(), sender, ex.getMessageBuilder());
+							Bukkit.getPluginManager().callEvent(preprocessEvent);
+							if(!preprocessEvent.isCancelled()) {
+								if(preprocessEvent.getMessage() != null) getMessageHandler().sendMessage(sender, preprocessEvent.getMessageBuilder());
+							}
+							return true;
+						}
+						
+						
 						e.printStackTrace();
 					}
 					return false;
@@ -385,7 +397,7 @@ public class CommandRegistry {
 				if(i.matches(sender, ce, command, args)) {
 					if(permissionHandler != null && i.getPermission() != null) {
 						if(!permissionHandler.hasPermission(sender, i.getPermission())) {
-							throw new NoPermissionException(Message.NO_PERMISSION.get(TextMode.COLOR));
+							throw new NoPermissionException(new MessageBuilder(Message.NO_PERMISSION, TextMode.COLOR));
 						}
 					}
 					ParameterSet ps = new ParameterSet(args);

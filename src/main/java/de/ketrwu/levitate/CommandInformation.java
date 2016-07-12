@@ -109,20 +109,20 @@ public class CommandInformation {
 			HashMap<String,String> replaces = new HashMap<String, String>();
 			replaces.put("%arg%", arg);
 			
-			if(!arg.startsWith("<")) throw new CommandSyntaxException(Message.CI_ARG_HAS_TO_START_WITH_CHAR.get(TextMode.COLOR, replaces));
-			if(!arg.endsWith(">")) throw new CommandSyntaxException(Message.CI_ARG_HAS_TO_END_WITH_CHAR.get(TextMode.COLOR, replaces));
+			if(!arg.startsWith("<")) throw new CommandSyntaxException(new MessageBuilder(Message.CI_ARG_HAS_TO_START_WITH_CHAR, TextMode.COLOR, replaces));
+			if(!arg.endsWith(">")) throw new CommandSyntaxException(new MessageBuilder(Message.CI_ARG_HAS_TO_END_WITH_CHAR, TextMode.COLOR, replaces));
 			arg = arg.substring(1, arg.length()-1);
 			String method = parseArgument(arg).get(0);
 			boolean unlimited = false;
 			if(method.endsWith("...")) {
-				if(matches.hasNext()) throw new CommandSyntaxException(Message.CI_ARG_CANNOT_BE_UNLIMITED.get(TextMode.COLOR, replaces));
+				if(matches.hasNext()) throw new CommandSyntaxException(new MessageBuilder(Message.CI_ARG_CANNOT_BE_UNLIMITED, TextMode.COLOR, replaces));
 				unlimited = true;
 				method = method.substring(0, method.length()-3);
 			}
 			if(!SyntaxValidations.existHandler(method)) {
 				replaces.clear();
 				replaces.put("%method%", method);
-				throw new CommandSyntaxException(Message.CI_NO_SYNTAX.get(TextMode.COLOR, replaces));
+				throw new CommandSyntaxException(new MessageBuilder(Message.CI_NO_SYNTAX, TextMode.COLOR, replaces));
 			}
 			this.args.add(new Argument(method, parseArgument(arg).get(1), SyntaxValidations.getSyntaxes().get(method), unlimited));
 		}
@@ -153,15 +153,15 @@ public class CommandInformation {
 				replaces.put("%char%", "[");
 				replaces.put("%arg%", arg);
 				if(ch.equals("[")) {
-					if(start) throw new CommandSyntaxException(Message.CI_ERROR_AT_CHAR_IN_ARG.get(TextMode.COLOR, replaces));
-					if(end) throw new CommandSyntaxException(Message.CI_ERROR_AT_CHAR_IN_ARG.get(TextMode.COLOR, replaces));
+					if(start) throw new CommandSyntaxException(new MessageBuilder(Message.CI_ERROR_AT_CHAR_IN_ARG, TextMode.COLOR, replaces));
+					if(end) throw new CommandSyntaxException(new MessageBuilder(Message.CI_ERROR_AT_CHAR_IN_ARG, TextMode.COLOR, replaces));
 					start = true;
 					continue;
 				}
 				if(ch.equals("]")) {
 					replaces.put("%char%", "]");
-					if(!start) throw new CommandSyntaxException(Message.CI_ERROR_AT_CHAR_IN_ARG.get(TextMode.COLOR, replaces));
-					if(end) throw new CommandSyntaxException(Message.CI_ERROR_AT_CHAR_IN_ARG.get(TextMode.COLOR, replaces));
+					if(!start) throw new CommandSyntaxException(new MessageBuilder(Message.CI_ERROR_AT_CHAR_IN_ARG, TextMode.COLOR, replaces));
+					if(end) throw new CommandSyntaxException(new MessageBuilder(Message.CI_ERROR_AT_CHAR_IN_ARG, TextMode.COLOR, replaces));
 					end = true;
 					continue;
 				}
@@ -176,7 +176,7 @@ public class CommandInformation {
 					}
 					replaces.clear();
 					replaces.put("%char%", ch);
-					throw new CommandSyntaxException(Message.CI_ERROR_AT_CHAR.get(TextMode.COLOR, replaces));
+					throw new CommandSyntaxException(new MessageBuilder(Message.CI_ERROR_AT_CHAR, TextMode.COLOR, replaces));
 				}
 			}
 		} else {
@@ -198,7 +198,7 @@ public class CommandInformation {
 			commandExecutor = CommandExecutor.CONSOLE;
 		}
 		base = base.substring(1);
-		if(base.startsWith("<")) throw new CommandSyntaxException(Message.CI_CMD_CANNOT_START_WITH.get(TextMode.COLOR));
+		if(base.startsWith("<")) throw new CommandSyntaxException(new MessageBuilder(Message.CI_CMD_CANNOT_START_WITH, TextMode.COLOR));
 		this.command = base;
 	}
 	
@@ -208,10 +208,10 @@ public class CommandInformation {
 		
 		switch(commandExecutor) {
 		case CONSOLE:
-			if(sender != CommandExecutor.CONSOLE) throw new ExecutorIncompatibleException(Message.ONLY_CONSOLE.get(TextMode.COLOR));
+			if(sender != CommandExecutor.CONSOLE) throw new ExecutorIncompatibleException(new MessageBuilder(Message.ONLY_CONSOLE, TextMode.COLOR));
 			break;
 		case PLAYER:
-			if(sender != CommandExecutor.PLAYER) throw new ExecutorIncompatibleException(Message.ONLY_INGAME.get(TextMode.COLOR));
+			if(sender != CommandExecutor.PLAYER) throw new ExecutorIncompatibleException(new MessageBuilder(Message.ONLY_INGAME, TextMode.COLOR));
 			break;
 		}
 		
