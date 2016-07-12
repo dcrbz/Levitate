@@ -25,7 +25,7 @@ public class PlayerSyntax implements SyntaxHandler {
 
 	@Override
 	public void check(CommandSender sender, String parameter, String passed) throws SyntaxResponseException, CommandSyntaxException {
-		if(parameter.equalsIgnoreCase("online") == false && parameter.equalsIgnoreCase("offline") == false && parameter.equals("") == false) throw new CommandSyntaxException(new MessageBuilder(Message.PLAYERSYNTAX_PARAMETER_MALFORMED, TextMode.COLOR, new HashMap<String, String>(){{put("%parameter%", parameter);}}));
+		if(parameter.equalsIgnoreCase("online") == false && parameter.equalsIgnoreCase("offline") == false && parameter.equals("") == false) throw new CommandSyntaxException(new MessageBuilder(Message.PLAYERSYNTAX_PARAMETER_MALFORMED, TextMode.COLOR).replace("%parameter%", parameter));
 		OfflinePlayer p = null;
 		HashMap<String, String> replaces = new HashMap<String, String>();
 		
