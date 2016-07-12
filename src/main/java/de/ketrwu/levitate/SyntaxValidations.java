@@ -2,8 +2,6 @@ package de.ketrwu.levitate;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -280,34 +278,5 @@ public class SyntaxValidations {
 	public static void clearSyntaxes() {
 		syntaxes.clear();
 	}
-	
-	public static boolean isStringList(Class clazz) {
-		final Type type = clazz.getGenericSuperclass();
-		if (type instanceof ParameterizedType) {
-			final ParameterizedType pType = (ParameterizedType) type;
-			try {
-				Class c = Class.forName(pType.getActualTypeArguments()[0].getTypeName());
-				for (int i = 0; i < 5; i++) {
-					if (c.isInstance(new ArrayList<String>()))
-						return true;
-					c = c.getSuperclass();
-				}
-			} catch (ClassNotFoundException e) {
-			}
-		}
-		return false;
-	}
-	
-//	public static Class getGeneric(Field f) {
-//		Type type = f.getGenericType();
-//	    if (type instanceof ParameterizedType) {
-//	        ParameterizedType pType = (ParameterizedType)type;
-//	        try {
-//				return Class.forName(pType.getActualTypeArguments()[0].getTypeName());
-//			} catch (ClassNotFoundException e) {
-//			}
-//	    }
-//	    return null;
-//	}
 	
 }
