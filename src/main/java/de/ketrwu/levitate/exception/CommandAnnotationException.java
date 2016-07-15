@@ -22,9 +22,9 @@ public class CommandAnnotationException extends Exception {
 	 * @deprecated Use {@link #SyntaxResponseException(MessageBuilder messageBuilder)} instead.
 	 * @param message
 	 */
-//	public CommandAnnotationException(String message) {
-//		super(message);
-//	}
+	public CommandAnnotationException(String message) {
+		super(message);
+	}
 
 	public CommandAnnotationException(String message, Throwable cause) {
 		super(message, cause);

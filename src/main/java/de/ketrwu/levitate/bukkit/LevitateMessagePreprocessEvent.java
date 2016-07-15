@@ -13,7 +13,7 @@ import de.ketrwu.levitate.MessageBuilder;
 /**
  * Gets called before Levitate sends a message to the user. <br />
  * When cancelled, Levitate wont send a message to the user.<br />
- * Levitate will send the message from getMessage() to the user.
+ * Levitate will send the message builded by the MessageBuilder to the user.
  * 
  * @author Kenneth Wussmann
  */

@@ -92,7 +92,11 @@ public class CommandInformation {
 			e.printStackTrace();
 		}
 	}
-
+	
+	/**
+	 * Prase the main syntax and throw errors on fails by developer
+	 * @throws CommandSyntaxException throws when the syntax is wrong
+	 */
 	private void processSyntax() throws CommandSyntaxException {
 		
 		if(!syntax.contains(" ")) {
@@ -128,6 +132,14 @@ public class CommandInformation {
 		}
 	}
 	
+	/**
+	 * Check if the argument matches the user input
+	 * @param sender
+	 * @param input
+	 * @param syntaxArg
+	 * @return
+	 * @throws CommandSyntaxException
+	 */
 	public boolean matchArgument(CommandSender sender, String input, String syntaxArg) throws CommandSyntaxException {
 		List<String> i = parseArgument(syntaxArg);
 		for(SyntaxHandler h : SyntaxValidations.getSyntaxes().values()) {
@@ -139,6 +151,12 @@ public class CommandInformation {
 		return false;
 	}
 			
+	/**
+	 * Prase single Argument
+	 * @param arg
+	 * @return
+	 * @throws CommandSyntaxException
+	 */
 	private List<String> parseArgument(String arg) throws CommandSyntaxException {
 		List<String> i = new ArrayList<String>();
 		String method = "";
@@ -187,6 +205,11 @@ public class CommandInformation {
 		return i;
 	}
 	
+	/**
+	 * Process the command-base with command executor
+	 * @param base
+	 * @throws CommandSyntaxException
+	 */
 	private void processCommandBase(String base) throws CommandSyntaxException {
 		if(base.toLowerCase().startsWith("?")) {
 			commandExecutor = CommandExecutor.ALL;
@@ -202,7 +225,17 @@ public class CommandInformation {
 		this.command = base;
 	}
 	
-	
+	/**
+	 * Check if a user-input command matches this CommandInformation
+	 * @param cmdSender
+	 * @param sender
+	 * @param command
+	 * @param args
+	 * @return
+	 * @throws CommandSyntaxException 
+	 * @throws SyntaxResponseException Throws when a syntax says the input is wrong
+	 * @throws ExecutorIncompatibleException Throws when the CommandExecutors doesn't match
+	 */
 	public boolean matches(CommandSender cmdSender, CommandExecutor sender, String command, String[] args) throws CommandSyntaxException, SyntaxResponseException, ExecutorIncompatibleException {
 		if(!this.command.equalsIgnoreCase(command)) return false;
 		
@@ -247,6 +280,10 @@ public class CommandInformation {
 		return false;
 	}
 	
+	/**
+	 * Checks whether CommandInformation has a human readable syntax description
+	 * @return
+	 */
 	public boolean hasReadableSyntax() {
 		return getReadable() != null;
 	}

@@ -16,7 +16,6 @@ import de.ketrwu.levitate.handler.SyntaxHandler;
  * Read <a href="https://github.com/KennethWussmann/Levitate/wiki/2.-First-command">this page</a> to create your first Levitate-Command.
  * @author Kenneth Wussmann
  */
-
 public class Levitate {
 	
 	private JavaPlugin plugin;
@@ -197,7 +196,7 @@ public class Levitate {
 	
 	/**
 	 * Get the current MessageHandler
-	 * @return Get the current MessageHandler
+	 * @return The current MessageHandler
 	 */
 	public MessageHandler getMessageHandler() {
 		return getCommandRegistry().getMessageHandler();

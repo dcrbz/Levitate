@@ -7,6 +7,10 @@ import java.lang.annotation.Target;
 
 import de.ketrwu.levitate.CommandExecutor;
 
+/**
+ * The syntax annotation used to register syntaxes in a developer-friendly way.
+ * @author Kenneth Wussmann
+ */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Syntax {

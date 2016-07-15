@@ -13,6 +13,14 @@ import de.ketrwu.levitate.Message;
 import de.ketrwu.levitate.ParameterSet;
 import de.ketrwu.levitate.handler.CommandHandler;
 
+/**
+ * A Bukkit-Plugin Main-Class to allow Levitate to run as a plugin on a server. <br />
+ * Levitate doesn't do much on itself without a plugin using it. <br />
+ * This plugin also uses Levitate and offers the commands: <br />
+ * - /levitate <reload>  =  To reload the messages of levitate<br />
+ * - /levitate <version> =  To get the current running version of levitate (Sometimes useful for development)
+ * @author Kenneth Wussmann
+ */
 public class LevitatePlugin extends JavaPlugin {
 	
 	@Override

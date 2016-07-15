@@ -4,6 +4,10 @@ import org.bukkit.command.CommandSender;
 
 import de.ketrwu.levitate.handler.MessageHandler;
 
+/**
+ * Default MessageHandler used to send messages to player or console
+ * @author Kenneth Wussmann
+ */
 public class DefaultMessageHandler implements MessageHandler {
 
 	@Override

@@ -424,6 +424,11 @@ public class CommandRegistry {
 		return found;
 	}
 	
+	/**
+	 * Checks if given class exists
+	 * @param clazz
+	 * @return
+	 */
 	public static boolean existClass(String clazz) {
 		try {
 			Class.forName(clazz);
@@ -431,23 +436,43 @@ public class CommandRegistry {
 		} catch (Exception e) { }
 		return false;
 	}
-
+	
+	/**
+	 * Get all commands registered
+	 * @return
+	 */
 	public HashMap<CommandInformation, CommandHandler> getCommands() {
 		return commands;
 	}
-
+	
+	/**
+	 * Get the current PermissionHandler
+	 * @return
+	 */
 	public PermissionHandler getPermissionHandler() {
 		return permissionHandler;
 	}
 	
+	/**
+	 * Get the plugin instance of the plugin registered this CommandRegistry
+	 * @return
+	 */
 	public Plugin getPlugin() {
 		return plugin;
 	}
-
+	
+	/**
+	 * Get the current HelpMap
+	 * @return
+	 */
 	public HelpMap getHelpMap() {
 		return helpMap;
 	}
-
+	
+	/**
+	 * Get the current MessageHandler
+	 * @return
+	 */
 	public MessageHandler getMessageHandler() {
 		return messageHandler;
 	}

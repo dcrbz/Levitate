@@ -198,7 +198,7 @@ public class ParameterSet {
 	 * @param val 
 	 * @return
 	 */
-	private boolean isInt(String val) {
+	public boolean isInt(String val) {
 		try {
 			Integer.parseInt(val);
 			return true;
