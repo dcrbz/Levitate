@@ -163,7 +163,7 @@ public class Levitate {
 	 * Register own MessageHandler
 	 * @param messageHandler Handles messages
 	 */
-	public void registerHelpMap(MessageHandler messageHandler) {
+	public void registerMessageHandler(MessageHandler messageHandler) {
 		getCommandRegistry().registerMessageHandler(messageHandler);
 	}
 	
