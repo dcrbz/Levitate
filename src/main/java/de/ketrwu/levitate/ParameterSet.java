@@ -89,8 +89,9 @@ public class ParameterSet {
 	 * @return
 	 */
 	public Player getPlayer(int i) {
+		String param = parameter.get(i);
 		Player p = Bukkit.getPlayer(parameter.get(i));
-		if(p == null) Bukkit.getPlayer(UUID.fromString(parameter.get(i)));
+		if(param.length() > 16 && param.contains("-")) p = Bukkit.getPlayer(UUID.fromString(parameter.get(i)));
 		return p;
 	}
 
@@ -100,8 +101,9 @@ public class ParameterSet {
 	 * @return
 	 */
 	public OfflinePlayer getOfflinePlayer(int i) {
+		String param = parameter.get(i);
 		OfflinePlayer p = Bukkit.getOfflinePlayer(parameter.get(i));
-		if(p == null) Bukkit.getOfflinePlayer(UUID.fromString(parameter.get(i)));
+		if(param.length() > 16 && param.contains("-")) p = Bukkit.getOfflinePlayer(UUID.fromString(parameter.get(i)));
 		return p;
 	}
 	

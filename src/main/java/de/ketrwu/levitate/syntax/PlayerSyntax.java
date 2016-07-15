@@ -28,13 +28,19 @@ public class PlayerSyntax implements SyntaxHandler {
 		if(parameter.equalsIgnoreCase("online") == false && parameter.equalsIgnoreCase("offline") == false && parameter.equals("") == false) throw new CommandSyntaxException(new MessageBuilder(Message.PLAYERSYNTAX_PARAMETER_MALFORMED, TextMode.COLOR).replace("%parameter%", parameter));
 		OfflinePlayer p = null;
 		HashMap<String, String> replaces = new HashMap<String, String>();
-		
 		if(passed.length() > 16 && passed.contains("-")) {
-			p = Bukkit.getOfflinePlayer(UUID.fromString(passed));
+			replaces.put("%uuid%", passed);
+			replaces.put("%player%", passed);
+			try {
+				p = Bukkit.getOfflinePlayer(UUID.fromString(passed));
+				if(p == null) throw new SyntaxResponseException(new MessageBuilder(Message.PLAYERSYNTAX_PLAYER_NOT_FOUND, TextMode.COLOR, replaces));
+				if(p.getName() == null || p.getName().equalsIgnoreCase(passed)) throw new SyntaxResponseException(new MessageBuilder(Message.PLAYERSYNTAX_PLAYER_NOT_FOUND, TextMode.COLOR, replaces));
+			} catch (IllegalArgumentException e) {
+				throw new SyntaxResponseException(new MessageBuilder(Message.PLAYERSYNTAX_UUID_MALFORMED, TextMode.COLOR, replaces));
+			}
 		} else {
 			p = Bukkit.getOfflinePlayer(passed);
 		}
-		
 		if(p == null) throw new SyntaxResponseException(new MessageBuilder(Message.PLAYERSYNTAX_PLAYER_NOT_FOUND, TextMode.COLOR, replaces));
 		replaces.put("%player%", p.getName());
 		if(parameter.equalsIgnoreCase("online")) {
