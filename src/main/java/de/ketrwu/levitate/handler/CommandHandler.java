@@ -1,6 +1,8 @@
-package de.ketrwu.levitate;
+package de.ketrwu.levitate.handler;
 
 import org.bukkit.command.CommandSender;
+
+import de.ketrwu.levitate.ParameterSet;
 
 /**
  * Handle a Levitate-Command

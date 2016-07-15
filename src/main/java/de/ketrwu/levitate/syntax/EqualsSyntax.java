@@ -5,10 +5,13 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
+import org.bukkit.command.CommandSender;
+
 import de.ketrwu.levitate.Message;
 import de.ketrwu.levitate.Message.TextMode;
-import de.ketrwu.levitate.SyntaxHandler;
+import de.ketrwu.levitate.MessageBuilder;
 import de.ketrwu.levitate.exception.SyntaxResponseException;
+import de.ketrwu.levitate.handler.SyntaxHandler;
 
 /**
  * Checks if user-input is string. Case-sensitive
@@ -17,15 +20,15 @@ import de.ketrwu.levitate.exception.SyntaxResponseException;
 public class EqualsSyntax implements SyntaxHandler {
 
 	@Override
-	public void check(String parameter, String passed) throws SyntaxResponseException {
+	public void check(CommandSender sender, String parameter, String passed) throws SyntaxResponseException {
 		HashMap<String, String> replaces = new HashMap<String, String>();
 		replaces.put("%arg%", passed);
 		replaces.put("%value%", parameter);
-		if(!parameter.equals(passed)) throw new SyntaxResponseException(Message.EQUALSSYNTAX_DOESNT_EQUAL.get(TextMode.COLOR, replaces));
+		if(!parameter.equals(passed)) throw new SyntaxResponseException(new MessageBuilder(Message.EQUALSSYNTAX_DOESNT_EQUAL, TextMode.COLOR, replaces));
 	}
 
 	@Override
-	public List<String> getTabComplete(String parameter, String passed) {
+	public List<String> getTabComplete(CommandSender sender, String parameter, String passed) {
 		return new ArrayList<String>(Arrays.asList(parameter));
 	}
 }

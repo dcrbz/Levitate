@@ -10,13 +10,15 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.bukkit.Material;
+import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import de.ketrwu.levitate.Message;
 import de.ketrwu.levitate.Message.TextMode;
-import de.ketrwu.levitate.SyntaxHandler;
+import de.ketrwu.levitate.MessageBuilder;
 import de.ketrwu.levitate.exception.SyntaxResponseException;
+import de.ketrwu.levitate.handler.SyntaxHandler;
 
 /**
  * Checks if user-input is an itemname or id
@@ -33,7 +35,7 @@ public class ItemStackSyntax implements SyntaxHandler {
 	}
 
 	@Override
-	public void check(String parameter, String passed) throws SyntaxResponseException {
+	public void check(CommandSender sender, String parameter, String passed) throws SyntaxResponseException {
 		HashMap<String, String> replaces = new HashMap<String, String>();
 		replaces.put("%arg%", passed);
 		ItemStack is = null;
@@ -43,11 +45,11 @@ public class ItemStackSyntax implements SyntaxHandler {
 			String a = passed.split(":")[0];
 			String b = passed.split(":")[1];
 			
-			if(!isInt(b)) throw new SyntaxResponseException(Message.ITEMSTACKSYNTAX_NO_INTEGER.get(TextMode.COLOR, replaces));
+			if(!isInt(b)) throw new SyntaxResponseException(new MessageBuilder(Message.ITEMSTACKSYNTAX_NO_INTEGER, TextMode.COLOR, replaces));
 			
 			int meta = Integer.parseInt(b);
 			replaces.put("%int%", b);
-			if(meta < 0)  throw new SyntaxResponseException(Message.ITEMSTACKSYNTAX_POSITIVE_INTEGER.get(TextMode.COLOR, replaces));
+			if(meta < 0)  throw new SyntaxResponseException(new MessageBuilder(Message.ITEMSTACKSYNTAX_POSITIVE_INTEGER, TextMode.COLOR, replaces));
 			
 			if(!isInt(a)) {
 				is = items.get(a);
@@ -57,15 +59,15 @@ public class ItemStackSyntax implements SyntaxHandler {
 			
 			int id = Integer.parseInt(a);
 			replaces.put("%int%", a);
-			if(id < 0)  throw new SyntaxResponseException(Message.ITEMSTACKSYNTAX_POSITIVE_INTEGER.get(TextMode.COLOR, replaces));
+			if(id < 0)  throw new SyntaxResponseException(new MessageBuilder(Message.ITEMSTACKSYNTAX_POSITIVE_INTEGER, TextMode.COLOR, replaces));
 			
 			is = new ItemStack(Material.getMaterial(id), 1, (short) meta);
 		} else if(isInt(passed)) {
 			int i = Integer.parseInt(passed);
-			if(i < 0)  throw new SyntaxResponseException(Message.ITEMSTACKSYNTAX_POSITIVE_INTEGER.get(TextMode.COLOR, replaces));
+			if(i < 0)  throw new SyntaxResponseException(new MessageBuilder(Message.ITEMSTACKSYNTAX_POSITIVE_INTEGER, TextMode.COLOR, replaces));
 			is = new ItemStack(i);
 		}
-		if(is == null) throw new SyntaxResponseException(Message.ITEMSTACKSYNTAX_ITEM_NOT_FOUND.get(TextMode.COLOR, replaces));
+		if(is == null) throw new SyntaxResponseException(new MessageBuilder(Message.ITEMSTACKSYNTAX_ITEM_NOT_FOUND, TextMode.COLOR, replaces));
 	}
 	
 	public static void loadCSV() {
@@ -117,7 +119,7 @@ public class ItemStackSyntax implements SyntaxHandler {
 	}
 
 	@Override
-	public List<String> getTabComplete(String parameter, String passed) {
+	public List<String> getTabComplete(CommandSender sender, String parameter, String passed) {
 		return new ArrayList<String>(){{addAll(items.keySet());}};
 	}
 	

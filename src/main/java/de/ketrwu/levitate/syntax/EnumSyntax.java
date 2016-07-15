@@ -5,12 +5,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.bukkit.command.CommandSender;
+
 import de.ketrwu.levitate.CommandRegistry;
 import de.ketrwu.levitate.Message;
 import de.ketrwu.levitate.Message.TextMode;
-import de.ketrwu.levitate.SyntaxHandler;
+import de.ketrwu.levitate.MessageBuilder;
 import de.ketrwu.levitate.exception.CommandSyntaxException;
 import de.ketrwu.levitate.exception.SyntaxResponseException;
+import de.ketrwu.levitate.handler.SyntaxHandler;
 
 /**
  * Checks if user-input is a value of entered enum. Case-insensitive
@@ -19,11 +22,11 @@ import de.ketrwu.levitate.exception.SyntaxResponseException;
 public class EnumSyntax implements SyntaxHandler {
 
 	@Override
-	public void check(String parameter, String passed) throws SyntaxResponseException, CommandSyntaxException {
-		if(parameter.equals("")) throw new CommandSyntaxException(Message.ENUMSYNTAX_NEEDS_CLASSPATH.get(TextMode.COLOR));
+	public void check(CommandSender sender, String parameter, String passed) throws SyntaxResponseException, CommandSyntaxException {
+		if(parameter.equals("")) throw new CommandSyntaxException(new MessageBuilder(Message.ENUMSYNTAX_NEEDS_CLASSPATH, TextMode.COLOR));
 		HashMap<String, String> replaces = new HashMap<String, String>();
 		replaces.put("%class%", parameter);
-		if(!CommandRegistry.existClass(parameter)) throw new CommandSyntaxException(Message.ENUMSYNTAX_CLASS_DOESNT_EXIST.get(TextMode.COLOR, replaces));
+		if(!CommandRegistry.existClass(parameter)) throw new CommandSyntaxException(new MessageBuilder(Message.ENUMSYNTAX_CLASS_DOESNT_EXIST, TextMode.COLOR, replaces));
 		try {
 			Class<?> cls = Class.forName(parameter);
 			cls.getDeclaredField(passed.toUpperCase());
@@ -39,7 +42,7 @@ public class EnumSyntax implements SyntaxHandler {
 					replaces.clear();
 					replaces.put("%arg%", correctCase(passed));
 					replaces.put("%list%", fields);
-					throw new SyntaxResponseException(Message.ENUMSYNTAX_ARG_NOT_IN_ENUM.get(TextMode.COLOR, replaces));
+					throw new SyntaxResponseException(new MessageBuilder(Message.ENUMSYNTAX_ARG_NOT_IN_ENUM, TextMode.COLOR, replaces));
 				} catch (ClassNotFoundException e2) { }
 			}
 			e.printStackTrace();
@@ -59,7 +62,7 @@ public class EnumSyntax implements SyntaxHandler {
 	}
 
 	@Override
-	public List<String> getTabComplete(String parameter, String passed) {
+	public List<String> getTabComplete(CommandSender sender, String parameter, String passed) {
 		List<String> complete = new ArrayList<String>();
 		try {
 			Class<?> cls = Class.forName(parameter);

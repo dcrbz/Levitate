@@ -4,6 +4,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -88,7 +89,10 @@ public class ParameterSet {
 	 * @return
 	 */
 	public Player getPlayer(int i) {
-		return Bukkit.getPlayer(parameter.get(i));
+		String param = parameter.get(i);
+		Player p = Bukkit.getPlayer(parameter.get(i));
+		if(param.length() > 16 && param.contains("-")) p = Bukkit.getPlayer(UUID.fromString(parameter.get(i)));
+		return p;
 	}
 
 	/**
@@ -97,7 +101,10 @@ public class ParameterSet {
 	 * @return
 	 */
 	public OfflinePlayer getOfflinePlayer(int i) {
-		return Bukkit.getOfflinePlayer(parameter.get(i));
+		String param = parameter.get(i);
+		OfflinePlayer p = Bukkit.getOfflinePlayer(parameter.get(i));
+		if(param.length() > 16 && param.contains("-")) p = Bukkit.getOfflinePlayer(UUID.fromString(parameter.get(i)));
+		return p;
 	}
 	
 	/**
@@ -193,7 +200,7 @@ public class ParameterSet {
 	 * @param val 
 	 * @return
 	 */
-	private boolean isInt(String val) {
+	public boolean isInt(String val) {
 		try {
 			Integer.parseInt(val);
 			return true;

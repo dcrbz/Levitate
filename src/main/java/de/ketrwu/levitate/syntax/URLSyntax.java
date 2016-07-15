@@ -6,10 +6,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.bukkit.command.CommandSender;
+
 import de.ketrwu.levitate.Message;
 import de.ketrwu.levitate.Message.TextMode;
-import de.ketrwu.levitate.SyntaxHandler;
+import de.ketrwu.levitate.MessageBuilder;
 import de.ketrwu.levitate.exception.SyntaxResponseException;
+import de.ketrwu.levitate.handler.SyntaxHandler;
 
 /**
  * Checks if user-input is an url
@@ -18,7 +21,7 @@ import de.ketrwu.levitate.exception.SyntaxResponseException;
 public class URLSyntax implements SyntaxHandler {
 
 	@Override
-	public void check(String parameter, String passed) throws SyntaxResponseException {
+	public void check(CommandSender sender, String parameter, String passed) throws SyntaxResponseException {
 		HashMap<String, String> replaces = new HashMap<String, String>();
 		replaces.put("%arg%", passed);
 		
@@ -27,16 +30,16 @@ public class URLSyntax implements SyntaxHandler {
 			if(parameter != null && !parameter.equals("")) {
 				if(!passed.toLowerCase().startsWith(parameter.toLowerCase())) {
 					replaces.put("%parameter%", parameter);
-					throw new SyntaxResponseException(Message.URLSYNTAX_DOES_NOT_START_WITH.get(TextMode.COLOR, replaces));
+					throw new SyntaxResponseException(new MessageBuilder(Message.URLSYNTAX_DOES_NOT_START_WITH, TextMode.COLOR, replaces));
 				}
 			}
 		} catch (MalformedURLException e) {
-			throw new SyntaxResponseException(Message.URLSYNTAX_URL_MALFORMED.get(TextMode.COLOR, replaces));
+			throw new SyntaxResponseException(new MessageBuilder(Message.URLSYNTAX_URL_MALFORMED, TextMode.COLOR, replaces));
 		}
 	}
 
 	@Override
-	public List<String> getTabComplete(String parameter, String passed) {
+	public List<String> getTabComplete(CommandSender sender, String parameter, String passed) {
 		List<String> complete = new ArrayList<String>();
 		complete.add("http://");
 		complete.add("https://");

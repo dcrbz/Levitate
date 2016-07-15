@@ -20,7 +20,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
-import de.ketrwu.levitate.CommandInformation.CommandExecutor;
 import de.ketrwu.levitate.Message.TextMode;
 import de.ketrwu.levitate.bukkit.LevitateCommandPreprocessEvent;
 import de.ketrwu.levitate.bukkit.LevitateMessagePreprocessEvent;
@@ -29,6 +28,9 @@ import de.ketrwu.levitate.exception.CommandSyntaxException;
 import de.ketrwu.levitate.exception.ExecutorIncompatibleException;
 import de.ketrwu.levitate.exception.NoPermissionException;
 import de.ketrwu.levitate.exception.SyntaxResponseException;
+import de.ketrwu.levitate.handler.CommandHandler;
+import de.ketrwu.levitate.handler.MessageHandler;
+import de.ketrwu.levitate.handler.PermissionHandler;
 
 /**
  * Handles Levitate-Commands
@@ -41,6 +43,7 @@ public class CommandRegistry {
 	private List<Object> commandClasses = new ArrayList<Object>();
 	private PermissionHandler permissionHandler = null;
 	private HelpMap helpMap = null;
+	private MessageHandler messageHandler = null;
 	private Plugin plugin = null;
 	
 	/**
@@ -51,6 +54,9 @@ public class CommandRegistry {
 	public CommandRegistry(Plugin plugin) { 
 		if(plugin == null) return;
 		this.plugin = plugin;
+		registerDefaultMessageHandler();
+		registerBukkitPermissionHandler();
+		registerDefaultHelpMap();
 	}
 	
 	/**
@@ -66,25 +72,25 @@ public class CommandRegistry {
 				replaces.put("%method%", obj.getClass().getName() + ": " + m.getName() + "()");
 				CommandInformation cmd = null;
 				String[] aliases = null;
-				if(m.isAnnotationPresent(de.ketrwu.levitate.Command.class)) {
-					if(m.getParameterTypes().length != 3) throw new CommandAnnotationException(Message.CR_PARAMETERCOUNT_INVALID.get(TextMode.PLAIN, replaces));
+				if(m.isAnnotationPresent(de.ketrwu.levitate.annotation.Command.class)) {
+					if(m.getParameterTypes().length != 3) throw new CommandAnnotationException(new MessageBuilder(Message.CR_PARAMETERCOUNT_INVALID, TextMode.PLAIN, replaces));
 					if(m.getParameterTypes()[0] != CommandSender.class) {
 						replaces.put("%index%", "0");
 						replaces.put("%class%", "CommandSender");
-						throw new CommandAnnotationException(Message.CR_PARAMETER_INVALID.get(TextMode.PLAIN, replaces));
+						throw new CommandAnnotationException(new MessageBuilder(Message.CR_PARAMETER_INVALID, TextMode.PLAIN, replaces));
 					}
 					if(m.getParameterTypes()[1] != String.class) {
 						replaces.put("%index%", "1");
 						replaces.put("%class%", "String");
-						throw new CommandAnnotationException(Message.CR_PARAMETER_INVALID.get(TextMode.PLAIN, replaces));
+						throw new CommandAnnotationException(new MessageBuilder(Message.CR_PARAMETER_INVALID, TextMode.PLAIN, replaces));
 					}
 					if(m.getParameterTypes()[2] != ParameterSet.class) {
 						replaces.put("%index%", "2");
 						replaces.put("%class%", "ParameterSet");
-						throw new CommandAnnotationException(Message.CR_PARAMETER_INVALID.get(TextMode.PLAIN, replaces));
+						throw new CommandAnnotationException(new MessageBuilder(Message.CR_PARAMETER_INVALID, TextMode.PLAIN, replaces));
 					}
 					
-					de.ketrwu.levitate.Command commandAnnotation = m.getAnnotation(de.ketrwu.levitate.Command.class);
+					de.ketrwu.levitate.annotation.Command commandAnnotation = m.getAnnotation(de.ketrwu.levitate.annotation.Command.class);
 					cmd = new CommandInformation(commandAnnotation.syntax());
 					
 					if(!commandAnnotation.readable().equals("")) cmd.setReadable(commandAnnotation.readable());
@@ -103,6 +109,7 @@ public class CommandRegistry {
 									e.printStackTrace();
 								}
 							}
+							
 						});
 					} else {
 						register(cmd, aliases, new CommandHandler() {
@@ -115,6 +122,7 @@ public class CommandRegistry {
 									e.printStackTrace();
 								}
 							}
+							
 						});
 					}
 				}
@@ -171,6 +179,7 @@ public class CommandRegistry {
 			CommandInformation cinfo = new CommandInformation(ns, info.getPermission());
 			cinfo.setPermission(info.getPermission());
 			cinfo.setDescription(info.getDescription());
+			if(info.getReadable() != null) cinfo.setReadable(info.getReadable());
 			registerAlias(alias);
 			commands.put(cinfo, handler);
 		}
@@ -188,7 +197,7 @@ public class CommandRegistry {
 		try {
 			final Field f = getPlugin().getServer().getClass().getDeclaredField("commandMap");
 			f.setAccessible(true);
-            CommandMap cmap = (CommandMap)f.get(getPlugin().getServer());
+            CommandMap cmap = (CommandMap) f.get(getPlugin().getServer());
             cmap.register(info.getCommand(), new Command(info.getCommand(), info.getDescription(), info.getSyntax(), new ArrayList<String>(Arrays.asList(aliases))) {
 				
             	@Override
@@ -202,27 +211,39 @@ public class CommandRegistry {
             	}
             	
 				@Override
-				public boolean execute(CommandSender arg0, String arg1, String[] arg2) {
+				public boolean execute(CommandSender sender, String arg1, String[] arg2) {
 					try {
-						return playerPassCommand(arg0, arg1, arg2);
+						return playerPassCommand(sender, arg1, arg2);
 					} catch (CommandSyntaxException | NoPermissionException | SyntaxResponseException | ExecutorIncompatibleException e) {
 						if(e instanceof NoPermissionException) {
-							LevitateMessagePreprocessEvent preprocessEvent = new LevitateMessagePreprocessEvent(arg0, Message.NO_PERMISSION, TextMode.COLOR, Message.NO_PERMISSION.get(TextMode.COLOR));
+							LevitateMessagePreprocessEvent preprocessEvent = new LevitateMessagePreprocessEvent(getPlugin(), sender, new MessageBuilder(Message.NO_PERMISSION, TextMode.COLOR));
 							Bukkit.getPluginManager().callEvent(preprocessEvent);
 							if(!preprocessEvent.isCancelled()) {
-								if(preprocessEvent.getMessage() != null) arg0.sendMessage(preprocessEvent.getMessage());
+								if(preprocessEvent.getMessage() != null) getMessageHandler().sendMessage(sender, preprocessEvent.getMessageBuilder());
 							}
 							return true;
 						}
-						if(e instanceof SyntaxResponseException || e instanceof ExecutorIncompatibleException) {
-
-							LevitateMessagePreprocessEvent preprocessEvent = new LevitateMessagePreprocessEvent(arg0, null, null, e.getMessage());
+						if(e instanceof SyntaxResponseException) {
+							SyntaxResponseException ex = (SyntaxResponseException) e;
+							LevitateMessagePreprocessEvent preprocessEvent = new LevitateMessagePreprocessEvent(getPlugin(), sender, ex.getMessageBuilder());
 							Bukkit.getPluginManager().callEvent(preprocessEvent);
 							if(!preprocessEvent.isCancelled()) {
-								if(preprocessEvent.getMessage() != null) arg0.sendMessage(preprocessEvent.getMessage());
+								if(preprocessEvent.getMessage() != null) getMessageHandler().sendMessage(sender, preprocessEvent.getMessageBuilder());
 							}
 							return true;
 						}
+						
+						if(e instanceof ExecutorIncompatibleException) {
+							ExecutorIncompatibleException ex = (ExecutorIncompatibleException) e;
+							LevitateMessagePreprocessEvent preprocessEvent = new LevitateMessagePreprocessEvent(getPlugin(), sender, ex.getMessageBuilder());
+							Bukkit.getPluginManager().callEvent(preprocessEvent);
+							if(!preprocessEvent.isCancelled()) {
+								if(preprocessEvent.getMessage() != null) getMessageHandler().sendMessage(sender, preprocessEvent.getMessageBuilder());
+							}
+							return true;
+						}
+						
+						
 						e.printStackTrace();
 					}
 					return false;
@@ -279,7 +300,7 @@ public class CommandRegistry {
 				
 			}
 			if(exArg == null) continue;
-			List<String> l = exArg.getHandler().getTabComplete(exArg.getParameter(), arg);
+			List<String> l = exArg.getHandler().getTabComplete(sender, exArg.getParameter(), arg);
 			if(l != null && l.size() > 0) complete.addAll(l);
 		}
 		Iterator<String> iComplete = complete.iterator();
@@ -329,13 +350,28 @@ public class CommandRegistry {
 	}
 	
 	/**
-	 * Register own HelpMaoo
+	 * Register default MessageHandler
+	 */
+	public void registerDefaultMessageHandler() {
+		this.messageHandler = new DefaultMessageHandler();
+	}
+	
+	/**
+	 * Register own HelpMap
 	 * @param helpMap Handles the help-message
 	 */
 	public void registerHelpMap(HelpMap helpMap) {
 		this.helpMap = helpMap;
 	}
 		
+	/**
+	 * Register own MessageHandler
+	 * @param messageHandler
+	 */
+	public void registerMessageHandler(MessageHandler messageHandler) {
+		this.messageHandler = messageHandler;
+	}
+	
 	/**
 	 * Executes a command as a Bukkit/Spigot player or console.
 	 * You don't need to call it.
@@ -358,14 +394,14 @@ public class CommandRegistry {
 		for(CommandInformation i : commands.keySet()) {
 			if(found == true) continue;
 			try {
-				if(i.matches(ce, command, args)) {
+				if(i.matches(sender, ce, command, args)) {
 					if(permissionHandler != null && i.getPermission() != null) {
 						if(!permissionHandler.hasPermission(sender, i.getPermission())) {
-							throw new NoPermissionException(Message.NO_PERMISSION.get(TextMode.COLOR));
+							throw new NoPermissionException(new MessageBuilder(Message.NO_PERMISSION, TextMode.COLOR));
 						}
 					}
 					ParameterSet ps = new ParameterSet(args);
-					LevitateCommandPreprocessEvent preprocessEvent = new LevitateCommandPreprocessEvent(sender, i, ps);
+					LevitateCommandPreprocessEvent preprocessEvent = new LevitateCommandPreprocessEvent(getPlugin(), sender, i, ps);
 					Bukkit.getPluginManager().callEvent(preprocessEvent);
 					if(!preprocessEvent.isCancelled()) commands.get(i).execute(sender, command, new ParameterSet(args));
 					found = true;
@@ -388,6 +424,11 @@ public class CommandRegistry {
 		return found;
 	}
 	
+	/**
+	 * Checks if given class exists
+	 * @param clazz
+	 * @return
+	 */
 	public static boolean existClass(String clazz) {
 		try {
 			Class.forName(clazz);
@@ -395,38 +436,47 @@ public class CommandRegistry {
 		} catch (Exception e) { }
 		return false;
 	}
-
+	
+	/**
+	 * Get all commands registered
+	 * @return
+	 */
 	public HashMap<CommandInformation, CommandHandler> getCommands() {
 		return commands;
 	}
-
-	public void setCommands(HashMap<CommandInformation, CommandHandler> commands) {
-		this.commands = commands;
-	}
-
+	
+	/**
+	 * Get the current PermissionHandler
+	 * @return
+	 */
 	public PermissionHandler getPermissionHandler() {
 		return permissionHandler;
 	}
-
-	public void setPermissionHandler(PermissionHandler permissionHandler) {
-		this.permissionHandler = permissionHandler;
-	}
-
+	
+	/**
+	 * Get the plugin instance of the plugin registered this CommandRegistry
+	 * @return
+	 */
 	public Plugin getPlugin() {
 		return plugin;
 	}
-
-	public void setPlugin(Plugin plugin) {
-		this.plugin = plugin;
-	}
-
+	
+	/**
+	 * Get the current HelpMap
+	 * @return
+	 */
 	public HelpMap getHelpMap() {
 		return helpMap;
 	}
-
-	public void setHelpMap(HelpMap helpMap) {
-		this.helpMap = helpMap;
+	
+	/**
+	 * Get the current MessageHandler
+	 * @return
+	 */
+	public MessageHandler getMessageHandler() {
+		return messageHandler;
 	}
+	
 	
 	
 	

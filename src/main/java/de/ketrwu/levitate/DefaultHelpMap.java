@@ -5,7 +5,6 @@ import java.util.HashMap;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import de.ketrwu.levitate.CommandInformation.CommandExecutor;
 import de.ketrwu.levitate.Message.TextMode;
 
 /**

@@ -31,6 +31,11 @@ public enum Message {
 	CI_CMD_CANNOT_START_WITH("Command cannot start with \"<\"!"),
 	CR_PARAMETERCOUNT_INVALID("ParameterCount of \"%method%\" has to be three!"),
 	CR_PARAMETER_INVALID("Parameter %index% of \"%method%\" has to be \"%class%\"!"),
+	SV_PARAMETERCOUNT_INVALID("ParameterCount of \"%method%\" has to be \"%amount%\"!"),
+	SV_PARAMETER_INVALID("Parameter %index% of \"%method%\" has to be \"%class%\"!"),
+	SV_PARAMETER_DISALLOWED("Parameter for syntax \"%syntax%\" are disallowed!"),
+	SV_PARAMETER_NEEDED("Parameter for syntax \"%syntax%\" is needed!"),
+	SV_DISALLOWED_FOR_EXECUTOR("Syntax \"%syntax%\" is only for command executor \"%executor%\"!"),
 	BOOLEANSYNTAX_HAS_TO_BE_BOOLEAN("Argument \"%arg%\" has to be a boolean!"),
 	CHOICESYNTAX_NOT_LIST("Parameter \"%arg%\" has to be a list of choices!"),
 	CHOICESYNTAX_NOT_COMMA_SEPARATED("Parameter \"%arg%\" has to be a comma-separated list!"),
@@ -54,8 +59,11 @@ public enum Message {
 	DOUBLESYNTAX_HAS_TO_BE_INBETWEEN("Argument \"%arg%\" has to be inbetween \"%min%\" and \"%max%\"!"),
 	NOTEQUALSIGNORECASESYNTAX_CANNOT_EQUAL("Argument \"%arg%\" cannot equal \"%value%\"!"),
 	NOTEQUALSSYNTAX_CANNOT_EQUAL("Argument \"%arg%\" cannot equal \"%value%\"!"),
+	PLAYERSYNTAX_PARAMETER_MALFORMED("The parameter \"%parameter%\" is malformed!"),
+	PLAYERSYNTAX_UUID_MALFORMED("The UUID \"%uuid%\" is malformed!"),
 	PLAYERSYNTAX_PLAYER_OFFLINE("The player \"%player%\" has to be online!"),
 	PLAYERSYNTAX_PLAYER_ONLINE("The player \"%player%\" has to be offline!"),
+	PLAYERSYNTAX_PLAYER_NOT_FOUND("The player \"%player%\" doesn't exist!"),
 	STRINGSYNTAX_CANNOT_BE_INT("Argmuent \"%arg%\" cannot be a number!"),
 	STRINGSYNTAX_ONLY_LOWERCASE("Argument \"%arg%\" has to contain only lower-case letters!"),
 	STRINGSYNTAX_ONLY_UPPERCASE("Argument \"%arg%\" has to contain only upper-case letters!"),
@@ -64,9 +72,15 @@ public enum Message {
 	ITEMSTACKSYNTAX_ITEM_NOT_FOUND("Item \"%arg%\" doesn't exist!"),
 	WORLDSYNTAX_WORLD_DOES_NOT_EXIST("The world \"%world%\" doesn't exist!"),
 	URLSYNTAX_URL_MALFORMED("The argument \"%arg%\" has to be an URL!"),
-	URLSYNTAX_DOES_NOT_START_WITH("The url \"%arg%\" has to start with \"%parameter%\"!");
+	URLSYNTAX_DOES_NOT_START_WITH("The url \"%arg%\" has to start with \"%parameter%\"!"),
+	COORDSYNTAX_PARAMETER_MALFORMED("Parameter \"%parameter%\" of syntax \"coord\" is malformed!"),
+	COORDSYNTAX_CONSOLE_COMMAND("The syntax \"coord\" cannot be used in a console command!"),
+	COORDSYNTAX_HAS_TO_BE_WORLD("Argument \"%arg%\" has to be a worldname!"),
+	COORDSYNTAX_HAS_TO_BE_NUMBER("Argument \"%arg%\" has to be a number!");
+	
 	
 	private static YamlConfiguration config;
+	private static HashMap<Message, String> overrides = new HashMap<Message, String>();
 	private String message;
 	
 	/**
@@ -87,6 +101,9 @@ public enum Message {
 		String raw = message;
 		if(config != null) {
 			if(config.getString("levitate." + values()[ordinal()].toString()) != null) raw = config.getString("levitate." + values()[ordinal()].toString());
+		}
+		if(overrides.containsKey(values()[ordinal()])) {
+			raw = overrides.get(values()[ordinal()]);
 		}
 		switch(mode) {
 		case COLOR:
@@ -140,6 +157,15 @@ public enum Message {
 		} catch (IOException | InvalidConfigurationException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	/**
+	 * Override a message globally
+	 * @param message The message you want to override
+	 * @param raw The raw String to override the default message
+	 */
+	public static void overrideMessage(Message message, String raw) {
+		overrides.put(message, raw);
 	}
 
 	/**

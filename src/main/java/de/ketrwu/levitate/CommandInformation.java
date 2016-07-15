@@ -7,10 +7,13 @@ import java.util.List;
 import java.util.regex.MatchResult;
 import java.util.regex.Pattern;
 
+import org.bukkit.command.CommandSender;
+
 import de.ketrwu.levitate.Message.TextMode;
 import de.ketrwu.levitate.exception.CommandSyntaxException;
 import de.ketrwu.levitate.exception.ExecutorIncompatibleException;
 import de.ketrwu.levitate.exception.SyntaxResponseException;
+import de.ketrwu.levitate.handler.SyntaxHandler;
 
 /**
  * Holds syntax of Levitate-Command
@@ -89,7 +92,11 @@ public class CommandInformation {
 			e.printStackTrace();
 		}
 	}
-
+	
+	/**
+	 * Prase the main syntax and throw errors on fails by developer
+	 * @throws CommandSyntaxException throws when the syntax is wrong
+	 */
 	private void processSyntax() throws CommandSyntaxException {
 		
 		if(!syntax.contains(" ")) {
@@ -106,36 +113,50 @@ public class CommandInformation {
 			HashMap<String,String> replaces = new HashMap<String, String>();
 			replaces.put("%arg%", arg);
 			
-			if(!arg.startsWith("<")) throw new CommandSyntaxException(Message.CI_ARG_HAS_TO_START_WITH_CHAR.get(TextMode.COLOR, replaces));
-			if(!arg.endsWith(">")) throw new CommandSyntaxException(Message.CI_ARG_HAS_TO_END_WITH_CHAR.get(TextMode.COLOR, replaces));
+			if(!arg.startsWith("<")) throw new CommandSyntaxException(new MessageBuilder(Message.CI_ARG_HAS_TO_START_WITH_CHAR, TextMode.COLOR, replaces));
+			if(!arg.endsWith(">")) throw new CommandSyntaxException(new MessageBuilder(Message.CI_ARG_HAS_TO_END_WITH_CHAR, TextMode.COLOR, replaces));
 			arg = arg.substring(1, arg.length()-1);
 			String method = parseArgument(arg).get(0);
 			boolean unlimited = false;
 			if(method.endsWith("...")) {
-				if(matches.hasNext()) throw new CommandSyntaxException(Message.CI_ARG_CANNOT_BE_UNLIMITED.get(TextMode.COLOR, replaces));
+				if(matches.hasNext()) throw new CommandSyntaxException(new MessageBuilder(Message.CI_ARG_CANNOT_BE_UNLIMITED, TextMode.COLOR, replaces));
 				unlimited = true;
 				method = method.substring(0, method.length()-3);
 			}
 			if(!SyntaxValidations.existHandler(method)) {
 				replaces.clear();
 				replaces.put("%method%", method);
-				throw new CommandSyntaxException(Message.CI_NO_SYNTAX.get(TextMode.COLOR, replaces));
+				throw new CommandSyntaxException(new MessageBuilder(Message.CI_NO_SYNTAX, TextMode.COLOR, replaces));
 			}
 			this.args.add(new Argument(method, parseArgument(arg).get(1), SyntaxValidations.getSyntaxes().get(method), unlimited));
 		}
 	}
 	
-	public boolean matchArgument(String input, String syntaxArg) throws CommandSyntaxException {
+	/**
+	 * Check if the argument matches the user input
+	 * @param sender
+	 * @param input
+	 * @param syntaxArg
+	 * @return
+	 * @throws CommandSyntaxException
+	 */
+	public boolean matchArgument(CommandSender sender, String input, String syntaxArg) throws CommandSyntaxException {
 		List<String> i = parseArgument(syntaxArg);
 		for(SyntaxHandler h : SyntaxValidations.getSyntaxes().values()) {
 			try {
-				h.check(i.get(1), input);
+				h.check(sender, i.get(1), input);
 				return true;
 			} catch (Exception e) { }
 		}
 		return false;
 	}
 			
+	/**
+	 * Prase single Argument
+	 * @param arg
+	 * @return
+	 * @throws CommandSyntaxException
+	 */
 	private List<String> parseArgument(String arg) throws CommandSyntaxException {
 		List<String> i = new ArrayList<String>();
 		String method = "";
@@ -150,15 +171,15 @@ public class CommandInformation {
 				replaces.put("%char%", "[");
 				replaces.put("%arg%", arg);
 				if(ch.equals("[")) {
-					if(start) throw new CommandSyntaxException(Message.CI_ERROR_AT_CHAR_IN_ARG.get(TextMode.COLOR, replaces));
-					if(end) throw new CommandSyntaxException(Message.CI_ERROR_AT_CHAR_IN_ARG.get(TextMode.COLOR, replaces));
+					if(start) throw new CommandSyntaxException(new MessageBuilder(Message.CI_ERROR_AT_CHAR_IN_ARG, TextMode.COLOR, replaces));
+					if(end) throw new CommandSyntaxException(new MessageBuilder(Message.CI_ERROR_AT_CHAR_IN_ARG, TextMode.COLOR, replaces));
 					start = true;
 					continue;
 				}
 				if(ch.equals("]")) {
 					replaces.put("%char%", "]");
-					if(!start) throw new CommandSyntaxException(Message.CI_ERROR_AT_CHAR_IN_ARG.get(TextMode.COLOR, replaces));
-					if(end) throw new CommandSyntaxException(Message.CI_ERROR_AT_CHAR_IN_ARG.get(TextMode.COLOR, replaces));
+					if(!start) throw new CommandSyntaxException(new MessageBuilder(Message.CI_ERROR_AT_CHAR_IN_ARG, TextMode.COLOR, replaces));
+					if(end) throw new CommandSyntaxException(new MessageBuilder(Message.CI_ERROR_AT_CHAR_IN_ARG, TextMode.COLOR, replaces));
 					end = true;
 					continue;
 				}
@@ -173,7 +194,7 @@ public class CommandInformation {
 					}
 					replaces.clear();
 					replaces.put("%char%", ch);
-					throw new CommandSyntaxException(Message.CI_ERROR_AT_CHAR.get(TextMode.COLOR, replaces));
+					throw new CommandSyntaxException(new MessageBuilder(Message.CI_ERROR_AT_CHAR, TextMode.COLOR, replaces));
 				}
 			}
 		} else {
@@ -184,6 +205,11 @@ public class CommandInformation {
 		return i;
 	}
 	
+	/**
+	 * Process the command-base with command executor
+	 * @param base
+	 * @throws CommandSyntaxException
+	 */
 	private void processCommandBase(String base) throws CommandSyntaxException {
 		if(base.toLowerCase().startsWith("?")) {
 			commandExecutor = CommandExecutor.ALL;
@@ -195,20 +221,30 @@ public class CommandInformation {
 			commandExecutor = CommandExecutor.CONSOLE;
 		}
 		base = base.substring(1);
-		if(base.startsWith("<")) throw new CommandSyntaxException(Message.CI_CMD_CANNOT_START_WITH.get(TextMode.COLOR));
+		if(base.startsWith("<")) throw new CommandSyntaxException(new MessageBuilder(Message.CI_CMD_CANNOT_START_WITH, TextMode.COLOR));
 		this.command = base;
 	}
 	
-	
-	public boolean matches(CommandExecutor sender, String command, String[] args) throws CommandSyntaxException, SyntaxResponseException, ExecutorIncompatibleException {
+	/**
+	 * Check if a user-input command matches this CommandInformation
+	 * @param cmdSender
+	 * @param sender
+	 * @param command
+	 * @param args
+	 * @return
+	 * @throws CommandSyntaxException 
+	 * @throws SyntaxResponseException Throws when a syntax says the input is wrong
+	 * @throws ExecutorIncompatibleException Throws when the CommandExecutors doesn't match
+	 */
+	public boolean matches(CommandSender cmdSender, CommandExecutor sender, String command, String[] args) throws CommandSyntaxException, SyntaxResponseException, ExecutorIncompatibleException {
 		if(!this.command.equalsIgnoreCase(command)) return false;
 		
 		switch(commandExecutor) {
 		case CONSOLE:
-			if(sender != CommandExecutor.CONSOLE) throw new ExecutorIncompatibleException(Message.ONLY_CONSOLE.get(TextMode.COLOR));
+			if(sender != CommandExecutor.CONSOLE) throw new ExecutorIncompatibleException(new MessageBuilder(Message.ONLY_CONSOLE, TextMode.COLOR));
 			break;
 		case PLAYER:
-			if(sender != CommandExecutor.PLAYER) throw new ExecutorIncompatibleException(Message.ONLY_INGAME.get(TextMode.COLOR));
+			if(sender != CommandExecutor.PLAYER) throw new ExecutorIncompatibleException(new MessageBuilder(Message.ONLY_INGAME, TextMode.COLOR));
 			break;
 		}
 		
@@ -233,7 +269,7 @@ public class CommandInformation {
 			}
 			String arg = args[i];
 			try {
-				exArg.getHandler().check(exArg.getParameter(), arg);
+				exArg.getHandler().check(cmdSender, exArg.getParameter(), arg);
 			} catch (SyntaxResponseException e) {
 				throw e;
 			}
@@ -244,16 +280,14 @@ public class CommandInformation {
 		return false;
 	}
 	
+	/**
+	 * Checks whether CommandInformation has a human readable syntax description
+	 * @return
+	 */
 	public boolean hasReadableSyntax() {
 		return getReadable() != null;
 	}
 	
-	enum CommandExecutor {
-		CONSOLE(),
-		PLAYER(),
-		ALL();
-	}
-
 	public String getSyntax() {
 		return syntax;
 	}

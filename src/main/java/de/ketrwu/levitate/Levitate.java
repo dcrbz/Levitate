@@ -6,12 +6,16 @@ import java.io.InputStream;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
+import de.ketrwu.levitate.handler.CommandHandler;
+import de.ketrwu.levitate.handler.MessageHandler;
+import de.ketrwu.levitate.handler.PermissionHandler;
+import de.ketrwu.levitate.handler.SyntaxHandler;
+
 /**
  * Bundles everything you need to use Levitate.
  * Read <a href="https://github.com/KennethWussmann/Levitate/wiki/2.-First-command">this page</a> to create your first Levitate-Command.
  * @author Kenneth Wussmann
  */
-
 public class Levitate {
 	
 	private JavaPlugin plugin;
@@ -26,8 +30,6 @@ public class Levitate {
 		this.plugin = plugin;
 		SyntaxValidations.registerDefaultSyntax(plugin);
 		registry = new CommandRegistry(plugin);
-		registry.registerBukkitPermissionHandler();
-		registry.registerDefaultHelpMap();
 	}
 
 	/**
@@ -89,6 +91,15 @@ public class Levitate {
 	public void registerCommands(Object obj) {
 		getCommandRegistry().registerCommands(obj);
 	}
+	
+	/**
+	 * Register all annotation-based syntaxes in given class. <br />
+	 * Be sure to register the syntaxes before using them in a command.
+	 * @param obj
+	 */
+	public void registerSyntaxes(Object obj) {
+		SyntaxValidations.registerSyntaxes(obj);
+	}
 
 	/**
 	 * Register new command with aliases
@@ -123,7 +134,7 @@ public class Levitate {
 	 * @param permissionHandler PermissionHandler wich checks whether the sender has permission to execute the command
 	 */
 	public void registerPermissionHandler(PermissionHandler permissionHandler) {
-		getCommandRegistry().setPermissionHandler(permissionHandler);
+		getCommandRegistry().registerPermissionHandler(permissionHandler);
 	}
 	
 	/**
@@ -139,6 +150,21 @@ public class Levitate {
 	 */
 	public void registerHelpMap(HelpMap helpMap) {
 		getCommandRegistry().registerHelpMap(helpMap);
+	}
+	
+	/**
+	 * Register default MessageHandler
+	 */
+	public void registerDefaultMessageHandler() {
+		getCommandRegistry().registerDefaultMessageHandler();
+	}
+	
+	/**
+	 * Register own MessageHandler
+	 * @param messageHandler Handles messages
+	 */
+	public void registerHelpMap(MessageHandler messageHandler) {
+		getCommandRegistry().registerMessageHandler(messageHandler);
 	}
 	
 	/**
@@ -167,4 +193,12 @@ public class Levitate {
             }
         }
     }
+	
+	/**
+	 * Get the current MessageHandler
+	 * @return The current MessageHandler
+	 */
+	public MessageHandler getMessageHandler() {
+		return getCommandRegistry().getMessageHandler();
+	}
 }

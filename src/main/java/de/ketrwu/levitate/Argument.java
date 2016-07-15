@@ -1,5 +1,7 @@
 package de.ketrwu.levitate;
 
+import de.ketrwu.levitate.handler.SyntaxHandler;
+
 /**
  * Internal class to handle arguments
  * @author Kenneth Wussmann

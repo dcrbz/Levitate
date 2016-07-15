@@ -6,31 +6,32 @@ import de.ketrwu.levitate.MessageBuilder;
  * Throws when something with parsing your command via @Command went wrong
  * @author Kenneth Wussmann
  */
-public class CommandAnnotationException extends Exception {
-
+public class SyntaxAnnotationException extends Exception {
+	
 	private MessageBuilder messageBuilder;
 	
-	public CommandAnnotationException() {
+	public SyntaxAnnotationException() {
 		super();
 	}
 	
-	public CommandAnnotationException(MessageBuilder messageBuilder) {
+	public SyntaxAnnotationException(MessageBuilder messageBuilder) {
 		this.messageBuilder = messageBuilder;
 	}
 
 	/**
-	 * @deprecated Use {@link #SyntaxResponseException(MessageBuilder messageBuilder)} instead.
+	 * @deprecated Use {@link #SyntaxAnnotationException(MessageBuilder messageBuilder)} instead.
 	 * @param message
 	 */
-	public CommandAnnotationException(String message) {
+	@Deprecated
+	public SyntaxAnnotationException(String message) {
 		super(message);
 	}
 
-	public CommandAnnotationException(String message, Throwable cause) {
+	public SyntaxAnnotationException(String message, Throwable cause) {
 		super(message, cause);
 	}
 
-	public CommandAnnotationException(Throwable cause) {
+	public SyntaxAnnotationException(Throwable cause) {
 		super(cause);
 	}
 	
