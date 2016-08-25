@@ -47,7 +47,7 @@ public void killCommand(CommandSender sender, String cmd, ParameterSet args) {
 	sender.sendMessage("Player has been killed!");
 }
 ```
-Please check [the wiki](https://github.com/KennethWussmann/Levitate/wiki) for further reading. You can download Levitate [here](https://github.com/KennethWussmann/Levitate/wiki/1.-Getting-started#download-levitate) if you don't want to use Maven.
+Please check [the wiki](https://github.com/KennethWussmann/Levitate/wiki) for further reading. You can download Levitate [here](https://github.com/KennethWussmann/Levitate/wiki/Getting-started#download-levitate) if you don't want to use Maven.
 
 # Features
 - [x] Checks arguments to be valid
