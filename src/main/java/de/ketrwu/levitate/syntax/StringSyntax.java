@@ -22,7 +22,6 @@ public class StringSyntax implements SyntaxHandler {
 		HashMap<String, String> replaces = new HashMap<String, String>();
 		replaces.put("%arg%", passed);
 		if(parameter.equals("") || parameter.equals("aA")) {
-			if(isInt(passed)) throw new SyntaxResponseException(new MessageBuilder(Message.STRINGSYNTAX_CANNOT_BE_INT, TextMode.COLOR, replaces));
 			return;
 		}
 		if(parameter.equals("a")) {
@@ -32,14 +31,6 @@ public class StringSyntax implements SyntaxHandler {
 			if(!isUpperCase(passed)) throw new SyntaxResponseException(new MessageBuilder(Message.STRINGSYNTAX_ONLY_UPPERCASE, TextMode.COLOR, replaces));
 		}
 		return;
-	}
-
-	public boolean isInt(String val) {
-		try {
-			Integer.parseInt(val);
-			return true;
-		} catch (Exception e) { }
-		return false;
 	}
 
 	public boolean isLowerCase(String input) {
