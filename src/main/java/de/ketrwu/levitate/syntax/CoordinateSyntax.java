@@ -1,22 +1,22 @@
 package de.ketrwu.levitate.syntax;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-
-import org.bukkit.Bukkit;
-import org.bukkit.World;
-import org.bukkit.block.Block;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-
 import de.ketrwu.levitate.Message;
 import de.ketrwu.levitate.Message.TextMode;
 import de.ketrwu.levitate.MessageBuilder;
 import de.ketrwu.levitate.exception.CommandSyntaxException;
 import de.ketrwu.levitate.exception.SyntaxResponseException;
 import de.ketrwu.levitate.handler.SyntaxHandler;
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.World;
+import org.bukkit.block.Block;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 
 /**
  * Used for Tab-Complete coordinates of the block a player is looking at
@@ -81,7 +81,7 @@ public class CoordinateSyntax implements SyntaxHandler {
 		List<String> complete = new ArrayList<String>();
 		if(!(sender instanceof Player)) return complete;
 		Player p = (Player) sender;
-		Block b = p.getTargetBlock((HashSet<Byte>) null, 5);
+		Block b = p.getTargetBlock((HashSet<Material>) null, 5);
 		switch(parameter.trim().toLowerCase()) {
 		case "world":
 			complete.add(p.getWorld().getName());

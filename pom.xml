@@ -7,12 +7,14 @@
    <version>1.5.5-SNAPSHOT</version>
    <name>Levitate</name>
    <description>Easy to use command registry and handler for Bukkit and Spigot.</description>
+
    <licenses>
       <license>
          <name>GNU General Public License, Version 2.0</name>
          <url>https://raw.githubusercontent.com/KennethWussmann/Levitate/master/LICENSE</url>
       </license>
    </licenses>
+
    <developers>
       <developer>
          <name>Kenneth Wussmann</name>
@@ -21,6 +23,7 @@
          <organizationUrl>https://ketrwu.de/</organizationUrl>
       </developer>
    </developers>
+
    <distributionManagement>
       <repository>
          <id>deployment</id>
@@ -33,6 +36,18 @@
          <url>http://repo.ketrwu.de/repository/maven-snapshots/</url>
       </snapshotRepository>
    </distributionManagement>
+
+    <repositories>
+        <repository>
+            <id>spigot-repo</id>
+            <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
+        </repository>
+        <repository>
+            <id>ketrwu-repo</id>
+            <url>http://repo.ketrwu.de/repository/maven-snapshots/</url>
+        </repository>
+    </repositories>
+
    <dependencies>
       <dependency>
          <groupId>junit</groupId>
@@ -43,25 +58,16 @@
       <dependency>
          <groupId>org.spigotmc</groupId>
          <artifactId>spigot-api</artifactId>
-         <version>1.9.4-R0.1-SNAPSHOT</version>
+         <version>1.12.2-R0.1-SNAPSHOT</version>
       </dependency>
    </dependencies>
-   <repositories>
-      <repository>
-         <id>spigot-repo</id>
-         <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
-      </repository>
-      <repository>
-         <id>ketrwu-repo</id>
-         <url>http://repo.ketrwu.de/repository/maven-snapshots/</url>
-      </repository>
-   </repositories>
+
    <build>
       <plugins>
          <plugin>
             <groupId>org.sonatype.plugins</groupId>
             <artifactId>nexus-staging-maven-plugin</artifactId>
-            <version>1.5.1</version>
+            <version>1.6.8</version>
             <executions>
                <execution>
                   <id>default-deploy</id>
@@ -79,7 +85,7 @@
          </plugin>
          <plugin>
             <artifactId>maven-compiler-plugin</artifactId>
-            <version>3.1</version>
+            <version>3.7.0</version>
             <executions>
                <execution>
                   <id>default-compile</id>

@@ -1,24 +1,19 @@
 package de.ketrwu.levitate.syntax;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
-import org.bukkit.Material;
-import org.bukkit.command.CommandSender;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.java.JavaPlugin;
-
 import de.ketrwu.levitate.Message;
 import de.ketrwu.levitate.Message.TextMode;
 import de.ketrwu.levitate.MessageBuilder;
 import de.ketrwu.levitate.exception.SyntaxResponseException;
 import de.ketrwu.levitate.handler.SyntaxHandler;
+import org.bukkit.Material;
+import org.bukkit.command.CommandSender;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.java.JavaPlugin;
+
+import java.io.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * Checks if user-input is an itemname or id
@@ -91,6 +86,7 @@ public class ItemStackSyntax implements SyntaxHandler {
 				if(line.startsWith("#")) continue;
 				if(line.equals("")) continue;
 				String[] item = line.split(cvsSplitBy);
+				if (item.length < 3) continue;
 				ItemStack is = new ItemStack(Material.getMaterial(Integer.parseInt(item[1])), 1, Short.parseShort(item[2]));
 				items.put(item[0].toLowerCase(), is);
 			}
