@@ -1,5 +1,12 @@
 package de.ketrwu.levitate;
 
+import de.ketrwu.levitate.Message.TextMode;
+import de.ketrwu.levitate.exception.CommandSyntaxException;
+import de.ketrwu.levitate.exception.ExecutorIncompatibleException;
+import de.ketrwu.levitate.exception.SyntaxResponseException;
+import de.ketrwu.levitate.handler.SyntaxHandler;
+import org.bukkit.command.CommandSender;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -7,343 +14,356 @@ import java.util.List;
 import java.util.regex.MatchResult;
 import java.util.regex.Pattern;
 
-import org.bukkit.command.CommandSender;
-
-import de.ketrwu.levitate.Message.TextMode;
-import de.ketrwu.levitate.exception.CommandSyntaxException;
-import de.ketrwu.levitate.exception.ExecutorIncompatibleException;
-import de.ketrwu.levitate.exception.SyntaxResponseException;
-import de.ketrwu.levitate.handler.SyntaxHandler;
-
 /**
  * Holds syntax of Levitate-Command
+ *
  * @author Kenneth Wussmann
  */
 public class CommandInformation {
 
-	private String syntax;
-	private String command;
-	private String permission;
-	private String description = "";
-	private String readable;
-	private CommandExecutor commandExecutor;
-	private List<Argument> args = new ArrayList<Argument>();
-	
-	/**
-	 * Create a CommandInformation for a new command
-	 * @param syntax Your syntax
-	 */
-	public CommandInformation(String syntax) {
-		this.syntax = syntax;
-		try {
-			processSyntax();
-		} catch (CommandSyntaxException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	/**
-	 * Create a CommandInformation with permission for a new command
-	 * @param syntax Your syntax
-	 * @param permission Your new permission
-	 */
-	public CommandInformation(String syntax, String permission) {
-		this.permission = permission;
-		this.syntax = syntax;
-		try {
-			processSyntax();
-		} catch (CommandSyntaxException e) {
-			e.printStackTrace();
-		}
-	}
+    private String syntax;
+    private String command;
+    private String permission;
+    private String description = "";
+    private String readable;
+    private CommandExecutor commandExecutor;
+    private List<Argument> args = new ArrayList<Argument>();
 
-	/**
-	 * Create a CommandInformation with permission and description for a new command
-	 * @param syntax Your syntax
-	 * @param permission Your new permission
-	 * @param description Your description of your command
-	 */
-	public CommandInformation(String syntax, String permission, String description) {
-		this.permission = permission;
-		this.syntax = syntax;
-		this.description = description;
-		try {
-			processSyntax();
-		} catch (CommandSyntaxException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	/**
-	 * Create a CommandInformation with permission and description for a new command
-	 * @param syntax Your syntax
-	 * @param permission Your new permission
-	 * @param description Your description of your command
-	 * @param readable Your syntax for humans readable
-	 */
-	public CommandInformation(String syntax, String permission, String description, String readable) {
-		this.permission = permission;
-		this.syntax = syntax;
-		this.description = description;
-		this.readable = readable;
-		try {
-			processSyntax();
-		} catch (CommandSyntaxException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	/**
-	 * Prase the main syntax and throw errors on fails by developer
-	 * @throws CommandSyntaxException throws when the syntax is wrong
-	 */
-	private void processSyntax() throws CommandSyntaxException {
-		
-		if(!syntax.contains(" ")) {
-			processCommandBase(syntax);
-			return;
-		}
-		Iterator<MatchResult> matches = SyntaxValidations.allMatches(Pattern.compile("<([^>]*)>|([\\/|\\?|\\$][.^\\w]*)"), syntax).iterator();
-		while(matches.hasNext()) {
-			String arg = matches.next().group();
-			if(arg.startsWith("$")|arg.startsWith("?")|arg.startsWith("/")) {
-				processCommandBase(arg);
-				continue;
-			}
-			HashMap<String,String> replaces = new HashMap<String, String>();
-			replaces.put("%arg%", arg);
-			
-			if(!arg.startsWith("<")) throw new CommandSyntaxException(new MessageBuilder(Message.CI_ARG_HAS_TO_START_WITH_CHAR, TextMode.COLOR, replaces));
-			if(!arg.endsWith(">")) throw new CommandSyntaxException(new MessageBuilder(Message.CI_ARG_HAS_TO_END_WITH_CHAR, TextMode.COLOR, replaces));
-			arg = arg.substring(1, arg.length()-1);
-			String method = parseArgument(arg).get(0);
-			boolean unlimited = false;
-			if(method.endsWith("...")) {
-				if(matches.hasNext()) throw new CommandSyntaxException(new MessageBuilder(Message.CI_ARG_CANNOT_BE_UNLIMITED, TextMode.COLOR, replaces));
-				unlimited = true;
-				method = method.substring(0, method.length()-3);
-			}
-			if(!SyntaxValidations.existHandler(method)) {
-				replaces.clear();
-				replaces.put("%method%", method);
-				throw new CommandSyntaxException(new MessageBuilder(Message.CI_NO_SYNTAX, TextMode.COLOR, replaces));
-			}
-			this.args.add(new Argument(method, parseArgument(arg).get(1), SyntaxValidations.getSyntaxes().get(method), unlimited));
-		}
-	}
-	
-	/**
-	 * Check if the argument matches the user input
-	 * @param sender
-	 * @param input
-	 * @param syntaxArg
-	 * @return
-	 * @throws CommandSyntaxException
-	 */
-	public boolean matchArgument(CommandSender sender, String input, String syntaxArg) throws CommandSyntaxException {
-		List<String> i = parseArgument(syntaxArg);
-		for(SyntaxHandler h : SyntaxValidations.getSyntaxes().values()) {
-			try {
-				h.check(sender, i.get(1), input);
-				return true;
-			} catch (Exception e) { }
-		}
-		return false;
-	}
-			
-	/**
-	 * Prase single Argument
-	 * @param arg
-	 * @return
-	 * @throws CommandSyntaxException
-	 */
-	private List<String> parseArgument(String arg) throws CommandSyntaxException {
-		List<String> i = new ArrayList<String>();
-		String method = "";
-		String parameters = "";
-		if(arg.contains("[") && arg.contains("]")) {
-			boolean start = false;
-			boolean end = false;
-			int dots = 0;
-			for(char c : arg.toCharArray()) {
-				String ch = String.valueOf(c);	
-				HashMap<String,String> replaces = new HashMap<String, String>();
-				replaces.put("%char%", "[");
-				replaces.put("%arg%", arg);
-				if(ch.equals("[")) {
-					if(start) throw new CommandSyntaxException(new MessageBuilder(Message.CI_ERROR_AT_CHAR_IN_ARG, TextMode.COLOR, replaces));
-					if(end) throw new CommandSyntaxException(new MessageBuilder(Message.CI_ERROR_AT_CHAR_IN_ARG, TextMode.COLOR, replaces));
-					start = true;
-					continue;
-				}
-				if(ch.equals("]")) {
-					replaces.put("%char%", "]");
-					if(!start) throw new CommandSyntaxException(new MessageBuilder(Message.CI_ERROR_AT_CHAR_IN_ARG, TextMode.COLOR, replaces));
-					if(end) throw new CommandSyntaxException(new MessageBuilder(Message.CI_ERROR_AT_CHAR_IN_ARG, TextMode.COLOR, replaces));
-					end = true;
-					continue;
-				}
-				if(!start && !end) {
-					method += ch;
-				} else if(start == true && end == false) {
-					parameters += ch;
-				} else {
-					if(ch.equalsIgnoreCase(".")) {
-						dots++;
-						if(dots <= 3) continue;
-					}
-					replaces.clear();
-					replaces.put("%char%", ch);
-					throw new CommandSyntaxException(new MessageBuilder(Message.CI_ERROR_AT_CHAR, TextMode.COLOR, replaces));
-				}
-			}
-		} else {
-			method = arg;
-		}
-		i.add(method);
-		i.add(parameters);
-		return i;
-	}
-	
-	/**
-	 * Process the command-base with command executor
-	 * @param base
-	 * @throws CommandSyntaxException
-	 */
-	private void processCommandBase(String base) throws CommandSyntaxException {
-		if(base.toLowerCase().startsWith("?")) {
-			commandExecutor = CommandExecutor.ALL;
-		}
-		if(base.toLowerCase().startsWith("/")) {
-			commandExecutor = CommandExecutor.PLAYER;
-		}
-		if(base.toLowerCase().startsWith("$")) {
-			commandExecutor = CommandExecutor.CONSOLE;
-		}
-		base = base.substring(1);
-		if(base.startsWith("<")) throw new CommandSyntaxException(new MessageBuilder(Message.CI_CMD_CANNOT_START_WITH, TextMode.COLOR));
-		this.command = base;
-	}
-	
-	/**
-	 * Check if a user-input command matches this CommandInformation
-	 * @param cmdSender
-	 * @param sender
-	 * @param command
-	 * @param args
-	 * @return
-	 * @throws CommandSyntaxException 
-	 * @throws SyntaxResponseException Throws when a syntax says the input is wrong
-	 * @throws ExecutorIncompatibleException Throws when the CommandExecutors doesn't match
-	 */
-	public boolean matches(CommandSender cmdSender, CommandExecutor sender, String command, String[] args) throws CommandSyntaxException, SyntaxResponseException, ExecutorIncompatibleException {
-		if(!this.command.equalsIgnoreCase(command)) return false;
-		
-		switch(commandExecutor) {
-		case CONSOLE:
-			if(sender != CommandExecutor.CONSOLE) throw new ExecutorIncompatibleException(new MessageBuilder(Message.ONLY_CONSOLE, TextMode.COLOR));
-			break;
-		case PLAYER:
-			if(sender != CommandExecutor.PLAYER) throw new ExecutorIncompatibleException(new MessageBuilder(Message.ONLY_INGAME, TextMode.COLOR));
-			break;
-		}
-		
-		if(args == null || args.length == 0) {
-			if(this.args.size() != args.length) return false;
-		}
-		
-		int i = 0; 
-		Argument unlimitedArg = null;
-		while(i < args.length) {
-			Argument exArg = null;
-			try {
-				exArg = this.args.get(i);
-			} catch (IndexOutOfBoundsException e) {
-				if(unlimitedArg != null) {
-					exArg = unlimitedArg;
-				}
-			}
-			if(exArg == null) return false;
-			if(exArg.isUnlimited()) {
-				unlimitedArg = (Argument) exArg.clone();
-			}
-			String arg = args[i];
-			try {
-				exArg.getHandler().check(cmdSender, exArg.getParameter(), arg);
-			} catch (SyntaxResponseException e) {
-				throw e;
-			}
-			i++;
-		}
-		if(unlimitedArg != null) return true;
-		if(this.args.size() == i) return true;
-		return false;
-	}
-	
-	/**
-	 * Checks whether CommandInformation has a human readable syntax description
-	 * @return
-	 */
-	public boolean hasReadableSyntax() {
-		return getReadable() != null;
-	}
-	
-	public String getSyntax() {
-		return syntax;
-	}
+    /**
+     * Create a CommandInformation for a new command
+     *
+     * @param syntax Your syntax
+     */
+    public CommandInformation(String syntax) {
+        this.syntax = syntax;
+        try {
+            processSyntax();
+        } catch (CommandSyntaxException e) {
+            e.printStackTrace();
+        }
+    }
 
-	public void setSyntax(String syntax) {
-		this.syntax = syntax;
-	}
+    /**
+     * Create a CommandInformation with permission for a new command
+     *
+     * @param syntax     Your syntax
+     * @param permission Your new permission
+     */
+    public CommandInformation(String syntax, String permission) {
+        this.permission = permission;
+        this.syntax = syntax;
+        try {
+            processSyntax();
+        } catch (CommandSyntaxException e) {
+            e.printStackTrace();
+        }
+    }
 
-	public String getCommand() {
-		return command;
-	}
+    /**
+     * Create a CommandInformation with permission and description for a new command
+     *
+     * @param syntax      Your syntax
+     * @param permission  Your new permission
+     * @param description Your description of your command
+     */
+    public CommandInformation(String syntax, String permission, String description) {
+        this.permission = permission;
+        this.syntax = syntax;
+        this.description = description;
+        try {
+            processSyntax();
+        } catch (CommandSyntaxException e) {
+            e.printStackTrace();
+        }
+    }
 
-	public void setCommand(String command) {
-		this.command = command;
-	}
+    /**
+     * Create a CommandInformation with permission and description for a new command
+     *
+     * @param syntax      Your syntax
+     * @param permission  Your new permission
+     * @param description Your description of your command
+     * @param readable    Your syntax for humans readable
+     */
+    public CommandInformation(String syntax, String permission, String description, String readable) {
+        this.permission = permission;
+        this.syntax = syntax;
+        this.description = description;
+        this.readable = readable;
+        try {
+            processSyntax();
+        } catch (CommandSyntaxException e) {
+            e.printStackTrace();
+        }
+    }
 
-	public String getPermission() {
-		return permission;
-	}
+    /**
+     * Prase the main syntax and throw errors on fails by developer
+     *
+     * @throws CommandSyntaxException throws when the syntax is wrong
+     */
+    private void processSyntax() throws CommandSyntaxException {
 
-	public void setPermission(String permission) {
-		this.permission = permission;
-	}
+        if (!syntax.contains(" ")) {
+            processCommandBase(syntax);
+            return;
+        }
+        Iterator<MatchResult> matches = SyntaxValidations.allMatches(Pattern.compile("<([^>]*)>|([\\/|\\?|\\$][.^\\w]*)"), syntax).iterator();
+        while (matches.hasNext()) {
+            String arg = matches.next().group();
+            if (arg.startsWith("$") | arg.startsWith("?") | arg.startsWith("/")) {
+                processCommandBase(arg);
+                continue;
+            }
+            HashMap<String, String> replaces = new HashMap<String, String>();
+            replaces.put("%arg%", arg);
 
-	public String getDescription() {
-		return description;
-	}
+            if (!arg.startsWith("<"))
+                throw new CommandSyntaxException(new MessageBuilder(Message.CI_ARG_HAS_TO_START_WITH_CHAR, TextMode.COLOR, replaces));
+            if (!arg.endsWith(">"))
+                throw new CommandSyntaxException(new MessageBuilder(Message.CI_ARG_HAS_TO_END_WITH_CHAR, TextMode.COLOR, replaces));
+            arg = arg.substring(1, arg.length() - 1);
+            String method = parseArgument(arg).get(0);
+            boolean unlimited = false;
+            if (method.endsWith("...")) {
+                if (matches.hasNext())
+                    throw new CommandSyntaxException(new MessageBuilder(Message.CI_ARG_CANNOT_BE_UNLIMITED, TextMode.COLOR, replaces));
+                unlimited = true;
+                method = method.substring(0, method.length() - 3);
+            }
+            if (!SyntaxValidations.existHandler(method)) {
+                replaces.clear();
+                replaces.put("%method%", method);
+                throw new CommandSyntaxException(new MessageBuilder(Message.CI_NO_SYNTAX, TextMode.COLOR, replaces));
+            }
+            this.args.add(new Argument(method, parseArgument(arg).get(1), SyntaxValidations.getSyntaxes().get(method), unlimited));
+        }
+    }
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
+    /**
+     * Check if the argument matches the user input
+     *
+     * @param sender
+     * @param input
+     * @param syntaxArg
+     * @return
+     * @throws CommandSyntaxException
+     */
+    public boolean matchArgument(CommandSender sender, String input, String syntaxArg) throws CommandSyntaxException {
+        List<String> i = parseArgument(syntaxArg);
+        for (SyntaxHandler h : SyntaxValidations.getSyntaxes().values()) {
+            try {
+                h.check(sender, i.get(1), input);
+                return true;
+            } catch (Exception e) {
+            }
+        }
+        return false;
+    }
 
-	public CommandExecutor getCommandExecutor() {
-		return commandExecutor;
-	}
+    /**
+     * Prase single Argument
+     *
+     * @param arg
+     * @return
+     * @throws CommandSyntaxException
+     */
+    private List<String> parseArgument(String arg) throws CommandSyntaxException {
+        List<String> i = new ArrayList<String>();
+        String method = "";
+        String parameters = "";
+        if (arg.contains("[") && arg.contains("]")) {
+            boolean start = false;
+            boolean end = false;
+            int dots = 0;
+            for (char c : arg.toCharArray()) {
+                String ch = String.valueOf(c);
+                HashMap<String, String> replaces = new HashMap<String, String>();
+                replaces.put("%char%", "[");
+                replaces.put("%arg%", arg);
+                if (ch.equals("[")) {
+                    if (start)
+                        throw new CommandSyntaxException(new MessageBuilder(Message.CI_ERROR_AT_CHAR_IN_ARG, TextMode.COLOR, replaces));
+                    if (end)
+                        throw new CommandSyntaxException(new MessageBuilder(Message.CI_ERROR_AT_CHAR_IN_ARG, TextMode.COLOR, replaces));
+                    start = true;
+                    continue;
+                }
+                if (ch.equals("]")) {
+                    replaces.put("%char%", "]");
+                    if (!start)
+                        throw new CommandSyntaxException(new MessageBuilder(Message.CI_ERROR_AT_CHAR_IN_ARG, TextMode.COLOR, replaces));
+                    if (end)
+                        throw new CommandSyntaxException(new MessageBuilder(Message.CI_ERROR_AT_CHAR_IN_ARG, TextMode.COLOR, replaces));
+                    end = true;
+                    continue;
+                }
+                if (!start && !end) {
+                    method += ch;
+                } else if (start == true && end == false) {
+                    parameters += ch;
+                } else {
+                    if (ch.equalsIgnoreCase(".")) {
+                        dots++;
+                        if (dots <= 3) continue;
+                    }
+                    replaces.clear();
+                    replaces.put("%char%", ch);
+                    throw new CommandSyntaxException(new MessageBuilder(Message.CI_ERROR_AT_CHAR, TextMode.COLOR, replaces));
+                }
+            }
+        } else {
+            method = arg;
+        }
+        i.add(method);
+        i.add(parameters);
+        return i;
+    }
 
-	public void setCommandExecutor(CommandExecutor commandExecutor) {
-		this.commandExecutor = commandExecutor;
-	}
+    /**
+     * Process the command-base with command executor
+     *
+     * @param base
+     * @throws CommandSyntaxException
+     */
+    private void processCommandBase(String base) throws CommandSyntaxException {
+        if (base.toLowerCase().startsWith("?")) {
+            commandExecutor = CommandExecutor.ALL;
+        }
+        if (base.toLowerCase().startsWith("/")) {
+            commandExecutor = CommandExecutor.PLAYER;
+        }
+        if (base.toLowerCase().startsWith("$")) {
+            commandExecutor = CommandExecutor.CONSOLE;
+        }
+        base = base.substring(1);
+        if (base.startsWith("<"))
+            throw new CommandSyntaxException(new MessageBuilder(Message.CI_CMD_CANNOT_START_WITH, TextMode.COLOR));
+        this.command = base;
+    }
 
-	public List<Argument> getArgs() {
-		return args;
-	}
+    /**
+     * Check if a user-input command matches this CommandInformation
+     *
+     * @param cmdSender
+     * @param sender
+     * @param command
+     * @param args
+     * @return
+     * @throws CommandSyntaxException
+     * @throws SyntaxResponseException       Throws when a syntax says the input is wrong
+     * @throws ExecutorIncompatibleException Throws when the CommandExecutors doesn't match
+     */
+    public boolean matches(CommandSender cmdSender, CommandExecutor sender, String command, String[] args) throws CommandSyntaxException, SyntaxResponseException, ExecutorIncompatibleException {
+        if (!this.command.equalsIgnoreCase(command)) return false;
 
-	public void setArgs(List<Argument> args) {
-		this.args = args;
-	}
+        switch (commandExecutor) {
+            case CONSOLE:
+                if (sender != CommandExecutor.CONSOLE)
+                    throw new ExecutorIncompatibleException(new MessageBuilder(Message.ONLY_CONSOLE, TextMode.COLOR));
+                break;
+            case PLAYER:
+                if (sender != CommandExecutor.PLAYER)
+                    throw new ExecutorIncompatibleException(new MessageBuilder(Message.ONLY_INGAME, TextMode.COLOR));
+                break;
+        }
 
-	public String getReadable() {
-		return readable;
-	}
+        if (args == null || args.length == 0) {
+            if (this.args.size() != args.length) return false;
+        }
 
-	public void setReadable(String readable) {
-		this.readable = readable;
-	}
-	
-	
-	
+        int i = 0;
+        Argument unlimitedArg = null;
+        while (i < args.length) {
+            Argument exArg = null;
+            try {
+                exArg = this.args.get(i);
+            } catch (IndexOutOfBoundsException e) {
+                if (unlimitedArg != null) {
+                    exArg = unlimitedArg;
+                }
+            }
+            if (exArg == null) return false;
+            if (exArg.isUnlimited()) {
+                unlimitedArg = (Argument) exArg.clone();
+            }
+            String arg = args[i];
+            try {
+                exArg.getHandler().check(cmdSender, exArg.getParameter(), arg);
+            } catch (SyntaxResponseException e) {
+                throw e;
+            }
+            i++;
+        }
+        if (unlimitedArg != null) return true;
+        if (this.args.size() == i) return true;
+        return false;
+    }
+
+    /**
+     * Checks whether CommandInformation has a human readable syntax description
+     *
+     * @return
+     */
+    public boolean hasReadableSyntax() {
+        return getReadable() != null;
+    }
+
+    public String getSyntax() {
+        return syntax;
+    }
+
+    public void setSyntax(String syntax) {
+        this.syntax = syntax;
+    }
+
+    public String getCommand() {
+        return command;
+    }
+
+    public void setCommand(String command) {
+        this.command = command;
+    }
+
+    public String getPermission() {
+        return permission;
+    }
+
+    public void setPermission(String permission) {
+        this.permission = permission;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public CommandExecutor getCommandExecutor() {
+        return commandExecutor;
+    }
+
+    public void setCommandExecutor(CommandExecutor commandExecutor) {
+        this.commandExecutor = commandExecutor;
+    }
+
+    public List<Argument> getArgs() {
+        return args;
+    }
+
+    public void setArgs(List<Argument> args) {
+        this.args = args;
+    }
+
+    public String getReadable() {
+        return readable;
+    }
+
+    public void setReadable(String readable) {
+        this.readable = readable;
+    }
+
+
 }

@@ -4,39 +4,40 @@ import de.ketrwu.levitate.MessageBuilder;
 
 /**
  * Throws when something with parsing your syntax went wrong
+ *
  * @author Kenneth Wussmann
  */
 public class CommandSyntaxException extends Exception {
 
-	private MessageBuilder messageBuilder;
-	
-	public CommandSyntaxException() {
-		super();
-	}
+    private MessageBuilder messageBuilder;
 
-	public CommandSyntaxException(MessageBuilder messageBuilder) {
-		this.messageBuilder = messageBuilder;
-	}
+    public CommandSyntaxException() {
+        super();
+    }
 
-	/**
-	 * @deprecated Use {@link #CommandSyntaxException(MessageBuilder messageBuilder)} instead.
-	 * @param message
-	 */
-	@Deprecated
-	public CommandSyntaxException(String message) {
-		super(message);
-	}
+    public CommandSyntaxException(MessageBuilder messageBuilder) {
+        this.messageBuilder = messageBuilder;
+    }
 
-	public CommandSyntaxException(String message, Throwable cause) {
-		super(message, cause);
-	}
+    /**
+     * @param message
+     * @deprecated Use {@link #CommandSyntaxException(MessageBuilder messageBuilder)} instead.
+     */
+    @Deprecated
+    public CommandSyntaxException(String message) {
+        super(message);
+    }
 
-	public CommandSyntaxException(Throwable cause) {
-		super(cause);
-	}
-	
-	public MessageBuilder getMessageBuilder() {
-		return messageBuilder;
-	}
-	
+    public CommandSyntaxException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public CommandSyntaxException(Throwable cause) {
+        super(cause);
+    }
+
+    public MessageBuilder getMessageBuilder() {
+        return messageBuilder;
+    }
+
 }

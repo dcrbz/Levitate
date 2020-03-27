@@ -7,14 +7,19 @@ import java.lang.annotation.Target;
 
 /**
  * The command annotation used to register commands in a developer-friendly way.
+ *
  * @author Kenneth Wussmann
  */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Command {
-	String syntax();
-	String readable() default "";
-	String[] aliases() default {};
-	String permission() default "";
-	String description() default "";
+    String syntax();
+
+    String readable() default "";
+
+    String[] aliases() default {};
+
+    String permission() default "";
+
+    String description() default "";
 }
